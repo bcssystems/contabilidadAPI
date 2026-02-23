@@ -20,11 +20,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @Table(name = "employee")
-public class Employee {
+public class Empleado {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_employee;
+    private Integer idEmployee;
     @Column(nullable = false)
     private Float baseSalary;
     @Column(nullable = false)
@@ -35,6 +35,6 @@ public class Employee {
     private Position position;
     @OneToOne
     @JoinColumn(name = "id_person")
-    private Person person;
+    private Persona persona;
 
 }

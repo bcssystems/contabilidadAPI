@@ -21,11 +21,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Table(name = "persona")
-public class Person {
+public class Persona {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_person;
+    private Integer idPerson;
     @Column(nullable = false, length = 30)
     private String nombre;
     @Column(nullable = false, length = 30)

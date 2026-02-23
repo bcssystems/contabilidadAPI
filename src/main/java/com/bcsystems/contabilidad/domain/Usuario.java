@@ -18,11 +18,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Table(name = "usuario")
-public class User {
+public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_user;
+    private Integer idUser;
     @Column(unique = true, nullable = false, length = 50)
     private String username;
     @Column(nullable = false, length = 50)
@@ -34,6 +34,6 @@ public class User {
     private Role role;
     @ManyToOne
     @JoinColumn(name = "id_person")
-    private Person person;
+    private Persona persona;
 
 }
