@@ -25,9 +25,9 @@ public class Empleado {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEmpleado;
     @Column(nullable = false)
-    private LocalDate fechaIngreso;
+    private LocalDate fechaIngreso = LocalDate.now();
     @Column(nullable = false)
-    private Boolean activo = true;
+    private Boolean activo;
     @Enumerated(EnumType.STRING)
     private Position position;
     @OneToOne
