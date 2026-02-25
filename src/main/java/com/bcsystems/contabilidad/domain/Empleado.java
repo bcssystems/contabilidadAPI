@@ -2,12 +2,10 @@ package com.bcsystems.contabilidad.domain;
 
 import com.bcsystems.contabilidad.domain.en.Position;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /*
 * Definimos la estructura de los empleados, los cuales tienen id, salario base, fecha de ingreso, activo o no activo,
@@ -15,18 +13,17 @@ import java.time.LocalDate;
 * */
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "employee")
+@Table(name = "empleado")
 public class Empleado {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idEmployee;
-    @Column(nullable = false)
-    private Float baseSalary;
+    private Integer idEmpleado;
     @Column(nullable = false)
     private LocalDate fechaIngreso;
     @Column(nullable = false)
@@ -36,5 +33,7 @@ public class Empleado {
     @OneToOne
     @JoinColumn(name = "id_person")
     private Persona persona;
+    @OneToMany(mappedBy = "empleado")
+    private List<Comision> comisiones;
 
 }

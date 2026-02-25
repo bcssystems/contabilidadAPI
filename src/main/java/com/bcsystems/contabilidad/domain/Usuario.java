@@ -25,10 +25,10 @@ public class Usuario {
     private Integer idUser;
     @Column(unique = true, nullable = false, length = 50)
     private String username;
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
     private String password;
     @Column(nullable = false)
-    private Boolean activo = true;
+    private Boolean activo;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;

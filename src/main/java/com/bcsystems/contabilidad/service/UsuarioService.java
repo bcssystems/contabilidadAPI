@@ -13,5 +13,5 @@ public interface UsuarioService {
     UserDetailedResponse findByUsernameDetailed(String username);
     List<UserDetailedResponse> findAll();
     Optional<Usuario> findById(Integer idUser);
-    Usuario updateUser(Integer id, UserUpdateRequest trabajadorUpdateRequest);
+    Usuario updateUser(Integer id, UserUpdateRequest userUpdateRequest);
 }

@@ -37,6 +37,6 @@ public class Persona {
     private PersonType personType;
     @CreationTimestamp
     @Column(name = "fecha_registro", updatable = false, nullable = false)
-    private LocalDateTime fechaRegistro;
+    private LocalDateTime fechaRegistro = LocalDateTime.now();
 
 }

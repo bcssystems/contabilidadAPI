@@ -2,6 +2,7 @@ package com.bcsystems.contabilidad.service;
 
 import com.bcsystems.contabilidad.domain.Persona;
 import com.bcsystems.contabilidad.exception.NotFoundException;
+import com.bcsystems.contabilidad.exception.RepeatedException;
 import com.bcsystems.contabilidad.repository.PersonaRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,9 @@ public class PersonaServiceImpl implements PersonaService {
 
     @Override
     public Persona save(Persona persona) {
+        if (persona == null) {
+            throw new RepeatedException("Persona ya existente");
+        }
         return personaRepository.save(persona);
     }
 

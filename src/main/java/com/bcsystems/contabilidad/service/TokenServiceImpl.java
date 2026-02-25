@@ -102,7 +102,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public List<Token> findAllTokensByTrabajador(Usuario usuario) {
+    public List<Token> findalltokensbyusuario(Usuario usuario) {
         return tokenRepository.findByUsuario(usuario);
     }
 

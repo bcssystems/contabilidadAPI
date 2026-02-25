@@ -19,6 +19,6 @@ public interface TokenService {
     SecretKey getSignInKey();
     Optional<Token> findByToken(String token);
     void saveToken(Token token);
-    List<Token> findAllTokensByTrabajador(Usuario usuario);
+    List<Token> findalltokensbyusuario(Usuario usuario);
     void deleteTokens(List<Token> tokens);
 }
