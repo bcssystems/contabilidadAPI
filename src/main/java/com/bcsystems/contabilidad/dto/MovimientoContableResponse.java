@@ -7,6 +7,8 @@ public record MovimientoContableResponse(
         BigDecimal debe,
         BigDecimal haber,
         Long cuentaContableId,
-        String cuentaNombre
+        String cuentaNombre,
+        String cuentaCodigo,
+        Long asientoContableId
 ) {
 }
