@@ -1,6 +1,5 @@
 package com.bcsystems.contabilidad.dto;
 
-import com.bcsystems.contabilidad.domain.en.EstadoVenta;
 import com.bcsystems.contabilidad.domain.en.TipoVenta;
 
 import java.math.BigDecimal;
