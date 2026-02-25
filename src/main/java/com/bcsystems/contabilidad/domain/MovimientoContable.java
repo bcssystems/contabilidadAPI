@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "movimiento_contable")
 public class MovimientoContable {
 
