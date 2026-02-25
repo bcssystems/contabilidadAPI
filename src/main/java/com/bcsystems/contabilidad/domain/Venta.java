@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,6 +15,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "venta")
 public class Venta {
 
@@ -31,6 +33,7 @@ public class Venta {
     @JoinColumn(name = "asiento_id")
     private AsientoContable asiento;
     @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
-    private List<Comision> comisiones;
+    @Builder.Default
+    private List<Comision> comisiones = new ArrayList<>();
 
 }
