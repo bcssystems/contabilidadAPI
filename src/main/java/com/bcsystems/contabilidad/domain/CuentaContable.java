@@ -1,6 +1,7 @@
 package com.bcsystems.contabilidad.domain;
 
 import com.bcsystems.contabilidad.domain.en.TipoCuentaContable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,6 +26,7 @@ public class CuentaContable {
     @Enumerated(EnumType.STRING)
     private TipoCuentaContable tipoCuentaContable;
     private Boolean activa = true;
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cuenta_padre_id")
     private CuentaContable cuentaPadre;

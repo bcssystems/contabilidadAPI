@@ -41,7 +41,7 @@ public class CuentaContableServiceImpl implements CuentaContableService {
 
     @Override
     public List<CuentaContable> findAll() {
-        return cuentaContableRepository.findAll();
+        return cuentaContableRepository.findByCuentaPadreIsNull();
     }
 
     @Override
