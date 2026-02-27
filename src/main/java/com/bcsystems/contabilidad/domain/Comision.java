@@ -2,6 +2,9 @@ package com.bcsystems.contabilidad.domain;
 
 import com.bcsystems.contabilidad.domain.en.EstadoComision;
 import com.bcsystems.contabilidad.domain.en.TipoComision;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,8 +27,10 @@ public class Comision {
     private TipoComision tipoComision;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "venta_id")
+    @JsonBackReference
     private Venta venta;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "empleado_id", nullable = false)
     private Empleado empleado;
     private BigDecimal montoBase;

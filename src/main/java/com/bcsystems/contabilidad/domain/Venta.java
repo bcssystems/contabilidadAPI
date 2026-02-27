@@ -2,6 +2,8 @@ package com.bcsystems.contabilidad.domain;
 
 import com.bcsystems.contabilidad.domain.en.EstadoVenta;
 import com.bcsystems.contabilidad.domain.en.TipoVenta;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,6 +35,7 @@ public class Venta {
     @JoinColumn(name = "asiento_id")
     private AsientoContable asiento;
     @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
+    @JsonManagedReference
     @Builder.Default
     private List<Comision> comisiones = new ArrayList<>();
 

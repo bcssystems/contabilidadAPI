@@ -1,6 +1,7 @@
 package com.bcsystems.contabilidad.domain;
 
 import com.bcsystems.contabilidad.domain.en.Position;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,8 +26,6 @@ public class Empleado {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEmpleado;
     @Column(nullable = false)
-    private LocalDate fechaIngreso = LocalDate.now();
-    @Column(nullable = false)
     private Boolean activo;
     @Enumerated(EnumType.STRING)
     private Position position;
@@ -34,6 +33,7 @@ public class Empleado {
     @JoinColumn(name = "id_person")
     private Persona persona;
     @OneToMany(mappedBy = "empleado")
+    @JsonIgnore
     private List<Comision> comisiones;
 
 }

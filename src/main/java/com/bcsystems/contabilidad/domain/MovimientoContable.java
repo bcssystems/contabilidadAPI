@@ -1,5 +1,7 @@
 package com.bcsystems.contabilidad.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,9 +22,11 @@ public class MovimientoContable {
     private BigDecimal debe = BigDecimal.ZERO;
     private BigDecimal haber = BigDecimal.ZERO;
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "asiento_id")
     private AsientoContable asientoContable;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "cuenta_id")
     private CuentaContable cuentaContable;
 

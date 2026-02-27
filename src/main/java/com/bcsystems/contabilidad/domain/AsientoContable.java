@@ -1,6 +1,7 @@
 package com.bcsystems.contabilidad.domain;
 
 import com.bcsystems.contabilidad.domain.en.TipoAsientoContable;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,8 +29,8 @@ public class AsientoContable {
     private String descripcion;
     @Enumerated(EnumType.STRING)
     private TipoAsientoContable tipoAsientoContable;
-
     @OneToMany(mappedBy = "asientoContable", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     @Builder.Default
     private List<MovimientoContable> movimientos = new ArrayList<>();
 
