@@ -5,12 +5,15 @@ import com.bcsystems.contabilidad.domain.CuentaContable;
 import com.bcsystems.contabilidad.domain.MovimientoContable;
 import com.bcsystems.contabilidad.domain.en.TipoAsientoContable;
 import com.bcsystems.contabilidad.dto.MovimientoContableRegisterRequest;
+import com.bcsystems.contabilidad.dto.MovimientoContableResponse;
 import com.bcsystems.contabilidad.dto.MovimientoContableUpdateRequest;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.AsientoContableRepository;
 import com.bcsystems.contabilidad.repository.CuentaContableRepository;
 import com.bcsystems.contabilidad.repository.MovimientoContableRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -61,6 +64,24 @@ public class MovimientoContableServiceImpl implements MovimientoContableService 
     @Override
     public List<MovimientoContable> findAll() {
         return movimientoContableRepository.findAll();
+    }
+
+    @Override
+    public Page<MovimientoContableResponse> findAllPageable(PageRequest pageRequest) {
+        Page<MovimientoContable> movimientos = movimientoContableRepository.findAll(pageRequest);
+        return movimientos.map(this::toResponse);
+    }
+
+    private MovimientoContableResponse toResponse(MovimientoContable mov) {
+        return new MovimientoContableResponse(
+                mov.getIdMovimientoContable(),
+                mov.getDebe(),
+                mov.getHaber(),
+                mov.getCuentaContable() != null ? mov.getCuentaContable().getIdCuentaContable() : null,
+                mov.getCuentaContable() != null ? mov.getCuentaContable().getNombre() : null,
+                mov.getCuentaContable() != null ? mov.getCuentaContable().getCodigo() : null,
+                mov.getAsientoContable() != null ? mov.getAsientoContable().getIdAsientoContable() : null
+        );
     }
 
     @Override

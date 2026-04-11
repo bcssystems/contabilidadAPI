@@ -2,10 +2,7 @@ package com.bcsystems.contabilidad.domain;
 
 import com.bcsystems.contabilidad.domain.en.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /*
 * En esta clase se modela al usuario, el cual va a estar ingresando al sistema, tenemos el username,
@@ -13,9 +10,10 @@ import lombok.NoArgsConstructor;
 * */
 
 @Entity
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Table(name = "usuario")
 public class Usuario {
@@ -35,5 +33,4 @@ public class Usuario {
     @ManyToOne
     @JoinColumn(name = "id_person")
     private Persona persona;
-
 }

@@ -3,10 +3,13 @@ package com.bcsystems.contabilidad.service;
 import com.bcsystems.contabilidad.domain.Empleado;
 import com.bcsystems.contabilidad.domain.Persona;
 import com.bcsystems.contabilidad.dto.EmpleadoRegisterRequest;
+import com.bcsystems.contabilidad.dto.EmpleadoResponse;
 import com.bcsystems.contabilidad.dto.EmpleadoUpdateRequest;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.EmpleadoRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,6 +56,12 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     @Override
     public List<Empleado> findAll() {
         return empleadoRepository.findAll();
+    }
+
+    @Override
+    public Page<EmpleadoResponse> findAllPageable(PageRequest pageRequest) {
+        Page<Empleado> empleados = empleadoRepository.findAll(pageRequest);
+        return empleados.map(EmpleadoResponse::fromEntity);
     }
 
     @Override

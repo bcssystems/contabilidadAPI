@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /*
@@ -16,8 +15,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Table(name = "empleado")
 public class Empleado {
@@ -35,5 +34,4 @@ public class Empleado {
     @OneToMany(mappedBy = "empleado")
     @JsonIgnore
     private List<Comision> comisiones;
-
 }

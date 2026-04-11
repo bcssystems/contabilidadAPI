@@ -4,12 +4,15 @@ import com.bcsystems.contabilidad.domain.AsientoContable;
 import com.bcsystems.contabilidad.domain.Empleado;
 import com.bcsystems.contabilidad.domain.Nomina;
 import com.bcsystems.contabilidad.dto.NominaRegisterRequest;
+import com.bcsystems.contabilidad.dto.NominaResponse;
 import com.bcsystems.contabilidad.dto.NominaUpdateRequest;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.AsientoContableRepository;
 import com.bcsystems.contabilidad.repository.EmpleadoRepository;
 import com.bcsystems.contabilidad.repository.NominaRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,6 +59,21 @@ public class NominaService {
 
     public List<Nomina> findAll() {
         return nominaRepository.findAll();
+    }
+
+    public Page<NominaResponse> findAllPageable(PageRequest pageRequest) {
+        Page<Nomina> nominas = nominaRepository.findAll(pageRequest);
+        return nominas.map(this::toResponse);
+    }
+
+    private NominaResponse toResponse(Nomina nomina) {
+        return new NominaResponse(
+                nomina.getIdNomina(),
+                nomina.getFecha_nomina(),
+                nomina.getSueldo(),
+                nomina.getEmpleado() != null ? nomina.getEmpleado().getIdEmpleado().longValue() : null,
+                nomina.getAsientoContable() != null ? nomina.getAsientoContable().getIdAsientoContable() : null
+        );
     }
 
     public Optional<Nomina> findById(Long id) {

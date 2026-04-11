@@ -1,14 +1,18 @@
 package com.bcsystems.contabilidad.controller;
 
 import com.bcsystems.contabilidad.dto.VentaRegisterRequest;
+import com.bcsystems.contabilidad.dto.VentaResponse;
 import com.bcsystems.contabilidad.dto.VentaUpdateRequest;
 import com.bcsystems.contabilidad.service.VentaService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/venta")
+@RequestMapping("/api/v1/venta")
 public class VentaController {
 
     private final VentaService ventaService;
@@ -23,8 +27,20 @@ public class VentaController {
     }
 
     @GetMapping
-    public ResponseEntity<?> findAll() {
-        return ResponseEntity.status(HttpStatus.OK).body(ventaService.findAll());
+    public ResponseEntity<?> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "idVenta") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir) {
+        
+        Sort sort = sortDir.equalsIgnoreCase("desc") 
+            ? Sort.by(sortBy).descending() 
+            : Sort.by(sortBy).ascending();
+        
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        Page<VentaResponse> result = ventaService.findAllPageable(pageRequest);
+        
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @GetMapping("/{id}")

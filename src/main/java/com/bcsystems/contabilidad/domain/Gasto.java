@@ -9,8 +9,8 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Table(name = "gasto")
 public class Gasto {
@@ -27,5 +27,4 @@ public class Gasto {
     @ManyToOne
     @JoinColumn(name = "asiento_id")
     private AsientoContable asientoContable;
-
 }

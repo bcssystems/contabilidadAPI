@@ -4,12 +4,15 @@ import com.bcsystems.contabilidad.domain.AsientoContable;
 import com.bcsystems.contabilidad.domain.CuentaContable;
 import com.bcsystems.contabilidad.domain.Gasto;
 import com.bcsystems.contabilidad.dto.GastoRegisterRequest;
+import com.bcsystems.contabilidad.dto.GastoResponse;
 import com.bcsystems.contabilidad.dto.GastoUpdateRequest;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.AsientoContableRepository;
 import com.bcsystems.contabilidad.repository.CuentaContableRepository;
 import com.bcsystems.contabilidad.repository.GastoRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,6 +60,22 @@ public class GastoService {
 
     public List<Gasto> findAll() {
         return gastoRepository.findAll();
+    }
+
+    public Page<GastoResponse> findAllPageable(PageRequest pageRequest) {
+        Page<Gasto> gastos = gastoRepository.findAll(pageRequest);
+        return gastos.map(this::toResponse);
+    }
+
+    private GastoResponse toResponse(Gasto gasto) {
+        return new GastoResponse(
+                gasto.getIdGasto(),
+                gasto.getFecha_gasto(),
+                gasto.getConcepto(),
+                gasto.getMonto(),
+                gasto.getCuentaContable() != null ? gasto.getCuentaContable().getIdCuentaContable() : null,
+                gasto.getAsientoContable() != null ? gasto.getAsientoContable().getIdAsientoContable() : null
+        );
     }
 
     public Optional<Gasto> findById(Long id) {

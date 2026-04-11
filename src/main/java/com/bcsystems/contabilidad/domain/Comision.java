@@ -14,8 +14,8 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Table(name = "comision")
 public class Comision {
@@ -40,5 +40,4 @@ public class Comision {
     private EstadoComision estadoComision;
     private LocalDate fechaComision = LocalDate.now();
     private LocalDate fechaPago;
-
 }

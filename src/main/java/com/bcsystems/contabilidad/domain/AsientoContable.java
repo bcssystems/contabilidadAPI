@@ -12,8 +12,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Table(name = "asiento_contable")
 public class AsientoContable {
@@ -33,5 +33,4 @@ public class AsientoContable {
     @JsonManagedReference
     @Builder.Default
     private List<MovimientoContable> movimientos = new ArrayList<>();
-
 }

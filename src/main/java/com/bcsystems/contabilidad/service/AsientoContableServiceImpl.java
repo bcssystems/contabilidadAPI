@@ -5,12 +5,16 @@ import com.bcsystems.contabilidad.domain.CuentaContable;
 import com.bcsystems.contabilidad.domain.MovimientoContable;
 import com.bcsystems.contabilidad.domain.en.TipoAsientoContable;
 import com.bcsystems.contabilidad.dto.AsientoContableRegisterRequest;
+import com.bcsystems.contabilidad.dto.AsientoContableResponse;
 import com.bcsystems.contabilidad.dto.AsientoContableUpdateRequest;
 import com.bcsystems.contabilidad.dto.MovimientoContableRequest;
+import com.bcsystems.contabilidad.dto.MovimientoContableResponse;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.AsientoContableRepository;
 import com.bcsystems.contabilidad.repository.CuentaContableRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -80,6 +84,38 @@ public class AsientoContableServiceImpl implements AsientoContableService {
     @Override
     public List<AsientoContable> findAll() {
         return asientoContableRepository.findAll();
+    }
+
+    @Override
+    public Page<AsientoContableResponse> findAllPageable(PageRequest pageRequest) {
+        Page<AsientoContable> asientos = asientoContableRepository.findAll(pageRequest);
+        return asientos.map(this::toResponse);
+    }
+
+    private AsientoContableResponse toResponse(AsientoContable asiento) {
+        List<MovimientoContableResponse> movimientos = new ArrayList<>();
+        if (asiento.getMovimientos() != null) {
+            movimientos = asiento.getMovimientos().stream()
+                    .map(mov -> new MovimientoContableResponse(
+                            mov.getIdMovimientoContable(),
+                            mov.getDebe(),
+                            mov.getHaber(),
+                            mov.getCuentaContable() != null ? mov.getCuentaContable().getIdCuentaContable() : null,
+                            mov.getCuentaContable() != null ? mov.getCuentaContable().getNombre() : null,
+                            mov.getCuentaContable() != null ? mov.getCuentaContable().getCodigo() : null,
+                            mov.getAsientoContable() != null ? mov.getAsientoContable().getIdAsientoContable() : null
+                    ))
+                    .toList();
+        }
+        
+        return new AsientoContableResponse(
+                asiento.getIdAsientoContable(),
+                asiento.getFecha(),
+                asiento.getReferencia(),
+                asiento.getDescripcion(),
+                asiento.getTipoAsientoContable(),
+                movimientos
+        );
     }
 
     @Override

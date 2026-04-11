@@ -51,7 +51,8 @@ public class SecurityConfig {
                     return configuration;
                 }))
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers("/api/auth/**").permitAll()
+                        req.requestMatchers("/api/v1/auth/**").permitAll()
+                                .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/api/inventory/**").hasAnyRole("ADMIN")
                                 .anyRequest().authenticated()
                 )

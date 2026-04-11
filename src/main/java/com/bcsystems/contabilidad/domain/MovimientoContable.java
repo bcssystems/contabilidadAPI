@@ -10,8 +10,8 @@ import java.math.BigDecimal;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Table(name = "movimiento_contable")
 public class MovimientoContable {
@@ -29,5 +29,4 @@ public class MovimientoContable {
     @JsonIgnore
     @JoinColumn(name = "cuenta_id")
     private CuentaContable cuentaContable;
-
 }

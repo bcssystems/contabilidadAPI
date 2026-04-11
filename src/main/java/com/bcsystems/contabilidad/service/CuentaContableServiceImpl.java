@@ -2,10 +2,13 @@ package com.bcsystems.contabilidad.service;
 
 import com.bcsystems.contabilidad.domain.CuentaContable;
 import com.bcsystems.contabilidad.dto.CuentaContableRegisterRequest;
+import com.bcsystems.contabilidad.dto.CuentaContableResponse;
 import com.bcsystems.contabilidad.dto.CuentaContableUpdateRequest;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.CuentaContableRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,6 +45,26 @@ public class CuentaContableServiceImpl implements CuentaContableService {
     @Override
     public List<CuentaContable> findAll() {
         return cuentaContableRepository.findByCuentaPadreIsNull();
+    }
+
+    @Override
+    public Page<CuentaContableResponse> findAllPageable(PageRequest pageRequest) {
+        Page<CuentaContable> cuentas = cuentaContableRepository.findAll(pageRequest);
+        return cuentas.map(this::toResponse);
+    }
+
+    private CuentaContableResponse toResponse(CuentaContable cuenta) {
+        return new CuentaContableResponse(
+                cuenta.getIdCuentaContable(),
+                cuenta.getCodigo(),
+                cuenta.getNombre(),
+                cuenta.getTipoCuentaContable(),
+                cuenta.getActiva(),
+                cuenta.getCuentaPadre() != null ? cuenta.getCuentaPadre().getIdCuentaContable() : null,
+                cuenta.getSubcuentas() != null 
+                    ? cuenta.getSubcuentas().stream().map(this::toResponse).toList() 
+                    : List.of()
+        );
     }
 
     @Override

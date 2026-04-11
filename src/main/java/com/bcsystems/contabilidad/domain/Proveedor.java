@@ -6,8 +6,8 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Table(name = "proveedor")
 public class Proveedor {
@@ -19,5 +19,4 @@ public class Proveedor {
     @ManyToOne
     @JoinColumn(name = "cuenta_por_pagar_id")
     private CuentaContable cuentaPorPagar;
-
 }

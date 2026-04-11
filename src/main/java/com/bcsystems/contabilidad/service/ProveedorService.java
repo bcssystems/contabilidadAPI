@@ -3,11 +3,14 @@ package com.bcsystems.contabilidad.service;
 import com.bcsystems.contabilidad.domain.CuentaContable;
 import com.bcsystems.contabilidad.domain.Proveedor;
 import com.bcsystems.contabilidad.dto.ProveedorRegisterRequest;
+import com.bcsystems.contabilidad.dto.ProveedorResponse;
 import com.bcsystems.contabilidad.dto.ProveedorUpdateRequest;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.CuentaContableRepository;
 import com.bcsystems.contabilidad.repository.ProveedorRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,6 +46,19 @@ public class ProveedorService {
 
     public List<Proveedor> findAll() {
         return proveedorRepository.findAll();
+    }
+
+    public Page<ProveedorResponse> findAllPageable(PageRequest pageRequest) {
+        Page<Proveedor> proveedores = proveedorRepository.findAll(pageRequest);
+        return proveedores.map(this::toResponse);
+    }
+
+    private ProveedorResponse toResponse(Proveedor proveedor) {
+        return new ProveedorResponse(
+                proveedor.getIdProveedor(),
+                proveedor.getNombre(),
+                proveedor.getCuentaPorPagar() != null ? proveedor.getCuentaPorPagar().getIdCuentaContable() : null
+        );
     }
 
     public Optional<Proveedor> findById(Long id) {

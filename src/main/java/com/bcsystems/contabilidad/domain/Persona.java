@@ -2,10 +2,7 @@ package com.bcsystems.contabilidad.domain;
 
 import com.bcsystems.contabilidad.domain.en.PersonType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -16,9 +13,10 @@ import java.time.LocalDateTime;
 * */
 
 @Entity
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Table(name = "persona")
 public class Persona {
@@ -38,5 +36,4 @@ public class Persona {
     @CreationTimestamp
     @Column(name = "fecha_registro", updatable = false, nullable = false)
     private LocalDateTime fechaRegistro = LocalDateTime.now();
-
 }

@@ -6,12 +6,15 @@ import com.bcsystems.contabilidad.domain.Venta;
 import com.bcsystems.contabilidad.domain.en.EstadoComision;
 import com.bcsystems.contabilidad.domain.en.TipoComision;
 import com.bcsystems.contabilidad.dto.ComisionRegisterRequest;
+import com.bcsystems.contabilidad.dto.ComisionResponse;
 import com.bcsystems.contabilidad.dto.ComisionUpdateRequest;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.ComisionRepository;
 import com.bcsystems.contabilidad.repository.EmpleadoRepository;
 import com.bcsystems.contabilidad.repository.VentaRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -125,6 +128,26 @@ public class ComisionService {
     @Transactional
     public List<Comision> findAll() {
         return comisionRepository.findAll();
+    }
+
+    public Page<ComisionResponse> findAllPageable(PageRequest pageRequest) {
+        Page<Comision> comisiones = comisionRepository.findAll(pageRequest);
+        return comisiones.map(this::toResponse);
+    }
+
+    private ComisionResponse toResponse(Comision comision) {
+        return new ComisionResponse(
+                comision.getIdComision(),
+                comision.getTipoComision(),
+                comision.getMontoBase(),
+                comision.getPorcentajeComision(),
+                comision.getMontoComision(),
+                comision.getEstadoComision(),
+                comision.getFechaComision(),
+                comision.getFechaPago(),
+                comision.getEmpleado() != null ? comision.getEmpleado().getIdEmpleado().longValue() : null,
+                comision.getVenta() != null ? comision.getVenta().getIdVenta() : null
+        );
     }
 
     public Optional<Comision> findById(Long id) {

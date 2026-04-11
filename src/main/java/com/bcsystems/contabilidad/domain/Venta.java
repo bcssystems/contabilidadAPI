@@ -15,8 +15,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Table(name = "venta")
 public class Venta {
@@ -38,5 +38,4 @@ public class Venta {
     @JsonManagedReference
     @Builder.Default
     private List<Comision> comisiones = new ArrayList<>();
-
 }

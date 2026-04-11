@@ -4,12 +4,15 @@ import com.bcsystems.contabilidad.domain.AsientoContable;
 import com.bcsystems.contabilidad.domain.Compra;
 import com.bcsystems.contabilidad.domain.Proveedor;
 import com.bcsystems.contabilidad.dto.CompraRegisterRequest;
+import com.bcsystems.contabilidad.dto.CompraResponse;
 import com.bcsystems.contabilidad.dto.CompraUpdateRequest;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.AsientoContableRepository;
 import com.bcsystems.contabilidad.repository.CompraRepository;
 import com.bcsystems.contabilidad.repository.ProveedorRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,6 +59,22 @@ public class CompraService {
 
     public List<Compra> findAll() {
         return compraRepository.findAll();
+    }
+
+    public Page<CompraResponse> findAllPageable(PageRequest pageRequest) {
+        Page<Compra> compras = compraRepository.findAll(pageRequest);
+        return compras.map(this::toResponse);
+    }
+
+    private CompraResponse toResponse(Compra compra) {
+        return new CompraResponse(
+                compra.getIdCompra(),
+                compra.getFecha_compra(),
+                compra.getTotal_compra(),
+                compra.getEstadoCompra(),
+                compra.getProveedor() != null ? compra.getProveedor().getIdProveedor() : null,
+                compra.getAsientoContable() != null ? compra.getAsientoContable().getIdAsientoContable() : null
+        );
     }
 
     public Optional<Compra> findById(Long id) {

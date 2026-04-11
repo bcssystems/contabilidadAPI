@@ -4,11 +4,14 @@ import com.bcsystems.contabilidad.domain.AsientoContable;
 import com.bcsystems.contabilidad.domain.Venta;
 import com.bcsystems.contabilidad.domain.en.EstadoVenta;
 import com.bcsystems.contabilidad.dto.VentaRegisterRequest;
+import com.bcsystems.contabilidad.dto.VentaResponse;
 import com.bcsystems.contabilidad.dto.VentaUpdateRequest;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.AsientoContableRepository;
 import com.bcsystems.contabilidad.repository.VentaRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,6 +51,25 @@ public class VentaServiceImpl implements VentaService {
     @Override
     public List<Venta> findAll() {
         return ventaRepository.findAll();
+    }
+
+    @Override
+    public Page<VentaResponse> findAllPageable(PageRequest pageRequest) {
+        Page<Venta> ventas = ventaRepository.findAll(pageRequest);
+        return ventas.map(this::toResponse);
+    }
+
+    private VentaResponse toResponse(Venta venta) {
+        return new VentaResponse(
+                venta.getIdVenta(),
+                venta.getFecha_venta(),
+                venta.getTipoVenta(),
+                venta.getEstadoVenta(),
+                venta.getTotal(),
+                venta.getCosto(),
+                venta.getAsiento() != null ? venta.getAsiento().getIdAsientoContable() : null,
+                List.of()
+        );
     }
 
     @Override
