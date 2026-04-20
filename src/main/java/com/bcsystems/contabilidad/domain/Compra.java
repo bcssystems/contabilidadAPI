@@ -1,0 +1,35 @@
+package com.bcsystems.contabilidad.domain;
+
+import com.bcsystems.contabilidad.domain.en.EstadoCompra;
+import com.bcsystems.contabilidad.domain.en.TipoCompra;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Table(name = "compra")
+public class Compra {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idCompra;
+    private LocalDate fecha_compra;
+    private BigDecimal total_compra;
+    @Enumerated(EnumType.STRING)
+    private EstadoCompra estadoCompra;
+    @ManyToOne
+    @JoinColumn(name = "proveedor_id")
+    private Proveedor proveedor;
+    @ManyToOne
+    @JoinColumn(name = "asiento_id")
+    private AsientoContable asientoContable;
+    @Enumerated(EnumType.STRING)
+    private TipoCompra tipoCompra;
+}
