@@ -3,6 +3,7 @@ package com.bcsystems.contabilidad.service;
 import com.bcsystems.contabilidad.domain.AsientoContable;
 import com.bcsystems.contabilidad.domain.CuentaContable;
 import com.bcsystems.contabilidad.domain.Gasto;
+import com.bcsystems.contabilidad.domain.MovimientoContable;
 import com.bcsystems.contabilidad.dto.GastoRegisterRequest;
 import com.bcsystems.contabilidad.dto.GastoResponse;
 import com.bcsystems.contabilidad.dto.GastoUpdateRequest;
@@ -15,6 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,8 +30,8 @@ public class GastoService {
     private final AsientoContableRepository asientoContableRepository;
 
     public GastoService(GastoRepository gastoRepository,
-                       CuentaContableRepository cuentaContableRepository,
-                       AsientoContableRepository asientoContableRepository) {
+                     CuentaContableRepository cuentaContableRepository,
+                     AsientoContableRepository asientoContableRepository) {
         this.gastoRepository = gastoRepository;
         this.cuentaContableRepository = cuentaContableRepository;
         this.asientoContableRepository = asientoContableRepository;
@@ -48,7 +52,10 @@ public class GastoService {
             }
         }
 
-        if (request.asientoId() != null) {
+        if (request.asientoId() == null) {
+            AsientoContable asiento = crearAsientoAutomaticoGasto(gasto);
+            gasto.setAsientoContable(asiento);
+        } else {
             Optional<AsientoContable> asiento = asientoContableRepository.findById(request.asientoId());
             if (asiento.isPresent()) {
                 gasto.setAsientoContable(asiento.get());
@@ -56,6 +63,55 @@ public class GastoService {
         }
 
         return gastoRepository.save(gasto);
+    }
+
+    private AsientoContable crearAsientoAutomaticoGasto(Gasto gasto) {
+        Optional<CuentaContable> cuentaGasto = cuentaContableRepository.findByCodigo("6101");
+        Optional<CuentaContable> cuentaPago = cuentaContableRepository.findByCodigo("1101");
+
+        if (cuentaGasto.isEmpty() || cuentaPago.isEmpty()) {
+            throw new NotFoundException("Cuentas contables no encontradas para gasto automático");
+        }
+
+        if (gasto.getCuentaContable() != null) {
+            cuentaGasto = Optional.of(gasto.getCuentaContable());
+        }
+
+        List<MovimientoContable> movimientos = new ArrayList<>();
+
+        MovimientoContable movDebe = MovimientoContable.builder()
+                .debe(gasto.getMonto())
+                .haber(BigDecimal.ZERO)
+                .cuentaContable(cuentaGasto.get())
+                .build();
+        movimientos.add(movDebe);
+
+        MovimientoContable movHaber = MovimientoContable.builder()
+                .debe(BigDecimal.ZERO)
+                .haber(gasto.getMonto())
+                .cuentaContable(cuentaPago.get())
+                .build();
+        movimientos.add(movHaber);
+
+        String referencia = "Gasto-" + LocalDate.now();
+        String descripcion = "Gasto: " + gasto.getConcepto() + " por " + gasto.getMonto();
+
+        AsientoContable asiento = AsientoContable.builder()
+                .fecha(gasto.getFecha_gasto())
+                .referencia(referencia)
+                .descripcion(descripcion)
+                .tipoAsientoContable(com.bcsystems.contabilidad.domain.en.TipoAsientoContable.CONFIRMADO)
+                .movimientos(new ArrayList<>())
+                .build();
+
+        asiento = asientoContableRepository.save(asiento);
+
+        for (MovimientoContable mov : movimientos) {
+            mov.setAsientoContable(asiento);
+        }
+        asiento.setMovimientos(movimientos);
+
+        return asientoContableRepository.save(asiento);
     }
 
     public List<Gasto> findAll() {

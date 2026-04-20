@@ -1,6 +1,7 @@
 package com.bcsystems.contabilidad.domain;
 
 import com.bcsystems.contabilidad.domain.en.EstadoCompra;
+import com.bcsystems.contabilidad.domain.en.TipoCompra;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,4 +30,6 @@ public class Compra {
     @ManyToOne
     @JoinColumn(name = "asiento_id")
     private AsientoContable asientoContable;
+    @Enumerated(EnumType.STRING)
+    private TipoCompra tipoCompra;
 }

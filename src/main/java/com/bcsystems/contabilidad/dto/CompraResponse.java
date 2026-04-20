@@ -1,6 +1,7 @@
 package com.bcsystems.contabilidad.dto;
 
 import com.bcsystems.contabilidad.domain.en.EstadoCompra;
+import com.bcsystems.contabilidad.domain.en.TipoCompra;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ public record CompraResponse(
         BigDecimal total_compra,
         EstadoCompra estadoCompra,
         Long proveedorId,
-        Long asientoId
+        Long asientoId,
+        TipoCompra tipoCompra
 ) {
 }
