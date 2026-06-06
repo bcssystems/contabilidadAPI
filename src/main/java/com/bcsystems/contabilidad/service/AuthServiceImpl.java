@@ -50,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
                 .builder()
                 .username(userRegisterRequest.username())
                 .password(passwordEncoder.encode(userRegisterRequest.password()))
-                .role(Role.USER)
+                .role(userRegisterRequest.role() != null ? userRegisterRequest.role() : Role.USER)
                 .activo(true)
                 .persona(personaSaved)
                 .build();

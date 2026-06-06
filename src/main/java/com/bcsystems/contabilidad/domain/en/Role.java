@@ -7,6 +7,7 @@ package com.bcsystems.contabilidad.domain.en;
 
 public enum Role {
     ADMIN,
-    USER
+    USER,
+    ALMACEN
 }
 
