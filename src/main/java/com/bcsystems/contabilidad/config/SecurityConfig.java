@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOrigins(Arrays.asList("https://admon.omisoltec.mx"));
+                    configuration.setAllowedOrigins(Arrays.asList("https://admon.omisoltec.mx", "https://shop.omisoltec.mx", "http://127.0.0.1:5501", "http://127.0.0.1:5502"));
                     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
                     configuration.setAllowedHeaders(Arrays.asList("*"));
                     configuration.setExposedHeaders(Arrays.asList("Authorization"));
@@ -53,6 +53,10 @@ public class SecurityConfig {
                         req.requestMatchers("/api/v1/auth/**").permitAll()
                                 .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/api/inventory/**").hasAnyRole("ADMIN")
+                                .requestMatchers("/api/v1/productos/ecommerce/**").permitAll()
+                                .requestMatchers("/api/v1/productos/**").hasAnyRole("ADMIN", "ALMACEN")
+                                .requestMatchers("/api/v1/usuarios/**").hasRole("ADMIN")
+                                .requestMatchers("/api/images/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

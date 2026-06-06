@@ -1,0 +1,2968 @@
+[
+  {
+    "nombre": "AUDIFONOS 1H CANCELACION",
+    "marca": "1Hora",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 400,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI (1).webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CUBO 1H 65W CUR",
+    "marca": "1HORA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 450,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI (2).webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "AUDIFONOS 1H B",
+    "marca": "1HORA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 250,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI (3).webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "AUDIFONOS DIADEMA HEYDAY",
+    "marca": "HEYDAY",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 150,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 1.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "BOCINA FLOTANTE",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 160,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 10.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "AUDIFONOS PASTILLA HEYDAY",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 60,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 11.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "AUDIFONOS PASTILLA GOMITA",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 60,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 12.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CABLE UGREEN C-C 1.5MTRS",
+    "marca": "UGREEN",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 220,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 13.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CABLE UGREEN C-C 1MTRS LED",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 260,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 14.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "ADAPTADOR C-AUX AUN-C102",
+    "marca": "BUYTITI",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 50,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 15.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "AIRPODS OEM",
+    "marca": "OEM",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 400,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 16.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "AUDIFONOS 1H BLUETOOTH",
+    "marca": "1HORA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 280,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 17.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "AUDIFONOS SM SKG TIPO C",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 50,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 18.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CABLE C-C",
+    "marca": "1HORA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 75,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 19.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CABLE C-C HEYDAY",
+    "marca": "HEYDAY",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 75,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 2.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CABLE V8",
+    "marca": "1HORA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 45,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 20.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CABLE C-IPHONE",
+    "marca": "1HORA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 80,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 21.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CRISTAL PARA CAMARA DE IPHONE",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 50,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 22.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CUBO A 10W",
+    "marca": "1HORA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 50,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 23.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CUBO A 5W",
+    "marca": "1HORA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 50,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 24.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CUBO 20W TIPO C",
+    "marca": "1HORA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 100,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 25.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "MICA HIDROGEL MATE",
+    "marca": "GENGXIN",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 60,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 26.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "MICA HIDROGEL BLUERAY",
+    "marca": "GENGXIN",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 60,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 27.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "MICA HIDROGEL MORADA",
+    "marca": "GNGXIN",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 60,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 28.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "MICA HIDROGEL PRIVACIDAD",
+    "marca": "GNGXIN",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 100,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 29.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CABLE A-C HEYDAY",
+    "marca": "HEYDAY",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 75,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 3.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CHIP AT&T",
+    "marca": "AT&T",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 70,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 30.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "ADAPTADOR IP AUXILIAR",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 80,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 31.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CABLE HDMI 3MTRS",
+    "marca": "DEAL WORTHY",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 190,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 32.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CABLE A-IPHONE",
+    "marca": "1HORA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 60,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 33.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CABLE A-C",
+    "marca": "1HORA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 60,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 34.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CHIP BAIT",
+    "marca": "BAIT",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 100,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 35.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CHIP TELCEL",
+    "marca": "TELCEL",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 50,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 36.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CHIP UNEFON",
+    "marca": "UNEFON",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 70,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 37.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "MICA HIDROGEL HD",
+    "marca": "GENGXIN",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 60,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 38.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CABLE AUXILIAR AUDIO",
+    "marca": "MOREKA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 30,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 39.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CABLE IPHONE",
+    "marca": "HEYDAY",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 80,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 4.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "RECEPTOR INALAMBRICO AUTO",
+    "marca": "",
+    "modelo": "BT-450",
+    "precioCompra": 0,
+    "precioVenta": 60,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 40.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CARGADOR PARA AUTO",
+    "marca": "BROAD",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 50,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 41.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "FUNDAS VARIOS MOD Y COLORES",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 150,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 42.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CUBO UGREEN 20W",
+    "marca": "UGREEN",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 400,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 43.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CUBO UGREEN 30W",
+    "marca": "UGREEN",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 500,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 44.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CHIP TELCEL PORTABILIDAD",
+    "marca": "TELCEL",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 80,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 46.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CHIP MOVISTAR",
+    "marca": "MOVISTAR",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 50,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 47.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "AUDIFONOS VARIOS",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 60,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 48.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "BOCINA HEYDAY",
+    "marca": "HEYDAY",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 280,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 49.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CUBO A Y C HEYDAY",
+    "marca": "HEYDAY",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 100,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 5.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CAMARA INSTANTANEA HEYDAY",
+    "marca": "HEYDAY",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 280,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 50.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "BASE DE CARGA INALAMBRICA 4 EN 1",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 350,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 51.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "MAG SAFE CHARGER",
+    "marca": "1HORA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 200,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 52.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "POWER BANK MAGNETICA",
+    "marca": "1HORA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 400,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 53.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "MOUSE PARA NIÑO",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 240,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 54.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CORREA SMARTWATCH",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 30,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 55.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CORREA APPLEWATCH",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 50,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 56.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CABLE APPLEWATCH",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 250,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 57.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CUBO ORIGINAL IPHONE 20W",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 450,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 58.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CABLE ORIGINAL IPHONE",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 400,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 59.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "POWERBANK HEYDAY",
+    "marca": "HEYDAY",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 250,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 6.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CABLE IPHONE 5W",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 200,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 60.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "HEYDAY OCTOBUDY",
+    "marca": "HEYDAY",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 40,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 61.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "MICA CRISTAL",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 30,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 63.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CUBO IPAD 12W",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 200,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 64.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CARGADOR TIPO C",
+    "marca": "1HORA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 150,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 65.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "FUNDA AIRPODS PRO 1 Y 2",
+    "marca": "HEYDAY",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 50,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 7.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "MOUSE LOGITEC",
+    "marca": "LOGITECH",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 250,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 8.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "MOUSE HEYDAY",
+    "marca": "HEYDAY",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 240,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI - 9.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "POWERBANK 1H 10.5W",
+    "marca": "1HORA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 400,
+    "estado": "NUEVO",
+    "categoria": "ACCESORIOS",
+    "imagenes": [
+      "ACCESORIOS OMI.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "MOTOROLA EDGE 60 FUSION",
+    "marca": "MOTOROLA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 5200,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "edgefusion60.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "HONOR 9X",
+    "marca": "HONOR",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 1600,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "honor9x.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "HUAWEI NOVA 3",
+    "marca": "HUAWEI",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 950,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "huaweinova3.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "HUAWEI Y9A",
+    "marca": "HUAWEI",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 1600,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "huaweiy9a.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "MOTO G13",
+    "marca": "MOTOROLA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 1400,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "motog13.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "MOTO G41",
+    "marca": "MOTOROLA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 2100,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "motog41.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "MOTO G86",
+    "marca": "MOTOROLA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 6500,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "motog86.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "MOTO G86",
+    "marca": "MOTOROLA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 6500,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "motog862.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "OPPO A54",
+    "marca": "APPO",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 1900,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "oppoa54.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "OPPO A54",
+    "marca": "OPPO",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 1900,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "oppoa542.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "REDMI 9T",
+    "marca": "REDMI",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 1100,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "redmi9t.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "REDMI NOTE 12",
+    "marca": "REDMI",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 1700,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "redminote12.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "SAMSUNG A17",
+    "marca": "SAMSUNG",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 3200,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "samsunga17.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "SAMSUNG GALAXY A23",
+    "marca": "SAMSUNG",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 2200,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "samsunga23.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "SAMSUNG GALAXY A17",
+    "marca": "SAMSUNG",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 3200,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "samsunggalaxya17.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "SAMSUNG GALAXY A17",
+    "marca": "SAMSUNG",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 3200,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "sansunggalaxya17.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "SAMSUNG GALAXY FOLD 5",
+    "marca": "SAMSUNG",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 12500,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "smgalaxyfold.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "SAMSUNG Z FOLD 6",
+    "marca": "SAMSUNG",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 18000,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "smzfold6.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "VIVO 2028",
+    "marca": "VIVO",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 1200,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "vivo2028.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "VIVO Y53S",
+    "marca": "VIVO",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 1750,
+    "estado": "NUEVO",
+    "categoria": "ANDROID",
+    "imagenes": [
+      "vivoy53s.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "FREIDORA DE AIRE POWER XL",
+    "marca": "POWER XL",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 1600,
+    "estado": "SEMI",
+    "categoria": "HOGAR",
+    "imagenes": [
+      "freidoraaire.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "SHARP ROKU TV 50",
+    "marca": "SHARP",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 7000,
+    "estado": "NUEVO",
+    "categoria": "HOGAR",
+    "imagenes": [
+      "sharptv.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "VENTILADOR ATVIO 4",
+    "marca": "ATVIO",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 150,
+    "estado": "NUEVO",
+    "categoria": "HOGAR",
+    "imagenes": [
+      "ventiladoratvio4.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "VENTILADOR OMNIBREEZE",
+    "marca": "OMIBREEZE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 1150,
+    "estado": "NUEVO",
+    "categoria": "HOGAR",
+    "imagenes": [
+      "ventiladortorre.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "ASUS EXPERTBOOK",
+    "marca": "ASUS",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 8500,
+    "estado": "NUEVO",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "asusexpertbook.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "ASUS VIVO BOOK",
+    "marca": "ASUS",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 6500,
+    "estado": "NUEVO",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "asusvivobook.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CPU DELL",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 500,
+    "estado": "SEMI",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "cpudell.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "DELL LATITUDE 5440",
+    "marca": "DELL",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 10000,
+    "estado": "NUEVO",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "delllatitude.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "GABINETE GAMER XPG STARKER",
+    "marca": "XPG",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 900,
+    "estado": "SEMI",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "gabinetexpg.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "GHIA LIBERO LXH14CPP",
+    "marca": "GHIA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 3000,
+    "estado": "NUEVO",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "ghialibero.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "HP PROBOOK I7",
+    "marca": "HP",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 7500,
+    "estado": "NUEVO",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "hpprobook.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IMPRESORA SAMSUNG",
+    "marca": "SAMSUNG",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 800,
+    "estado": "SEMI",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "impresorasamsung.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "LAPTOP DELL G15 5530",
+    "marca": "DELL",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 24000,
+    "estado": "NUEVO",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "lapdellg15.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "LAPTOP DELL VOSTRO 5402",
+    "marca": "DELL",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 5500,
+    "estado": "NUEVO",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "lapdellvostro.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "LAPTOP GAMER MSI 15.6",
+    "marca": "MSI",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 6500,
+    "estado": "NUEVO",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "lapgamingmsi.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "LAPTOP LENOVO IDEAPAD 3",
+    "marca": "LENOVO",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 9500,
+    "estado": "NUEVO",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "laplenovo3.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "LAPTOP DELL LATITUDE 3410",
+    "marca": "DELL",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 6500,
+    "estado": "NUEVO",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "laptopdell.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "LENOVO IDEAPAD GAMING 3",
+    "marca": "LENOVO",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 12000,
+    "estado": "NUEVO",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "lenovoideapad3.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "LENOVO THINKPAD L14",
+    "marca": "LENOVO",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 11000,
+    "estado": "NUEVO",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "lenovothinkpad.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "LENOVO THINKPAD T16",
+    "marca": "LENOVO",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 16000,
+    "estado": "NUEVO",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "lenovothinkpad2.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "SURFACE LAPTOP GO",
+    "marca": "MICROSOFT",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 7500,
+    "estado": "NUEVO",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "surfacelaptopgo.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "SURFACE LAPTOP GO",
+    "marca": "MICROSOFT",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 6800,
+    "estado": "NUEVO",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "surfacelaptopgo2.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "SWITCH MERCUSYS MS105G",
+    "marca": "MERCUSYS",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 150,
+    "estado": "NUEVO",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "switchmercusys.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "SISTEMA DE REFRIGERACION NOCTUA",
+    "marca": "NOCTUA",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 2000,
+    "estado": "NUEVO",
+    "categoria": "COMPUTADORAS",
+    "imagenes": [
+      "ventiladoresnoctua.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "APPLE PENCIL",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 2500,
+    "estado": "SEMI",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "applepencil.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "APPLE WATCH S7",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 5050,
+    "estado": "NUEVO",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "applewatch.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "APPLE WATCH SE 2GEN",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 4900,
+    "estado": "NUEVO",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "applewatch2.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "APPLE WATCH S7",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 4500,
+    "estado": "NUEVO",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "applewatch3.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "AUDIFONOS CMF BUDS",
+    "marca": "CMF",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 1200,
+    "estado": "NUEVO",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "audifonoscmf.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "AUDIFONOS SONY MDR-ZX110",
+    "marca": "SONY",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 500,
+    "estado": "NUEVO",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "audifonossony.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "BOCINA ALTEC HIDRAMINI 2",
+    "marca": "ALTEC",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 880,
+    "estado": "NUEVO",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "bocinaaltec.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "BOCINA JBL CHARGE 5",
+    "marca": "JBL",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 3900,
+    "estado": "NUEVO",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "bocinajbl.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "BOCINA JBL GRIP",
+    "marca": "JBL",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 2200,
+    "estado": "NUEVO",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "bocinajblgrip.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "BOCINA JBL GRIP",
+    "marca": "JBL",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 2200,
+    "estado": "NUEVO",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "bocinajblgrip2.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "BOCINA PHILLIPS",
+    "marca": "PHILLIPS",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 500,
+    "estado": "NUEVO",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "bocinaphillips.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "BOOK COVER KEYBOARD",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 3500,
+    "estado": "NUEVO",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "bookcoverkeyboard.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CAMARA DJI OSMO",
+    "marca": "DJI",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 7500,
+    "estado": "SEMI",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "camaradji.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CAMARA WIFI STEREN",
+    "marca": "STEREN",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 350,
+    "estado": "SEMI",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "camarawifi.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CAMARA WIFI STEREN",
+    "marca": "STEREN",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 450,
+    "estado": "SEMI",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "camarawifi2.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CONTROL PARA TV",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 50,
+    "estado": "NUEVO",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "controltv.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IMPRESORA PARA TICKETS 58MM",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 400,
+    "estado": "SEMI",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "impresora58mm.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "MINI TERMINAL MERCADO PAGO",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 300,
+    "estado": "SEMI",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "miniterminal.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "MINI TERMINAL CLIP MERCADO PAGO",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 300,
+    "estado": "SEMI",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "miniterminal2.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "PROYECTOR OPLED YP20",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 2500,
+    "estado": "NUEVO",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "proyectoropeld.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "RELOJ CHECADOR F01",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 250,
+    "estado": "SEMI",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "relojchecador.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "SENSOR MOVIMIENTO",
+    "marca": "STEREN",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 90,
+    "estado": "SEMI",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "sensormovimiento.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "SMART KEYBOARD",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 1200,
+    "estado": "SEMI",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "smartkeyboard.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "ANTENA STARLINK MINI",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 4800,
+    "estado": "NUEVO",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "startlink.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "UGREEN SMART FINDER",
+    "marca": "UGREEN",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 350,
+    "estado": "NUEVO",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "ugreensmartfinder.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "UGREEN TRACKER SLIM",
+    "marca": "UGREEN",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 500,
+    "estado": "NUEVO",
+    "categoria": "GADGETS",
+    "imagenes": [
+      "ugreentrackerslim.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 12",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 4500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip12.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 12",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 5500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip122.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IHPONE 13",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 7500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip13.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 13 PRO",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 7500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip13pro.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 13 PRO",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 7500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip13pro2.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 13 PRO",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 7500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip13pro3.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 13 PRO",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 7500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip13pro4.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 13 PRO MAX",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 10300,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip13promax.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "PHONE 13 PRO MAX",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 9500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip13promax2.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 13 PRO MAX",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 10000,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip13promax3.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 13 PRO MAX",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 8500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip13promax4.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 13 PRO MAX",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 10300,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip13promax5.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 13 PRO MAX",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 8500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip13promax6.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 13 PRO MAX",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 10300,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip13promax7.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 14",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 9750,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip14.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 14",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 8000,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip142.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 14",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 8500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip143.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 14",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 8500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip144.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 14",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 8500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip145.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 14",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 8500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip146.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 14",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 8500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip147.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 14 PRO",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 10500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip14pro.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 14 PRO MAX",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 11000,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip14promax.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [
+      "",
+      ""
+    ],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 14 PRO MAX",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 11500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip14promax2.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 14 PRO MAX",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 11500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip14promax3.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 14 PRO MAX",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 11500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip14promax4.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 15",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 11500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip15.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 15",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 11500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip152.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [
+      "",
+      ""
+    ],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 15",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 11500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip153.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 15 PLUS",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 13000,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip15plus.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 16",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 11500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip16.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 16 PLUS",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 14500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip16plus.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 16 PRO",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 15800,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip16pro.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "IPHONE 16 PRO",
+    "marca": "APPLE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 15500,
+    "estado": "SEMI",
+    "categoria": "IPHONE",
+    "imagenes": [
+      "ip16pro2.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "SCOOTER ELECTRICO NAVEE",
+    "marca": "NAVEE",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 12500,
+    "estado": "NUEVO",
+    "categoria": "MOVILIDAD",
+    "imagenes": [
+      "scooter.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "GALAXY TAB A 8.4 2020",
+    "marca": "GALAXY",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 2600,
+    "estado": "SEMI",
+    "categoria": "TABLETS",
+    "imagenes": [
+      "galaxytaba8.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "LENOVO K10 10.2",
+    "marca": "LENOVO",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 4450,
+    "estado": "NUEVO",
+    "categoria": "TABLETS",
+    "imagenes": [
+      "lenovok10.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "SAMSUNG GALAXY TAB A11 64GB",
+    "marca": "SAMSUNG",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 3550,
+    "estado": "NUEVO",
+    "categoria": "TABLETS",
+    "imagenes": [
+      "samsunggaltaba11.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "SAMSUNG TAB S9 ULTRA 1T",
+    "marca": "SAMSUNG",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 14500,
+    "estado": "NUEVO",
+    "categoria": "TABLETS",
+    "imagenes": [
+      "samsungtabs9.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "TABLET HP ELITE PAD 1000 G2",
+    "marca": "HP",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 1500,
+    "estado": "NUEVO",
+    "categoria": "TABLETS",
+    "imagenes": [
+      "tablethpelitepad.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "TABLET HP ELITE PAD 900",
+    "marca": "HP",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 1500,
+    "estado": "NUEVO",
+    "categoria": "TABLETS",
+    "imagenes": [
+      "tablethpelitepad2.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CONTROL NINTENDO SWITCH",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 800,
+    "estado": "NUEVO",
+    "categoria": "VIDEOJUEGOS",
+    "imagenes": [
+      "controlnintendo.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "CORREAS PARA JOYCON",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 150,
+    "estado": "NUEVO",
+    "categoria": "VIDEOJUEGOS",
+    "imagenes": [
+      "correaspjoycon.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "FUNDAS PARA SWITCH",
+    "marca": "",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 250,
+    "estado": "SEMI",
+    "categoria": "VIDEOJUEGOS",
+    "imagenes": [
+      "fundaswitch.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "BASE DE CARGADOR NINTENDO SWITCH",
+    "marca": "NINTENDO",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 750,
+    "estado": "SEMI",
+    "categoria": "VIDEOJUEGOS",
+    "imagenes": [
+      "nintendoswitch.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "PLAYSTATION PORTAL LCD",
+    "marca": "PLAYSTATION",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 5500,
+    "estado": "SEMI",
+    "categoria": "VIDEOJUEGOS",
+    "imagenes": [
+      "playportal.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "PLAYSTATION 4 SLIM",
+    "marca": "SONY",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 3200,
+    "estado": "NUEVO",
+    "categoria": "VIDEOJUEGOS",
+    "imagenes": [
+      "ps4.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  },
+  {
+    "nombre": "PLAYSTATION 4 CON JUEGO",
+    "marca": "SONY",
+    "modelo": "",
+    "precioCompra": 0,
+    "precioVenta": 3500,
+    "estado": "NUEVO",
+    "categoria": "VIDEOJUEGOS",
+    "imagenes": [
+      "ps4cjuego.webp"
+    ],
+    "descripcion": "",
+    "especificaciones": [],
+    "mensajeWhatsapp": "Hola, me interesa este producto. Podrian darme mas informacion?",
+    "pagadoCaja": false
+  }
+]
