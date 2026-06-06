@@ -102,6 +102,16 @@ public class ProductoServiceImpl implements ProductoService {
         if (request.pagadoCaja() != null) producto.setPagadoCaja(request.pagadoCaja());
         if (request.activo() != null) producto.setActivo(request.activo());
 
+        if (request.imagenesEliminar() != null && !request.imagenesEliminar().isEmpty()) {
+            List<String> imagenesExistentes = fromJson(producto.getImagenes());
+            List<String> imagenesActualizadas = new ArrayList<>(imagenesExistentes);
+            for (String img : request.imagenesEliminar()) {
+                imagenesActualizadas.remove(img);
+                deleteImageFile(img);
+            }
+            producto.setImagenes(toJson(imagenesActualizadas));
+        }
+
         if (imagenesFiles != null && !imagenesFiles.isEmpty()) {
             List<String> rutasImagenes = saveImageFiles(imagenesFiles);
             List<String> imagenesExistentes = fromJson(producto.getImagenes());
@@ -220,6 +230,15 @@ public class ProductoServiceImpl implements ProductoService {
             return list == null ? "[]" : objectMapper.writeValueAsString(list);
         } catch (Exception e) {
             return "[]";
+        }
+    }
+
+    private void deleteImageFile(String filename) {
+        try {
+            Path filePath = Paths.get(uploadDir).resolve(filename);
+            Files.deleteIfExists(filePath);
+        } catch (IOException e) {
+            System.out.println("No se pudo eliminar el archivo: " + filename + " - " + e.getMessage());
         }
     }
 

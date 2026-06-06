@@ -18,5 +18,6 @@ public record ProductoUpdateRequest(
         List<String> especificaciones,
         String mensajeWhatsapp,
         Boolean pagadoCaja,
-        Boolean activo
+        Boolean activo,
+        List<String> imagenesEliminar
 ) {}
