@@ -34,6 +34,7 @@ public class AsientoContableServiceImpl implements AsientoContableService {
         this.cuentaContableRepository = cuentaContableRepository;
     }
 
+    @Override
     @Transactional
     public AsientoContable save(AsientoContableRegisterRequest request) {
         List<MovimientoContable> movimientos = new ArrayList<>();

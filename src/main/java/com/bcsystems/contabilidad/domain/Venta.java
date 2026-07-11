@@ -2,40 +2,59 @@ package com.bcsystems.contabilidad.domain;
 
 import com.bcsystems.contabilidad.domain.en.EstadoVenta;
 import com.bcsystems.contabilidad.domain.en.TipoVenta;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "venta")
 public class Venta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idVenta;
-    private LocalDate fecha_venta;
+    private Integer idVenta;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_caja", nullable = false)
+    private Caja caja;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cliente")
+    private Cliente cliente;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Persona usuario;
+
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
     private TipoVenta tipoVenta;
+
+    @Column(nullable = false)
+    private Integer precioSeleccionado;
+
+    @Column(nullable = false)
+    private Double subtotal;
+
+    @Column(nullable = false)
+    private Double descuento;
+
+    @Column(nullable = false)
+    private Double total;
+
     @Enumerated(EnumType.STRING)
-    private EstadoVenta estadoVenta;
-    private BigDecimal total;
-    private BigDecimal costo;
-    @ManyToOne
-    @JoinColumn(name = "asiento_id")
-    private AsientoContable asiento;
-    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    @Builder.Default
-    private List<Comision> comisiones = new ArrayList<>();
+    @Column(nullable = false, length = 10)
+    private EstadoVenta estado;
+
+    @Column(length = 500)
+    private String nota;
+
+    @Column(updatable = false)
+    private LocalDateTime fecha;
 }

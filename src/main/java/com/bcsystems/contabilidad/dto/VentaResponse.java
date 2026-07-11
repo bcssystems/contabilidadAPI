@@ -15,6 +15,8 @@ public record VentaResponse(
         BigDecimal total,
         BigDecimal costo,
         Long asientoId,
-        List<ComisionResponse> comisiones
+        List<ComisionResponse> comisiones,
+        Integer sucursalId,
+        String sucursalNombre
 ) {
 }

@@ -40,7 +40,7 @@ public class ComisionService {
 
     @Transactional
     public Comision save(ComisionRegisterRequest request) {
-        Optional<Venta> venta = ventaRepository.findById(request.ventaId());
+        Optional<Venta> venta = ventaRepository.findById(request.ventaId().intValue());
         if (venta.isEmpty()) {
             throw new NotFoundException("Venta no encontrada");
         }
@@ -76,7 +76,7 @@ public class ComisionService {
                                                    Long empleadoCobradorId,
                                                    BigDecimal porcentajeVenta, 
                                                    BigDecimal porcentajeCobranza) {
-        Optional<Venta> ventaOpt = ventaRepository.findById(ventaId);
+        Optional<Venta> ventaOpt = ventaRepository.findById(ventaId.intValue());
         if (ventaOpt.isEmpty()) {
             throw new NotFoundException("Venta no encontrada");
         }
@@ -86,7 +86,7 @@ public class ComisionService {
 
         Optional<Empleado> vendedor = empleadoRepository.findById(empleadoVendedorId);
         if (vendedor.isPresent()) {
-            BigDecimal montoComisionVenta = venta.getTotal()
+            BigDecimal montoComisionVenta = BigDecimal.valueOf(venta.getTotal())
                     .multiply(porcentajeVenta)
                     .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
 
@@ -94,7 +94,7 @@ public class ComisionService {
                     .tipoComision(TipoComision.VENTA)
                     .venta(venta)
                     .empleado(vendedor.get())
-                    .montoBase(venta.getTotal())
+                    .montoBase(BigDecimal.valueOf(venta.getTotal()))
                     .porcentajeComision(porcentajeVenta)
                     .montoComision(montoComisionVenta)
                     .estadoComision(EstadoComision.PENDIENTE)
@@ -105,7 +105,7 @@ public class ComisionService {
 
         Optional<Empleado> cobrador = empleadoRepository.findById(empleadoCobradorId);
         if (cobrador.isPresent()) {
-            BigDecimal montoComisionCobranza = venta.getTotal()
+            BigDecimal montoComisionCobranza = BigDecimal.valueOf(venta.getTotal())
                     .multiply(porcentajeCobranza)
                     .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
 
@@ -113,7 +113,7 @@ public class ComisionService {
                     .tipoComision(TipoComision.COBRANZA)
                     .venta(venta)
                     .empleado(cobrador.get())
-                    .montoBase(venta.getTotal())
+                    .montoBase(BigDecimal.valueOf(venta.getTotal()))
                     .porcentajeComision(porcentajeCobranza)
                     .montoComision(montoComisionCobranza)
                     .estadoComision(EstadoComision.PENDIENTE)
@@ -146,7 +146,7 @@ public class ComisionService {
                 comision.getFechaComision(),
                 comision.getFechaPago(),
                 comision.getEmpleado() != null ? comision.getEmpleado().getIdEmpleado().longValue() : null,
-                comision.getVenta() != null ? comision.getVenta().getIdVenta() : null
+                comision.getVenta() != null ? comision.getVenta().getIdVenta().longValue() : null
         );
     }
 
@@ -156,10 +156,14 @@ public class ComisionService {
         throw new NotFoundException("Comisión no encontrada");
     }
 
+    public Optional<Comision> findById(Integer id) {
+        return findById(id.longValue());
+    }
+
     @Transactional
     public Comision update(Long id, ComisionUpdateRequest request) {
         Optional<Comision> comisionOpt = comisionRepository.findById(id);
-        if (!comisionOpt.isPresent()) {
+        if (comisionOpt.isEmpty()) {
             throw new NotFoundException("Comisión no encontrada");
         }
 
@@ -193,7 +197,7 @@ public class ComisionService {
     @Transactional
     public void delete(Long id) {
         Optional<Comision> comisionOpt = comisionRepository.findById(id);
-        if (!comisionOpt.isPresent()) {
+        if (comisionOpt.isEmpty()) {
             throw new NotFoundException("Comisión no encontrada");
         }
         comisionRepository.delete(comisionOpt.get());
