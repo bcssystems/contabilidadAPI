@@ -35,6 +35,7 @@ public class MovimientoContableServiceImpl implements MovimientoContableService 
         this.asientoContableRepository = asientoContableRepository;
     }
 
+    @Override
     @Transactional
     public MovimientoContable save(MovimientoContableRegisterRequest request) {
         Optional<CuentaContable> cuenta = cuentaContableRepository.findById(request.cuentaContableId());

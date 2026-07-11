@@ -23,6 +23,7 @@ public class CuentaContableServiceImpl implements CuentaContableService {
         this.cuentaContableRepository = cuentaContableRepository;
     }
 
+    @Override
     @Transactional
     public CuentaContable save(CuentaContableRegisterRequest request) {
         CuentaContable cuenta = CuentaContable.builder()

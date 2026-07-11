@@ -1,8 +1,6 @@
 package com.bcsystems.contabilidad.config;
 
 import com.bcsystems.contabilidad.domain.Producto;
-import com.bcsystems.contabilidad.domain.en.CategoriaProducto;
-import com.bcsystems.contabilidad.domain.en.EstadoProducto;
 import com.bcsystems.contabilidad.repository.ProductoRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,9 +9,10 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
-import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Component
 public class ProductosInitializer implements CommandLineRunner {
@@ -35,21 +34,28 @@ public class ProductosInitializer implements CommandLineRunner {
         try {
             InputStream input = new ClassPathResource("productos-initial.json").getInputStream();
             List<Map<String, Object>> productosData = objectMapper.readValue(input, new TypeReference<>() {});
+            Set<String> usedSkus = new HashSet<>();
 
             for (Map<String, Object> data : productosData) {
+                String nombre = (String) data.get("nombre");
+                String baseSku = nombre.toUpperCase().replaceAll("[^A-Z0-9]", "_").replaceAll("_+", "_").replaceAll("^_|_$", "");
+                if (baseSku.length() > 40) baseSku = baseSku.substring(0, 40);
+                String sku = baseSku;
+                int counter = 1;
+                while (usedSkus.contains(sku)) {
+                    sku = baseSku + "_" + counter++;
+                }
+                usedSkus.add(sku);
+
+                Double precioVenta = data.get("precioVenta") != null ? ((Number) data.get("precioVenta")).doubleValue() : null;
+
                 Producto producto = Producto.builder()
-                        .nombre((String) data.get("nombre"))
-                        .marca((String) data.get("marca"))
-                        .modelo((String) data.get("modelo"))
-                        .precioCompra(new BigDecimal(data.get("precioCompra").toString()))
-                        .precioVenta(new BigDecimal(data.get("precioVenta").toString()))
-                        .estado(EstadoProducto.valueOf((String) data.get("estado")))
-                        .categoria(CategoriaProducto.valueOf((String) data.get("categoria")))
-                        .imagenes(objectMapper.writeValueAsString(data.get("imagenes")))
+                        .sku(sku)
+                        .nombre(nombre)
                         .descripcion((String) data.get("descripcion"))
-                        .especificaciones(objectMapper.writeValueAsString(data.get("especificaciones")))
-                        .mensajeWhatsapp((String) data.get("mensajeWhatsapp"))
-                        .pagadoCaja(false)
+                        .precio1(precioVenta)
+                        .stockActual(0)
+                        .activo(true)
                         .build();
                 productoRepository.save(producto);
             }

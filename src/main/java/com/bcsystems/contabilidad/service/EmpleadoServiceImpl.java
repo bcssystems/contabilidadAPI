@@ -26,6 +26,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         this.personaService = personaService;
     }
 
+    @Override
     @Transactional
     public Empleado save(EmpleadoRegisterRequest empleadoRegisterRequest) {
         Persona persona = Persona
@@ -42,7 +43,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
                 .position(empleadoRegisterRequest.position())
                 .persona(personasaved)
                 .build();
-        empleadoRepository.save(empleado);
+        empleado = empleadoRepository.save(empleado);
         return empleado;
     }
 
@@ -72,6 +73,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     }
 
     @Override
+    @Transactional
     public Empleado updateEmpleado(Integer id, EmpleadoUpdateRequest empleadoUpdateRequest) {
         if(id == null) throw new NotFoundException("Usuario no encontrado");
 

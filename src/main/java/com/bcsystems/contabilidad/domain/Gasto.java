@@ -1,30 +1,48 @@
 package com.bcsystems.contabilidad.domain;
 
+import com.bcsystems.contabilidad.domain.en.EstadoGasto;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "gasto")
 public class Gasto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idGasto;
-    private LocalDate fecha_gasto;
-    private String concepto;
-    private BigDecimal monto;
-    @ManyToOne
-    @JoinColumn(name = "cuenta_gasto_id")
-    private CuentaContable cuentaContable;
-    @ManyToOne
-    @JoinColumn(name = "asiento_id")
-    private AsientoContable asientoContable;
+    private Integer idGasto;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_caja", nullable = false)
+    private Caja caja;
+
+    @Column(nullable = false, length = 300)
+    private String descripcion;
+
+    @Column(nullable = false)
+    private Double monto;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Persona usuario;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_autorizador")
+    private Persona autorizador;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 15)
+    private EstadoGasto estado;
+
+    @Column(updatable = false)
+    private LocalDateTime fechaCreacion;
+
+    private LocalDateTime fechaAutorizacion;
 }

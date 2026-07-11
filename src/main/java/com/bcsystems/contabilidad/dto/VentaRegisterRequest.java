@@ -10,6 +10,7 @@ public record VentaRegisterRequest(
         TipoVenta tipoVenta,
         BigDecimal total,
         BigDecimal costo,
-        Long asientoId
+        Long asientoId,
+        Integer sucursalId
 ) {
 }

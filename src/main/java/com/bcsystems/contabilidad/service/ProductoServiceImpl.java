@@ -1,253 +1,199 @@
 package com.bcsystems.contabilidad.service;
 
-import com.bcsystems.contabilidad.domain.Producto;
-import com.bcsystems.contabilidad.domain.en.CategoriaProducto;
-import com.bcsystems.contabilidad.domain.en.EstadoProducto;
-import com.bcsystems.contabilidad.dto.ProductoAdminResponse;
-import com.bcsystems.contabilidad.dto.ProductoEcommerceResponse;
-import com.bcsystems.contabilidad.dto.ProductoRegisterRequest;
-import com.bcsystems.contabilidad.dto.ProductoUpdateRequest;
+import com.bcsystems.contabilidad.domain.*;
+import com.bcsystems.contabilidad.domain.en.TipoMovimiento;
 import com.bcsystems.contabilidad.exception.NotFoundException;
-import com.bcsystems.contabilidad.repository.ProductoRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Value;
+import com.bcsystems.contabilidad.repository.*;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ProductoServiceImpl implements ProductoService {
 
     private final ProductoRepository productoRepository;
-    private final ObjectMapper objectMapper;
+    private final InventarioSucursalRepository inventarioSucursalRepository;
+    private final MovimientoStockRepository movimientoStockRepository;
+    private final SucursalRepository sucursalRepository;
 
-    @Value("${app.upload.dir:uploads/productos}")
-    private String uploadDir;
-
-    public ProductoServiceImpl(ProductoRepository productoRepository, ObjectMapper objectMapper) {
+    public ProductoServiceImpl(ProductoRepository productoRepository,
+                               InventarioSucursalRepository inventarioSucursalRepository,
+                               MovimientoStockRepository movimientoStockRepository,
+                               SucursalRepository sucursalRepository) {
         this.productoRepository = productoRepository;
-        this.objectMapper = objectMapper;
+        this.inventarioSucursalRepository = inventarioSucursalRepository;
+        this.movimientoStockRepository = movimientoStockRepository;
+        this.sucursalRepository = sucursalRepository;
     }
 
     @Override
     @Transactional
-    public Producto save(ProductoRegisterRequest request, List<MultipartFile> imagenesFiles) {
-        List<String> rutasImagenes = saveImageFiles(imagenesFiles);
+    public Producto save(Producto producto) {
+        if (producto.getStockActual() == null) producto.setStockActual(0);
+        producto.setActivo(true);
+        producto = productoRepository.save(producto);
 
-        Producto producto = Producto.builder()
-                .nombre(request.nombre())
-                .marca(request.marca())
-                .modelo(request.modelo())
-                .precioCompra(request.precioCompra())
-                .precioVenta(request.precioVenta())
-                .estado(request.estado())
-                .categoria(request.categoria())
-                .descripcion(request.descripcion())
-                .especificaciones(toJson(request.especificaciones()))
-                .mensajeWhatsapp(request.mensajeWhatsapp() != null ? request.mensajeWhatsapp() :
-                        "Hola, me interesa este producto. Podrian darme mas informacion?")
-                .pagadoCaja(request.pagadoCaja() != null && request.pagadoCaja())
-                .imagenes(toJson(rutasImagenes))
-                .build();
+        if (producto.getInventarioSucursales() != null) {
+            for (InventarioSucursal inv : producto.getInventarioSucursales()) {
+                inv.setProducto(producto);
+                inventarioSucursalRepository.save(inv);
+            }
+        }
 
-        return productoRepository.save(producto);
+        return producto;
     }
 
     @Override
-    public Page<ProductoAdminResponse> findAllPageable(PageRequest pageRequest) {
-        Page<Producto> productos = productoRepository.findByActivoTrue(pageRequest);
-        return productos.map(this::toAdminResponse);
+    public Page<Producto> buscarConFiltros(String search, Boolean activo, Boolean tieneVariantes, Pageable pageable) {
+        return productoRepository.buscarConFiltros(search, activo, tieneVariantes, pageable);
     }
 
     @Override
-    public Producto findById(Long id) {
+    public Producto findById(Integer id) {
         return productoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Producto no encontrado"));
     }
 
     @Override
-    public ProductoAdminResponse findAdminById(Long id) {
-        Producto producto = findById(id);
-        return toAdminResponse(producto);
+    public Page<Producto> findBySucursal(Integer idSucursal, Pageable pageable) {
+        return productoRepository.findByActivoAndSucursal(idSucursal, pageable);
     }
 
     @Override
     @Transactional
-    public Producto update(Long id, ProductoUpdateRequest request, List<MultipartFile> imagenesFiles) {
-        Producto producto = findById(id);
+    public Producto update(Integer id, Producto producto) {
+        Producto existing = findById(id);
+        if (producto.getSku() != null) existing.setSku(producto.getSku());
+        if (producto.getNombre() != null) existing.setNombre(producto.getNombre());
+        if (producto.getDescripcion() != null) existing.setDescripcion(producto.getDescripcion());
+        if (producto.getPrecio1() != null) existing.setPrecio1(producto.getPrecio1());
+        if (producto.getPrecio2() != null) existing.setPrecio2(producto.getPrecio2());
+        if (producto.getPrecio3() != null) existing.setPrecio3(producto.getPrecio3());
+        if (producto.getPrecio4() != null) existing.setPrecio4(producto.getPrecio4());
+        if (producto.getPrecioPersonalizado() != null) existing.setPrecioPersonalizado(producto.getPrecioPersonalizado());
+        if (producto.getStockActual() != null) existing.setStockActual(producto.getStockActual());
+        if (producto.getStockMinimo() != null) existing.setStockMinimo(producto.getStockMinimo());
+        if (producto.getStockMaximo() != null) existing.setStockMaximo(producto.getStockMaximo());
+        if (producto.getCostoPromedio() != null) existing.setCostoPromedio(producto.getCostoPromedio());
+        if (producto.getTieneVariantes() != null) existing.setTieneVariantes(producto.getTieneVariantes());
+        if (producto.getActivo() != null) existing.setActivo(producto.getActivo());
 
-        if (request.nombre() != null) producto.setNombre(request.nombre());
-        if (request.marca() != null) producto.setMarca(request.marca());
-        if (request.modelo() != null) producto.setModelo(request.modelo());
-        if (request.precioCompra() != null) producto.setPrecioCompra(request.precioCompra());
-        if (request.precioVenta() != null) producto.setPrecioVenta(request.precioVenta());
-        if (request.estado() != null) producto.setEstado(request.estado());
-        if (request.categoria() != null) producto.setCategoria(request.categoria());
-        if (request.descripcion() != null) producto.setDescripcion(request.descripcion());
-        if (request.especificaciones() != null) producto.setEspecificaciones(toJson(request.especificaciones()));
-        if (request.mensajeWhatsapp() != null) producto.setMensajeWhatsapp(request.mensajeWhatsapp());
-        if (request.pagadoCaja() != null) producto.setPagadoCaja(request.pagadoCaja());
-        if (request.activo() != null) producto.setActivo(request.activo());
-
-        if (request.imagenesEliminar() != null && !request.imagenesEliminar().isEmpty()) {
-            List<String> imagenesExistentes = fromJson(producto.getImagenes());
-            List<String> imagenesActualizadas = new ArrayList<>(imagenesExistentes);
-            for (String img : request.imagenesEliminar()) {
-                imagenesActualizadas.remove(img);
-                deleteImageFile(img);
-            }
-            producto.setImagenes(toJson(imagenesActualizadas));
-        }
-
-        if (imagenesFiles != null && !imagenesFiles.isEmpty()) {
-            List<String> rutasImagenes = saveImageFiles(imagenesFiles);
-            List<String> imagenesExistentes = fromJson(producto.getImagenes());
-            imagenesExistentes.addAll(rutasImagenes);
-            producto.setImagenes(toJson(imagenesExistentes));
-        }
-
-        return productoRepository.save(producto);
+        return productoRepository.save(existing);
     }
 
     @Override
     @Transactional
-    public void delete(Long id) {
+    public void delete(Integer id) {
         Producto producto = findById(id);
         producto.setActivo(false);
         productoRepository.save(producto);
     }
 
     @Override
-    public Page<ProductoEcommerceResponse> findAllEcommercePageable(PageRequest pageRequest) {
-        Page<Producto> productos = productoRepository.findByActivoTrue(pageRequest);
-        return productos.map(this::toEcommerceResponse);
+    public Map<String, Object> getStats() {
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("totalProductos", productoRepository.countByActivoTrue());
+        stats.put("totalVariantes", productoRepository.findByTieneVariantesTrueAndActivoTrue().size());
+        return stats;
     }
 
     @Override
-    public ProductoEcommerceResponse findEcommerceById(Long id) {
-        Producto producto = findById(id);
-        return toEcommerceResponse(producto);
+    public ProductoMultimediaService getMultimediaService() {
+        return null;
     }
 
     @Override
-    public Page<ProductoEcommerceResponse> findByCategoriaEcommerce(PageRequest pageRequest, CategoriaProducto categoria) {
-        Page<Producto> productos = productoRepository.findByActivoTrueAndCategoria(pageRequest, categoria);
-        return productos.map(this::toEcommerceResponse);
-    }
+    @Transactional
+    public Producto registrarMovimientoStock(Integer idProducto, String tipoMovimiento, Integer cantidad, Integer idSucursal, String referencia, String observacion) {
+        Producto producto = findById(idProducto);
+        TipoMovimiento tipo = TipoMovimiento.valueOf(tipoMovimiento);
 
-    @Override
-    public Page<ProductoEcommerceResponse> findByEstadoEcommerce(PageRequest pageRequest, EstadoProducto estado) {
-        Page<Producto> productos = productoRepository.findByActivoTrueAndEstado(pageRequest, estado);
-        return productos.map(this::toEcommerceResponse);
-    }
+        int stockAnterior = producto.getStockActual();
+        int stockNuevo = stockAnterior;
 
-    @Override
-    public Page<ProductoEcommerceResponse> findByCategoriaAndEstadoEcommerce(PageRequest pageRequest, CategoriaProducto categoria, EstadoProducto estado) {
-        Page<Producto> productos = productoRepository.findByActivoTrueAndCategoriaAndEstado(pageRequest, categoria, estado);
-        return productos.map(this::toEcommerceResponse);
-    }
+        switch (tipo) {
+            case ENTRADA:
+                stockNuevo = stockAnterior + cantidad;
+                break;
+            case SALIDA:
+                stockNuevo = stockAnterior - cantidad;
+                break;
+            case AJUSTE:
+                stockNuevo = cantidad;
+                cantidad = stockNuevo - stockAnterior;
+                break;
+            default:
+                break;
+        }
 
-    private List<String> saveImageFiles(List<MultipartFile> files) {
-        List<String> rutas = new ArrayList<>();
-        if (files == null || files.isEmpty()) return rutas;
+        producto.setStockActual(stockNuevo);
+        productoRepository.save(producto);
 
-        try {
-            Path uploadPath = Paths.get(uploadDir);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
+        Sucursal sucursal = idSucursal != null ? sucursalRepository.findById(idSucursal).orElse(null) : null;
+
+        MovimientoStock mov = MovimientoStock.builder()
+                .producto(producto)
+                .sucursal(sucursal)
+                .tipoMovimiento(tipo)
+                .cantidad(Math.abs(cantidad))
+                .stockAnterior(stockAnterior)
+                .stockNuevo(stockNuevo)
+                .referencia(referencia)
+                .observacion(observacion)
+                .build();
+        movimientoStockRepository.save(mov);
+
+        if (sucursal != null) {
+            InventarioSucursal inv = inventarioSucursalRepository
+                    .findByProductoIdProductoAndSucursalIdSucursal(idProducto, idSucursal)
+                    .orElse(null);
+            if (inv != null) {
+                inv.setStock(stockNuevo);
+                inventarioSucursalRepository.save(inv);
             }
-
-            for (MultipartFile file : files) {
-                if (file.isEmpty()) continue;
-                String originalFilename = file.getOriginalFilename();
-                String extension = "";
-                if (originalFilename != null && originalFilename.contains(".")) {
-                    extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-                }
-                String uniqueFilename = UUID.randomUUID().toString() + extension;
-                Path filePath = uploadPath.resolve(uniqueFilename);
-                Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-                rutas.add(uniqueFilename);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Error al guardar imágenes", e);
         }
 
-        return rutas;
+        return producto;
     }
 
-    private ProductoAdminResponse toAdminResponse(Producto p) {
-        return new ProductoAdminResponse(
-                p.getId(),
-                p.getNombre(),
-                p.getMarca(),
-                p.getModelo(),
-                p.getPrecioCompra(),
-                p.getPrecioVenta(),
-                p.getEstado(),
-                p.getCategoria(),
-                fromJson(p.getImagenes()),
-                p.getDescripcion(),
-                fromJson(p.getEspecificaciones()),
-                p.getMensajeWhatsapp(),
-                p.getPagadoCaja(),
-                p.getActivo(),
-                p.getFechaCreacion()
-        );
-    }
+    @Override
+    @Transactional
+    public Producto transferirStock(Integer idProducto, Integer idSucursalOrigen, Integer idSucursalDestino, Integer cantidad, String referencia, String observacion) {
+        Producto producto = findById(idProducto);
 
-    private ProductoEcommerceResponse toEcommerceResponse(Producto p) {
-        return new ProductoEcommerceResponse(
-                p.getId(),
-                p.getNombre(),
-                p.getMarca(),
-                p.getModelo(),
-                p.getPrecioVenta(),
-                p.getEstado(),
-                p.getCategoria(),
-                fromJson(p.getImagenes()),
-                p.getDescripcion(),
-                fromJson(p.getEspecificaciones()),
-                p.getMensajeWhatsapp()
-        );
-    }
+        InventarioSucursal origen = inventarioSucursalRepository
+                .findByProductoIdProductoAndSucursalIdSucursal(idProducto, idSucursalOrigen)
+                .orElseThrow(() -> new NotFoundException("Inventario origen no encontrado"));
 
-    private String toJson(List<String> list) {
-        try {
-            return list == null ? "[]" : objectMapper.writeValueAsString(list);
-        } catch (Exception e) {
-            return "[]";
+        InventarioSucursal destino = inventarioSucursalRepository
+                .findByProductoIdProductoAndSucursalIdSucursal(idProducto, idSucursalDestino)
+                .orElse(null);
+
+        origen.setStock(origen.getStock() - cantidad);
+        inventarioSucursalRepository.save(origen);
+
+        if (destino != null) {
+            destino.setStock(destino.getStock() + cantidad);
+            inventarioSucursalRepository.save(destino);
         }
-    }
 
-    private void deleteImageFile(String filename) {
-        try {
-            Path filePath = Paths.get(uploadDir).resolve(filename);
-            Files.deleteIfExists(filePath);
-        } catch (IOException e) {
-            System.out.println("No se pudo eliminar el archivo: " + filename + " - " + e.getMessage());
-        }
-    }
+        Sucursal sucOrigen = sucursalRepository.findById(idSucursalOrigen).orElse(null);
 
-    private List<String> fromJson(String json) {
-        try {
-            if (json == null || json.isBlank()) return new ArrayList<>();
-            return objectMapper.readValue(json, new TypeReference<List<String>>() {});
-        } catch (Exception e) {
-            return new ArrayList<>();
-        }
+        MovimientoStock mov = MovimientoStock.builder()
+                .producto(producto)
+                .sucursal(sucOrigen)
+                .tipoMovimiento(TipoMovimiento.TRANSFERENCIA)
+                .cantidad(cantidad)
+                .stockAnterior(origen.getStock() + cantidad)
+                .stockNuevo(origen.getStock())
+                .referencia(referencia != null ? referencia : "Transferencia a sucursal " + idSucursalDestino)
+                .observacion(observacion)
+                .build();
+        movimientoStockRepository.save(mov);
+
+        return producto;
     }
 }

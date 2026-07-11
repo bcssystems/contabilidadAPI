@@ -12,6 +12,7 @@ public record VentaUpdateRequest(
         EstadoVenta estadoVenta,
         BigDecimal total,
         BigDecimal costo,
-        Long asientoId
+        Long asientoId,
+        Integer sucursalId
 ) {
 }

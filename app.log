@@ -1,30 +1,3 @@
-[INFO] Scanning for projects...
-[INFO] 
-[INFO] ---------------------< com.bcsystems:contabilidad >---------------------
-[INFO] Building contabilidad 0.0.1-SNAPSHOT
-[INFO]   from pom.xml
-[INFO] --------------------------------[ jar ]---------------------------------
-[INFO] 
-[INFO] >>> spring-boot:3.3.4:run (default-cli) > test-compile @ contabilidad >>>
-[INFO] 
-[INFO] --- resources:3.3.1:resources (default-resources) @ contabilidad ---
-[INFO] Copying 1 resource from src\main\resources to target\classes
-[INFO] Copying 0 resource from src\main\resources to target\classes
-[INFO] 
-[INFO] --- compiler:3.13.0:compile (default-compile) @ contabilidad ---
-[INFO] Nothing to compile - all classes are up to date.
-[INFO] 
-[INFO] --- resources:3.3.1:testResources (default-testResources) @ contabilidad ---
-[INFO] skip non existing resourceDirectory C:\AppDevelopment\contabilidad\src\test\resources
-[INFO] 
-[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ contabilidad ---
-[INFO] Nothing to compile - all classes are up to date.
-[INFO] 
-[INFO] <<< spring-boot:3.3.4:run (default-cli) < test-compile @ contabilidad <<<
-[INFO] 
-[INFO] 
-[INFO] --- spring-boot:3.3.4:run (default-cli) @ contabilidad ---
-[INFO] Attaching agents: []
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -35,55 +8,326 @@
 
  :: Spring Boot ::                (v3.3.4)
 
-2026-04-11T11:17:36.952-06:00  INFO 26432 --- [contabilidad] [           main] c.b.c.ContabilidadApplication            : Starting ContabilidadApplication using Java 21.0.7 with PID 26432 (C:\AppDevelopment\contabilidad\target\classes started by Benyi Uriel in C:\AppDevelopment\contabilidad)
-2026-04-11T11:17:36.955-06:00  INFO 26432 --- [contabilidad] [           main] c.b.c.ContabilidadApplication            : No active profile set, falling back to 1 default profile: "default"
-2026-04-11T11:17:37.823-06:00  INFO 26432 --- [contabilidad] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-04-11T11:17:37.931-06:00  INFO 26432 --- [contabilidad] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 98 ms. Found 13 JPA repository interfaces.
-2026-04-11T11:17:38.643-06:00  INFO 26432 --- [contabilidad] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8888 (http)
-2026-04-11T11:17:38.656-06:00  INFO 26432 --- [contabilidad] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-04-11T11:17:38.656-06:00  INFO 26432 --- [contabilidad] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
-2026-04-11T11:17:38.759-06:00  INFO 26432 --- [contabilidad] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2026-04-11T11:17:38.761-06:00  INFO 26432 --- [contabilidad] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1758 ms
-2026-04-11T11:17:38.936-06:00  INFO 26432 --- [contabilidad] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-04-11T11:17:38.988-06:00  INFO 26432 --- [contabilidad] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
-2026-04-11T11:17:39.027-06:00  INFO 26432 --- [contabilidad] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2026-04-11T11:17:39.330-06:00  INFO 26432 --- [contabilidad] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-04-11T11:17:39.360-06:00  INFO 26432 --- [contabilidad] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-04-11T11:17:39.689-06:00  INFO 26432 --- [contabilidad] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@37cf91d8
-2026-04-11T11:17:39.692-06:00  INFO 26432 --- [contabilidad] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-04-11T11:17:39.742-06:00  WARN 26432 --- [contabilidad] [           main] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-04-11T11:17:39.743-06:00  WARN 26432 --- [contabilidad] [           main] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
-2026-04-11T11:17:40.976-06:00  INFO 26432 --- [contabilidad] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-04-11T11:17:41.184-06:00  INFO 26432 --- [contabilidad] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-04-11T11:17:41.654-06:00  INFO 26432 --- [contabilidad] [           main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
-2026-04-11T11:17:41.655-06:00  WARN 26432 --- [contabilidad] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
-2026-04-11T11:17:41.932-06:00  WARN 26432 --- [contabilidad] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-04-11T11:17:42.234-06:00 DEBUG 26432 --- [contabilidad] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
-2026-04-11T11:17:42.666-06:00  INFO 26432 --- [contabilidad] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8888 (http) with context path '/'
-2026-04-11T11:17:42.675-06:00  INFO 26432 --- [contabilidad] [           main] c.b.c.ContabilidadApplication            : Started ContabilidadApplication in 6.218 seconds (process running for 6.677)
+2026-07-10T18:17:27.278-06:00  INFO 11544 --- [contabilidad] [           main] c.b.c.ContabilidadApplication            : Starting ContabilidadApplication using Java 21.0.7 with PID 11544 (C:\AppDevelopment\contabilidad\target\classes started by Benyi Uriel in C:\AppDevelopment\contabilidad)
+2026-07-10T18:17:27.281-06:00  INFO 11544 --- [contabilidad] [           main] c.b.c.ContabilidadApplication            : No active profile set, falling back to 1 default profile: "default"
+2026-07-10T18:17:28.233-06:00  INFO 11544 --- [contabilidad] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-10T18:17:28.435-06:00  INFO 11544 --- [contabilidad] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 192 ms. Found 39 JPA repository interfaces.
+2026-07-10T18:17:29.069-06:00  INFO 11544 --- [contabilidad] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8887 (http)
+2026-07-10T18:17:29.084-06:00  INFO 11544 --- [contabilidad] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-07-10T18:17:29.084-06:00  INFO 11544 --- [contabilidad] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-07-10T18:17:29.155-06:00  INFO 11544 --- [contabilidad] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-07-10T18:17:29.157-06:00  INFO 11544 --- [contabilidad] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1830 ms
+2026-07-10T18:17:29.286-06:00  INFO 11544 --- [contabilidad] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-07-10T18:17:29.353-06:00  INFO 11544 --- [contabilidad] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-07-10T18:17:29.390-06:00  INFO 11544 --- [contabilidad] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-07-10T18:17:29.667-06:00  INFO 11544 --- [contabilidad] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-10T18:17:29.697-06:00  INFO 11544 --- [contabilidad] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-10T18:17:29.998-06:00  INFO 11544 --- [contabilidad] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@77e6761f
+2026-07-10T18:17:30.000-06:00  INFO 11544 --- [contabilidad] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-10T18:17:30.041-06:00  WARN 11544 --- [contabilidad] [           main] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-07-10T18:17:30.042-06:00  WARN 11544 --- [contabilidad] [           main] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-07-10T18:17:31.618-06:00  INFO 11544 --- [contabilidad] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: alter table abono modify column tipo enum ('LIQUIDACION','PARCIAL') not null
+Hibernate: alter table caja modify column estado enum ('ABIERTA','CERRADA') not null
+Hibernate: alter table credito modify column estado enum ('ACTIVO','CANCELADO','PAGADO','VENCIDO') not null
+Hibernate: alter table gasto modify column estado enum ('AUTORIZADO','PENDIENTE','RECHAZADO') not null
+Hibernate: alter table movimiento_almacen modify column descripcion TEXT
+Hibernate: alter table movimiento_almacen modify column observacion TEXT
+Hibernate: alter table movimiento_caja modify column tipo enum ('EGRESO','INGRESO') not null
+Hibernate: alter table movimiento_stock modify column observacion TEXT
+Hibernate: alter table movimiento_stock modify column tipo_movimiento enum ('ACTUALIZACION','AJUSTE','CREACION','ENTRADA','SALIDA','TRANSFERENCIA') not null
+Hibernate: alter table pedido modify column estado enum ('CANCELADO','COMPLETADO','PARCIAL','PENDIENTE') not null
+Hibernate: alter table pedido modify column nota TEXT
+Hibernate: alter table producto modify column descripcion TEXT
+Hibernate: alter table producto_multimedia modify column tipo enum ('IMAGEN','VIDEO') not null
+Hibernate: alter table producto_padre modify column descripcion TEXT
+Hibernate: alter table promocion modify column descripcion TEXT
+Hibernate: alter table promocion modify column tipo enum ('COMBO','PROMOCION') not null
+Hibernate: alter table variante modify column imagenes TEXT
+Hibernate: alter table variante modify column observacion TEXT
+Hibernate: alter table venta modify column tipo_venta enum ('CONTADO','CREDITO') not null
+2026-07-10T18:17:32.346-06:00  INFO 11544 --- [contabilidad] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-10T18:17:32.772-06:00  INFO 11544 --- [contabilidad] [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-10T18:17:33.688-06:00  INFO 11544 --- [contabilidad] [           main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-07-10T18:17:33.689-06:00  WARN 11544 --- [contabilidad] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
+2026-07-10T18:17:34.249-06:00  WARN 11544 --- [contabilidad] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-10T18:17:34.519-06:00 DEBUG 11544 --- [contabilidad] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-07-10T18:17:34.801-06:00  INFO 11544 --- [contabilidad] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8887 (http) with context path '/'
+2026-07-10T18:17:34.809-06:00  INFO 11544 --- [contabilidad] [           main] c.b.c.ContabilidadApplication            : Started ContabilidadApplication in 7.908 seconds (process running for 8.337)
+Hibernate: select count(*) from usuario u1_0
 Hibernate: select count(*) from cuenta_contable cc1_0
-2026-04-11T11:25:40.089-06:00  WARN 26432 --- [contabilidad] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=5m30s258ms308µs300ns).
-2026-04-11T12:08:36.503-06:00  WARN 26432 --- [contabilidad] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=4m55s813ms742µs700ns).
-2026-04-11T13:03:03.091-06:00  WARN 26432 --- [contabilidad] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=41m26s387ms876µs400ns).
-2026-04-11T13:31:25.699-06:00  INFO 26432 --- [contabilidad] [nio-8888-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-04-11T13:31:25.700-06:00  INFO 26432 --- [contabilidad] [nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2026-04-11T13:31:25.710-06:00  INFO 26432 --- [contabilidad] [nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 10 ms
-2026-04-11T13:31:25.744-06:00 DEBUG 26432 --- [contabilidad] [nio-8888-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/cuenta-contable/1
-2026-04-11T13:31:25.758-06:00 DEBUG 26432 --- [contabilidad] [nio-8888-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
-2026-04-11T13:31:25.761-06:00 DEBUG 26432 --- [contabilidad] [nio-8888-exec-1] o.s.s.w.a.Http403ForbiddenEntryPoint     : Pre-authenticated entry point called. Rejecting access
-2026-04-11T13:31:25.769-06:00 DEBUG 26432 --- [contabilidad] [nio-8888-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /error
-2026-04-11T13:31:25.769-06:00 DEBUG 26432 --- [contabilidad] [nio-8888-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
-2026-04-11T13:31:25.770-06:00 DEBUG 26432 --- [contabilidad] [nio-8888-exec-1] o.s.s.w.a.Http403ForbiddenEntryPoint     : Pre-authenticated entry point called. Rejecting access
-2026-04-11T16:06:40.046-06:00  WARN 26432 --- [contabilidad] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2h6m6s90ms32µs500ns).
-2026-04-11T16:16:35.257-06:00 DEBUG 26432 --- [contabilidad] [nio-8888-exec-2] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/v1/auth/login
-2026-04-11T16:16:41.213-06:00 DEBUG 26432 --- [contabilidad] [nio-8888-exec-5] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/v1/auth/login
-2026-04-11T16:16:41.711-06:00 DEBUG 26432 --- [contabilidad] [nio-8888-exec-6] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/v1/auth/login
-2026-04-11T16:16:41.919-06:00 DEBUG 26432 --- [contabilidad] [nio-8888-exec-7] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/v1/auth/login
-2026-04-11T16:16:42.077-06:00 DEBUG 26432 --- [contabilidad] [nio-8888-exec-4] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/v1/auth/login
-2026-04-11T16:16:42.245-06:00 DEBUG 26432 --- [contabilidad] [nio-8888-exec-8] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/v1/auth/login
-2026-04-11T16:16:42.403-06:00 DEBUG 26432 --- [contabilidad] [nio-8888-exec-9] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/v1/auth/login
-2026-04-11T17:13:44.408-06:00  WARN 26432 --- [contabilidad] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=47m34s116ms568µs).
-2026-04-11T17:57:22.641-06:00  WARN 26432 --- [contabilidad] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=10m37s707ms257µs700ns).
-2026-04-11T20:17:38.946-06:00  WARN 26432 --- [contabilidad] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1h43m45s712ms429µs400ns).
-2026-04-11T23:25:35.369-06:00  WARN 26432 --- [contabilidad] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=3h34s646ms386µs).
-2026-04-12T00:21:44.283-06:00  WARN 26432 --- [contabilidad] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=56m8s914ms707µs700ns).
+Hibernate: select count(*) from producto p1_0
+2026-07-10T18:17:34.990-06:00  INFO 11544 --- [contabilidad] [nio-8887-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-10T18:17:34.990-06:00  INFO 11544 --- [contabilidad] [nio-8887-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-07-10T18:17:34.992-06:00  INFO 11544 --- [contabilidad] [nio-8887-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-07-10T18:17:35.009-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-1] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/auth/login
+2026-07-10T18:17:35.017-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-07-10T18:17:35.019-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-1] o.s.security.web.FilterChainProxy        : Secured POST /api/v1/auth/login
+Hibernate: select u1_0.id_user,u1_0.activo,u1_0.password,u1_0.id_person,u1_0.role,u1_0.username from usuario u1_0 where u1_0.username=?
+Hibernate: select p1_0.id_person,p1_0.fecha_registro,p1_0.nombre,p1_0.person_type,p1_0.primer_apellido,p1_0.segundo_apellido from persona p1_0 where p1_0.id_person=?
+2026-07-10T18:17:35.305-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-1] o.s.s.a.dao.DaoAuthenticationProvider    : Authenticated user
+Hibernate: select u1_0.id_user,u1_0.activo,u1_0.password,u1_0.id_person,u1_0.role,u1_0.username from usuario u1_0 where u1_0.username=?
+Hibernate: select t1_0.id_token,t1_0.is_expired,t1_0.is_revoked,t1_0.token,t1_0.type,t1_0.id_user from token t1_0 where t1_0.id_user=?
+Hibernate: delete from token where id_token=?
+Hibernate: insert into token (is_expired,is_revoked,token,type,id_user) values (?,?,?,?,?)
+2026-07-10T18:17:35.577-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-2] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/auth/login
+2026-07-10T18:17:35.578-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-07-10T18:17:35.578-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-2] o.s.security.web.FilterChainProxy        : Secured POST /api/v1/auth/login
+2026-07-10T18:17:35.580-06:00  WARN 11544 --- [contabilidad] [nio-8887-exec-2] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Unexpected character ('\' (code 92)): was expecting double-quote to start field name]
+2026-07-10T18:17:35.587-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-2] o.s.security.web.FilterChainProxy        : Securing POST /error
+2026-07-10T18:17:35.588-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-07-10T18:17:35.589-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-2] o.s.s.w.a.Http403ForbiddenEntryPoint     : Pre-authenticated entry point called. Rejecting access
+2026-07-10T18:17:35.812-06:00 DEBUG 11544 --- [contabilidad] [io-8887-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/productos
+2026-07-10T18:17:35.812-06:00 DEBUG 11544 --- [contabilidad] [io-8887-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-07-10T18:17:35.813-06:00 DEBUG 11544 --- [contabilidad] [io-8887-exec-10] o.s.s.w.a.Http403ForbiddenEntryPoint     : Pre-authenticated entry point called. Rejecting access
+2026-07-10T18:17:35.814-06:00 DEBUG 11544 --- [contabilidad] [io-8887-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /error
+2026-07-10T18:17:35.814-06:00 DEBUG 11544 --- [contabilidad] [io-8887-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-07-10T18:17:35.814-06:00 DEBUG 11544 --- [contabilidad] [io-8887-exec-10] o.s.s.w.a.Http403ForbiddenEntryPoint     : Pre-authenticated entry point called. Rejecting access
+2026-07-10T18:17:40.085-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-7] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/auth/login
+2026-07-10T18:17:40.086-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-07-10T18:17:40.086-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-7] o.s.security.web.FilterChainProxy        : Secured POST /api/v1/auth/login
+Hibernate: select u1_0.id_user,u1_0.activo,u1_0.password,u1_0.id_person,u1_0.role,u1_0.username from usuario u1_0 where u1_0.username=?
+Hibernate: select p1_0.id_person,p1_0.fecha_registro,p1_0.nombre,p1_0.person_type,p1_0.primer_apellido,p1_0.segundo_apellido from persona p1_0 where p1_0.id_person=?
+2026-07-10T18:17:40.162-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-7] o.s.s.a.dao.DaoAuthenticationProvider    : Authenticated user
+Hibernate: select u1_0.id_user,u1_0.activo,u1_0.password,u1_0.id_person,u1_0.role,u1_0.username from usuario u1_0 where u1_0.username=?
+Hibernate: select t1_0.id_token,t1_0.is_expired,t1_0.is_revoked,t1_0.token,t1_0.type,t1_0.id_user from token t1_0 where t1_0.id_user=?
+Hibernate: delete from token where id_token=?
+Hibernate: insert into token (is_expired,is_revoked,token,type,id_user) values (?,?,?,?,?)
+2026-07-10T18:17:40.489-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/productos
+Hibernate: select u1_0.id_user,u1_0.activo,u1_0.password,u1_0.id_person,u1_0.role,u1_0.username from usuario u1_0 where u1_0.username=?
+Hibernate: select p1_0.id_person,p1_0.fecha_registro,p1_0.nombre,p1_0.person_type,p1_0.primer_apellido,p1_0.segundo_apellido from persona p1_0 where p1_0.id_person=?
+Hibernate: select t1_0.id_token,t1_0.is_expired,t1_0.is_revoked,t1_0.token,t1_0.type,t1_0.id_user from token t1_0 where t1_0.token=?
+Hibernate: select u1_0.id_user,u1_0.activo,u1_0.password,u1_0.id_person,u1_0.role,u1_0.username from usuario u1_0 where u1_0.username=?
+Hibernate: select p1_0.id_person,p1_0.fecha_registro,p1_0.nombre,p1_0.person_type,p1_0.primer_apellido,p1_0.segundo_apellido from persona p1_0 where p1_0.id_person=?
+2026-07-10T18:17:40.577-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/productos
+Hibernate: select p1_0.id_producto,p1_0.activo,p1_0.costo_promedio,p1_0.descripcion,p1_0.fecha_actualizacion,p1_0.fecha_creacion,p1_0.nombre,p1_0.precio1,p1_0.precio2,p1_0.precio3,p1_0.precio4,p1_0.precio_personalizado,p1_0.id_producto_padre,p1_0.sku,p1_0.stock_actual,p1_0.stock_maximo,p1_0.stock_minimo,p1_0.tiene_variantes from producto p1_0 where (? is null or lower(p1_0.nombre) like replace(lower(concat('%',?,'%')),'\\','\\\\') or lower(p1_0.sku) like replace(lower(concat('%',?,'%')),'\\','\\\\')) and (? is null or p1_0.activo=?) and (? is null or p1_0.tiene_variantes=?) order by p1_0.nombre,p1_0.nombre limit ?
+Hibernate: select count(p1_0.id_producto) from producto p1_0 where (? is null or lower(p1_0.nombre) like replace(lower(concat('%',?,'%')),'\\','\\\\') or lower(p1_0.sku) like replace(lower(concat('%',?,'%')),'\\','\\\\')) and (? is null or p1_0.activo=?) and (? is null or p1_0.tiene_variantes=?)
+2026-07-10T18:17:40.632-06:00  WARN 11544 --- [contabilidad] [nio-8887-exec-9] ration$PageModule$WarningLoggingModifier : Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+Hibernate: select m1_0.id_producto,m1_0.id_multimedia,m1_0.es_principal,m1_0.fecha_subida,m1_0.nombre_archivo,m1_0.tipo,m1_0.url from producto_multimedia m1_0 where m1_0.id_producto=?
+Hibernate: select is1_0.id_producto,is1_0.id,is1_0.fecha_actualizacion,is1_0.stock,is1_0.stock_maximo,is1_0.stock_minimo,is1_0.id_sucursal,is1_0.variante_id from inventario_sucursal is1_0 where is1_0.id_producto=?
+Hibernate: select va1_0.id_producto_variante,va1_0.id,va1_0.id_atributo,va1_0.id_valor from producto_variante_atributo va1_0 where va1_0.id_producto_variante=?
+2026-07-10T18:17:40.878-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/usuarios
+Hibernate: select u1_0.id_user,u1_0.activo,u1_0.password,u1_0.id_person,u1_0.role,u1_0.username from usuario u1_0 where u1_0.username=?
+Hibernate: select p1_0.id_person,p1_0.fecha_registro,p1_0.nombre,p1_0.person_type,p1_0.primer_apellido,p1_0.segundo_apellido from persona p1_0 where p1_0.id_person=?
+Hibernate: select t1_0.id_token,t1_0.is_expired,t1_0.is_revoked,t1_0.token,t1_0.type,t1_0.id_user from token t1_0 where t1_0.token=?
+Hibernate: select u1_0.id_user,u1_0.activo,u1_0.password,u1_0.id_person,u1_0.role,u1_0.username from usuario u1_0 where u1_0.username=?
+Hibernate: select p1_0.id_person,p1_0.fecha_registro,p1_0.nombre,p1_0.person_type,p1_0.primer_apellido,p1_0.segundo_apellido from persona p1_0 where p1_0.id_person=?
+2026-07-10T18:17:40.889-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/usuarios
+Hibernate: select u1_0.id_user,u1_0.activo,u1_0.password,u1_0.id_person,u1_0.role,u1_0.username from usuario u1_0
+Hibernate: select p1_0.id_person,p1_0.fecha_registro,p1_0.nombre,p1_0.person_type,p1_0.primer_apellido,p1_0.segundo_apellido from persona p1_0 where p1_0.id_person=?
+2026-07-10T18:17:41.117-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/cuenta-contable
+Hibernate: select u1_0.id_user,u1_0.activo,u1_0.password,u1_0.id_person,u1_0.role,u1_0.username from usuario u1_0 where u1_0.username=?
+Hibernate: select p1_0.id_person,p1_0.fecha_registro,p1_0.nombre,p1_0.person_type,p1_0.primer_apellido,p1_0.segundo_apellido from persona p1_0 where p1_0.id_person=?
+Hibernate: select t1_0.id_token,t1_0.is_expired,t1_0.is_revoked,t1_0.token,t1_0.type,t1_0.id_user from token t1_0 where t1_0.token=?
+Hibernate: select u1_0.id_user,u1_0.activo,u1_0.password,u1_0.id_person,u1_0.role,u1_0.username from usuario u1_0 where u1_0.username=?
+Hibernate: select p1_0.id_person,p1_0.fecha_registro,p1_0.nombre,p1_0.person_type,p1_0.primer_apellido,p1_0.segundo_apellido from persona p1_0 where p1_0.id_person=?
+2026-07-10T18:17:41.129-06:00 DEBUG 11544 --- [contabilidad] [nio-8887-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/cuenta-contable
+Hibernate: select cc1_0.id_cuenta_contable,cc1_0.activa,cc1_0.codigo,cc1_0.cuenta_padre_id,cc1_0.nombre,cc1_0.tipo_cuenta_contable from cuenta_contable cc1_0 order by cc1_0.id_cuenta_contable limit ?,?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+Hibernate: select s1_0.cuenta_padre_id,s1_0.id_cuenta_contable,s1_0.activa,s1_0.codigo,s1_0.nombre,s1_0.tipo_cuenta_contable from cuenta_contable s1_0 where s1_0.cuenta_padre_id=?
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:3.3.4:run (default-cli) on project contabilidad: Process terminated with exit code: 1 -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
