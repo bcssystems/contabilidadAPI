@@ -27,6 +27,18 @@ public class ProductoController {
         this.productoMultimediaRepository = productoMultimediaRepository;
     }
 
+    @GetMapping("/ecommerce")
+    public ResponseEntity<?> ecommerce(
+            @RequestParam(defaultValue = "50") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+        PageRequest pageRequest = PageRequest.of(0, size, sort);
+        return ResponseEntity.ok(productoService.buscarConFiltros(null, true, null, pageRequest));
+    }
+
     @GetMapping("/stats")
     public ResponseEntity<?> stats() {
         return ResponseEntity.ok(productoService.getStats());
