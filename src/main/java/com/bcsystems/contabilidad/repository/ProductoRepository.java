@@ -34,6 +34,9 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
     Page<Producto> findByActivoAndSucursal(@Param("idSucursal") Integer idSucursal, Pageable pageable);
 
     List<Producto> findByActivoTrue();
+
+    @Query("SELECT DISTINCT p FROM Producto p LEFT JOIN FETCH p.productoPadre LEFT JOIN FETCH p.multimedia WHERE p.activo = true")
+    List<Producto> findAllEcommerce();
     List<Producto> findByProductoPadreIdProducto(Integer idProductoPadre);
     List<Producto> findByTieneVariantesTrueAndActivoTrue();
     long countByActivoTrue();
