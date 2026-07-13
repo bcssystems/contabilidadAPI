@@ -1,5 +1,6 @@
 package com.bcsystems.contabilidad.domain;
 
+import com.bcsystems.contabilidad.domain.en.CategoriaProducto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -35,6 +36,12 @@ public class Producto {
     private Double precio2;
     private Double precio3;
     private Double precio4;
+
+    private String marca;
+    private String modelo;
+
+    @Enumerated(EnumType.STRING)
+    private CategoriaProducto categoria;
 
     @Builder.Default
     @Column(nullable = false)

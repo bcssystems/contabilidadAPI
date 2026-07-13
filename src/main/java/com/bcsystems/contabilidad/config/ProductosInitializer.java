@@ -1,6 +1,7 @@
 package com.bcsystems.contabilidad.config;
 
 import com.bcsystems.contabilidad.domain.Producto;
+import com.bcsystems.contabilidad.domain.en.CategoriaProducto;
 import com.bcsystems.contabilidad.repository.ProductoRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
