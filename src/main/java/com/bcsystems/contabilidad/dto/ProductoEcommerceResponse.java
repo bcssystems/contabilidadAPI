@@ -1,21 +1,19 @@
 package com.bcsystems.contabilidad.dto;
 
-import com.bcsystems.contabilidad.domain.en.CategoriaProducto;
-import com.bcsystems.contabilidad.domain.en.EstadoProducto;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public record ProductoEcommerceResponse(
-        Long id,
-        String nombre,
-        String marca,
-        String modelo,
-        BigDecimal precioVenta,
-        EstadoProducto estado,
-        CategoriaProducto categoria,
-        List<String> imagenes,
-        String descripcion,
-        List<String> especificaciones,
-        String mensajeWhatsapp
+        @JsonProperty("id") Integer id,
+        @JsonProperty("nombre") String nombre,
+        @JsonProperty("marca") String marca,
+        @JsonProperty("modelo") String modelo,
+        @JsonProperty("precioVenta") Double precioVenta,
+        @JsonProperty("estado") String estado,
+        @JsonProperty("categoria") String categoria,
+        @JsonProperty("imagenes") List<String> imagenes,
+        @JsonProperty("descripcion") String descripcion,
+        @JsonProperty("especificaciones") List<String> especificaciones,
+        @JsonProperty("mensajeWhatsapp") String mensajeWhatsapp
 ) {}

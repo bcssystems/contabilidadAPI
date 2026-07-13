@@ -1,6 +1,8 @@
 package com.bcsystems.contabilidad.controller;
 
 import com.bcsystems.contabilidad.domain.Producto;
+import com.bcsystems.contabilidad.domain.ProductoMultimedia;
+import com.bcsystems.contabilidad.dto.ProductoEcommerceResponse;
 import com.bcsystems.contabilidad.repository.*;
 import com.bcsystems.contabilidad.service.ProductoService;
 import org.springframework.data.domain.PageRequest;
@@ -9,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -28,15 +31,41 @@ public class ProductoController {
     }
 
     @GetMapping("/ecommerce")
-    public ResponseEntity<?> ecommerce(
-            @RequestParam(defaultValue = "50") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase("desc")
-                ? Sort.by(sortBy).descending()
-                : Sort.by(sortBy).ascending();
-        PageRequest pageRequest = PageRequest.of(0, size, sort);
-        return ResponseEntity.ok(productoService.buscarConFiltros(null, true, null, pageRequest));
+    public ResponseEntity<?> ecommerce() {
+        List<Producto> productos = productoRepository.findAllEcommerce();
+        List<ProductoEcommerceResponse> response = productos.stream().map(this::toEcommerceResponse).toList();
+        return ResponseEntity.ok(response);
+    }
+
+    private ProductoEcommerceResponse toEcommerceResponse(Producto p) {
+        String marca = p.getProductoPadre() != null ? nvl(p.getProductoPadre().getMarca()) : "";
+        String modelo = p.getProductoPadre() != null ? nvl(p.getProductoPadre().getModelo()) : "";
+        String categoria = p.getProductoPadre() != null && p.getProductoPadre().getCategoria() != null
+                ? p.getProductoPadre().getCategoria().name() : "";
+        String whatsapp = p.getProductoPadre() != null && p.getProductoPadre().getMensajeWhatsapp() != null
+                ? p.getProductoPadre().getMensajeWhatsapp()
+                : "Hola, me interesa este producto. Podrian darme mas informacion?";
+        String estado = p.getActivo() ? "DISPONIBLE" : "INACTIVO";
+        List<String> imagenes = p.getMultimedia().stream()
+                .map(m -> m.getNombreArchivo() != null ? m.getNombreArchivo() : m.getUrl())
+                .toList();
+        return new ProductoEcommerceResponse(
+                p.getIdProducto(),
+                p.getNombre(),
+                marca,
+                modelo,
+                p.getPrecio1(),
+                estado,
+                categoria,
+                imagenes,
+                nvl(p.getDescripcion()),
+                List.of(),
+                whatsapp
+        );
+    }
+
+    private static String nvl(String s) {
+        return s != null ? s : "";
     }
 
     @GetMapping("/stats")
