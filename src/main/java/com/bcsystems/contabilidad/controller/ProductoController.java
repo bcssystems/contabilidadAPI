@@ -38,13 +38,6 @@ public class ProductoController {
     }
 
     private ProductoEcommerceResponse toEcommerceResponse(Producto p) {
-        String marca = p.getProductoPadre() != null ? nvl(p.getProductoPadre().getMarca()) : "";
-        String modelo = p.getProductoPadre() != null ? nvl(p.getProductoPadre().getModelo()) : "";
-        String categoria = p.getProductoPadre() != null && p.getProductoPadre().getCategoria() != null
-                ? p.getProductoPadre().getCategoria().name() : "";
-        String whatsapp = p.getProductoPadre() != null && p.getProductoPadre().getMensajeWhatsapp() != null
-                ? p.getProductoPadre().getMensajeWhatsapp()
-                : "Hola, me interesa este producto. Podrian darme mas informacion?";
         String estado = p.getActivo() ? "DISPONIBLE" : "INACTIVO";
         List<String> imagenes = p.getMultimedia().stream()
                 .map(m -> m.getNombreArchivo() != null ? m.getNombreArchivo() : m.getUrl())
@@ -52,15 +45,15 @@ public class ProductoController {
         return new ProductoEcommerceResponse(
                 p.getIdProducto(),
                 p.getNombre(),
-                marca,
-                modelo,
+                "",
+                "",
                 p.getPrecio1(),
                 estado,
-                categoria,
+                "",
                 imagenes,
                 nvl(p.getDescripcion()),
                 List.of(),
-                whatsapp
+                "Hola, me interesa este producto. Podrian darme mas informacion?"
         );
     }
 
