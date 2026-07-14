@@ -5,6 +5,7 @@ import com.bcsystems.contabilidad.domain.ProductoMultimedia;
 import com.bcsystems.contabilidad.domain.en.TipoMultimedia;
 import com.bcsystems.contabilidad.repository.ProductoMultimediaRepository;
 import com.bcsystems.contabilidad.repository.ProductoRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,9 @@ public class ProductoMultimediaController {
 
     private final ProductoMultimediaRepository multimediaRepository;
     private final ProductoRepository productoRepository;
+
+    @Value("${app.upload.dir:uploads/productos}")
+    private String uploadDir;
 
     public ProductoMultimediaController(ProductoMultimediaRepository multimediaRepository,
                                         ProductoRepository productoRepository) {
@@ -34,7 +38,6 @@ public class ProductoMultimediaController {
                     .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
             String fileName = System.currentTimeMillis() + "_" + archivo.getOriginalFilename();
-            String uploadDir = "uploads/productos/";
             java.nio.file.Path uploadPath = java.nio.file.Paths.get(uploadDir);
             if (!java.nio.file.Files.exists(uploadPath)) {
                 java.nio.file.Files.createDirectories(uploadPath);
