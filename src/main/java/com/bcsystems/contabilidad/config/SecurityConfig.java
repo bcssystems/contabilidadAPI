@@ -67,6 +67,8 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/almacen/**").authenticated()
                                 .requestMatchers("/api/v1/usuarios/**").hasRole("ADMIN")
                                 .requestMatchers("/api/images/**").permitAll()
+                                .requestMatchers("/uploads/**").permitAll()
+                                .requestMatchers("/error").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
