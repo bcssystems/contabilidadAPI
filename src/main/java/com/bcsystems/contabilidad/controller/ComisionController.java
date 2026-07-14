@@ -50,7 +50,7 @@ public class ComisionController {
     public ResponseEntity<?> findAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "idComision") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir) {
         
         Sort sort = sortDir.equalsIgnoreCase("desc") 

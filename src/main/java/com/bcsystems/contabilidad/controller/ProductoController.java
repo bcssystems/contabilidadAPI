@@ -49,7 +49,7 @@ public class ProductoController {
                 "",
                 p.getPrecio1(),
                 estado,
-                "",
+                p.getCategoria() != null ? p.getCategoria().name() : "",
                 imagenes,
                 nvl(p.getDescripcion()),
                 List.of(),
