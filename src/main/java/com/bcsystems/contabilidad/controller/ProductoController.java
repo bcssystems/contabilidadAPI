@@ -110,7 +110,7 @@ public class ProductoController {
     @DeleteMapping("/multimedia/{id}")
     public ResponseEntity<?> deleteMultimedia(@PathVariable Integer id) {
         productoMultimediaRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{id}/transferir")
