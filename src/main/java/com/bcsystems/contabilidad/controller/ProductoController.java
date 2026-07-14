@@ -40,7 +40,7 @@ public class ProductoController {
     private ProductoEcommerceResponse toEcommerceResponse(Producto p) {
         String estado = p.getActivo() ? "DISPONIBLE" : "INACTIVO";
         List<String> imagenes = p.getMultimedia().stream()
-                .map(m -> m.getNombreArchivo() != null ? m.getNombreArchivo() : m.getUrl())
+                .map(m -> m.getUrl() != null ? m.getUrl().substring(m.getUrl().lastIndexOf("/") + 1) : m.getNombreArchivo())
                 .toList();
         return new ProductoEcommerceResponse(
                 p.getIdProducto(),
