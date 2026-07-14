@@ -1,6 +1,7 @@
 package com.bcsystems.contabilidad.domain;
 
 import com.bcsystems.contabilidad.domain.en.TipoMultimedia;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,6 +23,7 @@ public class ProductoMultimedia {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_producto", nullable = false)
+    @JsonIgnore
     private Producto producto;
 
     @Enumerated(EnumType.STRING)

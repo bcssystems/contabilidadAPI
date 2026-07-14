@@ -49,12 +49,19 @@ public class ProductosInitializer implements CommandLineRunner {
                 usedSkus.add(sku);
 
                 Double precioVenta = data.get("precioVenta") != null ? ((Number) data.get("precioVenta")).doubleValue() : null;
+                String categoriaStr = (String) data.get("categoria");
+                CategoriaProducto categoria = null;
+                if (categoriaStr != null) {
+                    try { categoria = CategoriaProducto.valueOf(categoriaStr); }
+                    catch (IllegalArgumentException e) { categoria = null; }
+                }
 
                 Producto producto = Producto.builder()
                         .sku(sku)
                         .nombre(nombre)
                         .descripcion((String) data.get("descripcion"))
                         .precio1(precioVenta)
+                        .categoria(categoria)
                         .stockActual(0)
                         .activo(true)
                         .build();
