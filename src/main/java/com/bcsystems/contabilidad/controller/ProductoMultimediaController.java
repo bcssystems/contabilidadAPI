@@ -64,7 +64,7 @@ public class ProductoMultimediaController {
     @DeleteMapping("/{idMultimedia}")
     public ResponseEntity<?> delete(@PathVariable Integer idProducto, @PathVariable Integer idMultimedia) {
         multimediaRepository.deleteById(idMultimedia);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
