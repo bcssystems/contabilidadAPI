@@ -18,8 +18,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
 import java.util.Arrays;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -68,7 +66,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/almacen/salida-pdf/**").authenticated()
                                 .requestMatchers("/api/v1/almacen/**").authenticated()
                                 .requestMatchers("/api/v1/usuarios/**").hasRole("ADMIN")
-                                .requestMatchers(new AntPathRequestMatcher("/api/images/**")).permitAll()
+                                .requestMatchers("/api/images/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
