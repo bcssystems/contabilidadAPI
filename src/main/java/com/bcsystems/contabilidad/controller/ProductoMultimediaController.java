@@ -46,7 +46,7 @@ public class ProductoMultimediaController {
             ProductoMultimedia multimedia = ProductoMultimedia.builder()
                     .producto(producto)
                     .tipo(TipoMultimedia.IMAGEN)
-                    .url("/uploads/productos/" + fileName)
+                    .url("/api/images/" + fileName)
                     .nombreArchivo(archivo.getOriginalFilename())
                     .esPrincipal("true".equalsIgnoreCase(esPrincipal))
                     .build();
