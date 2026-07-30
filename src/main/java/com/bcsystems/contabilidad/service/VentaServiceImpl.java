@@ -3,17 +3,18 @@ package com.bcsystems.contabilidad.service;
 import com.bcsystems.contabilidad.domain.*;
 import com.bcsystems.contabilidad.domain.en.EstadoVenta;
 import com.bcsystems.contabilidad.domain.en.TipoMovimiento;
-import com.bcsystems.contabilidad.domain.en.TipoVenta;
+import com.bcsystems.contabilidad.dto.VentaDetalleResponse;
+import com.bcsystems.contabilidad.dto.VentaPagoResponse;
+import com.bcsystems.contabilidad.dto.VentaResponse;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.*;
-import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class VentaServiceImpl implements VentaService {
@@ -50,7 +51,7 @@ public class VentaServiceImpl implements VentaService {
 
     @Override
     @Transactional
-    public Venta save(Venta venta, List<VentaDetalle> detalles, List<VentaPago> pagos) {
+    public VentaResponse save(Venta venta, List<VentaDetalle> detalles, List<VentaPago> pagos) {
         venta.setFecha(LocalDateTime.now());
         venta.setEstado(EstadoVenta.COMPLETADA);
 
@@ -112,39 +113,66 @@ public class VentaServiceImpl implements VentaService {
             }
         }
 
-        return venta;
+        List<VentaDetalleResponse> detalleResponses = detalles != null
+            ? detalles.stream().map(VentaDetalleResponse::fromEntity).toList()
+            : List.of();
+        List<VentaPagoResponse> pagoResponses = pagos != null
+            ? pagos.stream().map(VentaPagoResponse::fromEntity).toList()
+            : List.of();
+
+        return VentaResponse.fromEntity(venta, detalleResponses, pagoResponses);
     }
 
     @Override
-    public List<Venta> findAll() {
-        return ventaRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<VentaResponse> findAll() {
+        return ventaRepository.findAll().stream()
+                .map(v -> VentaResponse.fromEntity(v, List.of(), List.of()))
+                .toList();
     }
 
     @Override
-    public Page<Venta> buscarConFiltros(Integer idSucursal, Integer idCaja, EstadoVenta estado, LocalDateTime fechaInicio, LocalDateTime fechaFin, Pageable pageable) {
-        return ventaRepository.buscarConFiltros(idSucursal, idCaja, estado, fechaInicio, fechaFin, pageable);
+    @Transactional(readOnly = true)
+    public Page<VentaResponse> buscarConFiltros(Integer idSucursal, Integer idCaja, EstadoVenta estado, LocalDateTime fechaInicio, LocalDateTime fechaFin, Pageable pageable) {
+        return ventaRepository.buscarConFiltros(idSucursal, idCaja, estado, fechaInicio, fechaFin, pageable)
+                .map(v -> VentaResponse.fromEntity(v, List.of(), List.of()));
     }
 
     @Override
-    public Optional<Venta> findById(Integer id) {
-        Optional<Venta> venta = ventaRepository.findById(id);
-        if (venta.isEmpty()) {
-            throw new NotFoundException("Venta no encontrada");
-        }
-        return venta;
+    @Transactional(readOnly = true)
+    public VentaResponse findById(Integer id) {
+        Venta venta = ventaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Venta no encontrada"));
+        List<VentaDetalleResponse> detalles = ventaDetalleRepository.findByVentaIdVenta(id).stream()
+                .map(VentaDetalleResponse::fromEntity)
+                .toList();
+        List<VentaPagoResponse> pagos = ventaPagoRepository.findByVentaIdVenta(id).stream()
+                .map(VentaPagoResponse::fromEntity)
+                .toList();
+        return VentaResponse.fromEntity(venta, detalles, pagos);
     }
 
     @Override
-    public List<Venta> findByCaja(Integer idCaja) {
-        return ventaRepository.findByCajaIdCaja(idCaja);
+    @Transactional(readOnly = true)
+    public List<VentaResponse> findByCaja(Integer idCaja) {
+        return ventaRepository.findByCajaIdCaja(idCaja).stream()
+                .map(v -> VentaResponse.fromEntity(v, List.of(), List.of()))
+                .toList();
     }
 
     @Override
     @Transactional
-    public Venta cancelar(Integer id) {
+    public VentaResponse cancelar(Integer id) {
         Venta venta = ventaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Venta no encontrada"));
         venta.setEstado(EstadoVenta.CANCELADA);
-        return ventaRepository.save(venta);
+        venta = ventaRepository.save(venta);
+        List<VentaDetalleResponse> detalles = ventaDetalleRepository.findByVentaIdVenta(id).stream()
+                .map(VentaDetalleResponse::fromEntity)
+                .toList();
+        List<VentaPagoResponse> pagos = ventaPagoRepository.findByVentaIdVenta(id).stream()
+                .map(VentaPagoResponse::fromEntity)
+                .toList();
+        return VentaResponse.fromEntity(venta, detalles, pagos);
     }
 }
