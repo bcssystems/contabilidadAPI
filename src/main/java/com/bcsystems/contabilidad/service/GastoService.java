@@ -4,11 +4,12 @@ import com.bcsystems.contabilidad.domain.Gasto;
 import com.bcsystems.contabilidad.domain.Caja;
 import com.bcsystems.contabilidad.domain.Persona;
 import com.bcsystems.contabilidad.domain.en.EstadoGasto;
+import com.bcsystems.contabilidad.dto.GastoResponse;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.CajaRepository;
 import com.bcsystems.contabilidad.repository.GastoRepository;
 import com.bcsystems.contabilidad.repository.PersonaRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class GastoService {
     }
 
     @Transactional
-    public Gasto save(Integer idCaja, String descripcion, Double monto, Integer idUsuario) {
+    public GastoResponse save(Integer idCaja, String descripcion, Double monto, Integer idUsuario) {
         Caja caja = cajaRepository.findById(idCaja)
                 .orElseThrow(() -> new NotFoundException("Caja no encontrada"));
         Persona usuario = personaRepository.findById(idUsuario)
@@ -47,50 +48,65 @@ public class GastoService {
                 .fechaCreacion(LocalDateTime.now())
                 .build();
 
-        return gastoRepository.save(gasto);
+        return GastoResponse.fromEntity(gastoRepository.save(gasto));
     }
 
-    public List<Gasto> findAll() {
-        return gastoRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<GastoResponse> findAll() {
+        return gastoRepository.findAll().stream()
+                .map(GastoResponse::fromEntity)
+                .toList();
     }
 
-    public Page<Gasto> findAllPageable(Pageable pageable) {
-        return gastoRepository.findAll(pageable);
+    @Transactional(readOnly = true)
+    public Page<GastoResponse> findAllPageable(Pageable pageable) {
+        return gastoRepository.findAll(pageable)
+                .map(GastoResponse::fromEntity);
     }
 
-    public Gasto findById(Integer id) {
+    @Transactional(readOnly = true)
+    public GastoResponse findById(Integer id) {
         return gastoRepository.findById(id)
+                .map(GastoResponse::fromEntity)
                 .orElseThrow(() -> new NotFoundException("Gasto no encontrado"));
     }
 
-    public List<Gasto> findPendientes() {
-        return gastoRepository.findByEstado(EstadoGasto.PENDIENTE);
+    @Transactional(readOnly = true)
+    public List<GastoResponse> findPendientes() {
+        return gastoRepository.findByEstado(EstadoGasto.PENDIENTE).stream()
+                .map(GastoResponse::fromEntity)
+                .toList();
     }
 
-    public List<Gasto> findByCaja(Integer idCaja) {
-        return gastoRepository.findByCajaIdCaja(idCaja);
+    @Transactional(readOnly = true)
+    public List<GastoResponse> findByCaja(Integer idCaja) {
+        return gastoRepository.findByCajaIdCaja(idCaja).stream()
+                .map(GastoResponse::fromEntity)
+                .toList();
     }
 
     @Transactional
-    public Gasto autorizar(Integer id, Integer idAutorizador) {
-        Gasto gasto = findById(id);
+    public GastoResponse autorizar(Integer id, Integer idAutorizador) {
+        Gasto gasto = gastoRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Gasto no encontrado"));
         Persona autorizador = personaRepository.findById(idAutorizador)
                 .orElseThrow(() -> new NotFoundException("Autorizador no encontrado"));
         gasto.setEstado(EstadoGasto.AUTORIZADO);
         gasto.setAutorizador(autorizador);
         gasto.setFechaAutorizacion(LocalDateTime.now());
-        return gastoRepository.save(gasto);
+        return GastoResponse.fromEntity(gastoRepository.save(gasto));
     }
 
     @Transactional
-    public Gasto rechazar(Integer id, Integer idAutorizador) {
-        Gasto gasto = findById(id);
+    public GastoResponse rechazar(Integer id, Integer idAutorizador) {
+        Gasto gasto = gastoRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Gasto no encontrado"));
         Persona autorizador = personaRepository.findById(idAutorizador)
                 .orElseThrow(() -> new NotFoundException("Autorizador no encontrado"));
         gasto.setEstado(EstadoGasto.RECHAZADO);
         gasto.setAutorizador(autorizador);
         gasto.setFechaAutorizacion(LocalDateTime.now());
-        return gastoRepository.save(gasto);
+        return GastoResponse.fromEntity(gastoRepository.save(gasto));
     }
 
     @Transactional

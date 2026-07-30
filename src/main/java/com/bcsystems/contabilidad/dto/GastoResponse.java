@@ -1,14 +1,30 @@
 package com.bcsystems.contabilidad.dto;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
+import com.bcsystems.contabilidad.domain.Gasto;
+
+import java.time.LocalDateTime;
 
 public record GastoResponse(
-        Long id,
-        LocalDate fecha_gasto,
-        String concepto,
-        BigDecimal monto,
-        Long cuentaContableId,
-        Long asientoId
+    Integer idGasto,
+    String cajaNombre,
+    String descripcion,
+    Double monto,
+    String usuario,
+    String estado,
+    LocalDateTime fechaCreacion
 ) {
+    public static GastoResponse fromEntity(Gasto gasto) {
+        String nombreUsuario = gasto.getUsuario() != null
+            ? gasto.getUsuario().getNombre() + " " + gasto.getUsuario().getPrimerApellido()
+            : null;
+        return new GastoResponse(
+            gasto.getIdGasto(),
+            gasto.getCaja() != null ? gasto.getCaja().getNombre() : null,
+            gasto.getDescripcion(),
+            gasto.getMonto(),
+            nombreUsuario,
+            gasto.getEstado() != null ? gasto.getEstado().name() : null,
+            gasto.getFechaCreacion()
+        );
+    }
 }
