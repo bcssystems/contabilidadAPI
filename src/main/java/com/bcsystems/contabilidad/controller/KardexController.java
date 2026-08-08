@@ -1,8 +1,9 @@
 package com.bcsystems.contabilidad.controller;
 
-import com.bcsystems.contabilidad.domain.MovimientoStock;
 import com.bcsystems.contabilidad.domain.en.TipoMovimiento;
-import com.bcsystems.contabilidad.repository.MovimientoStockRepository;
+import com.bcsystems.contabilidad.dto.KardexUnificadoResponse;
+import com.bcsystems.contabilidad.dto.MovimientoStockResponse;
+import com.bcsystems.contabilidad.service.KardexService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,26 +17,30 @@ import java.time.LocalDateTime;
 @RequestMapping("/api/v1/kardex")
 public class KardexController {
 
-    private final MovimientoStockRepository movimientoStockRepository;
+    private final KardexService kardexService;
 
-    public KardexController(MovimientoStockRepository movimientoStockRepository) {
-        this.movimientoStockRepository = movimientoStockRepository;
+    public KardexController(KardexService kardexService) {
+        this.kardexService = kardexService;
     }
 
     @GetMapping
-    public ResponseEntity<?> findByProducto(
+    public ResponseEntity<Page<MovimientoStockResponse>> findByProducto(
             @RequestParam Integer idProducto,
+            @RequestParam(required = false) Integer idSucursal,
+            @RequestParam(required = false) TipoMovimiento tipo,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaInicio,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaFin,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         Sort sort = Sort.by("fechaMovimiento").descending();
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         return ResponseEntity.ok(
-                movimientoStockRepository.findByProductoIdProductoOrderByFechaMovimientoDesc(idProducto, pageRequest)
+                kardexService.listarMovimientos(idProducto, idSucursal, tipo, fechaInicio, fechaFin, pageRequest)
         );
     }
 
     @GetMapping("/todo")
-    public ResponseEntity<?> findAll(
+    public ResponseEntity<Page<KardexUnificadoResponse>> findAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "50") int size,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaInicio,
@@ -44,7 +49,7 @@ public class KardexController {
         Sort sort = Sort.by("fechaMovimiento").descending();
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         return ResponseEntity.ok(
-                movimientoStockRepository.findAllFiltered(fechaInicio, fechaFin, tipo, pageRequest)
+                kardexService.listarTodo(fechaInicio, fechaFin, tipo, pageRequest)
         );
     }
 }
