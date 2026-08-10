@@ -2,6 +2,7 @@ package com.bcsystems.contabilidad.service;
 
 import com.bcsystems.contabilidad.domain.Comision;
 import com.bcsystems.contabilidad.domain.Empleado;
+import com.bcsystems.contabilidad.domain.Nomina;
 import com.bcsystems.contabilidad.domain.Venta;
 import com.bcsystems.contabilidad.domain.en.EstadoComision;
 import com.bcsystems.contabilidad.domain.en.TipoComision;
@@ -20,11 +21,14 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ComisionService {
+
+    public static final BigDecimal PORCENTAJE_COMISION_VENTA = BigDecimal.valueOf(20);
 
     private final ComisionRepository comisionRepository;
     private final VentaRepository ventaRepository;
@@ -135,7 +139,7 @@ public class ComisionService {
         return comisiones.map(this::toResponse);
     }
 
-    private ComisionResponse toResponse(Comision comision) {
+    public ComisionResponse toResponse(Comision comision) {
         return new ComisionResponse(
                 comision.getIdComision(),
                 comision.getTipoComision(),
@@ -230,6 +234,56 @@ public class ComisionService {
                 comision.setFechaPago(LocalDate.now());
                 comisiones.add(comisionRepository.save(comision));
             }
+        }
+        return comisiones;
+    }
+
+    @Transactional
+    public Comision generarComisionAutomaticaVenta(Venta venta, Empleado empleado) {
+        BigDecimal montoBase = BigDecimal.valueOf(venta.getTotal());
+        BigDecimal montoComision = montoBase
+                .multiply(PORCENTAJE_COMISION_VENTA)
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+
+        Comision comision = Comision.builder()
+                .tipoComision(TipoComision.VENTA)
+                .venta(venta)
+                .empleado(empleado)
+                .montoBase(montoBase)
+                .porcentajeComision(PORCENTAJE_COMISION_VENTA)
+                .montoComision(montoComision)
+                .estadoComision(EstadoComision.PENDIENTE)
+                .fechaComision(LocalDate.now())
+                .build();
+
+        return comisionRepository.save(comision);
+    }
+
+    @Transactional
+    public List<Comision> pagarComisionesPorNomina(List<Long> comisionIds, Nomina nomina) {
+        List<Comision> comisiones = new ArrayList<>();
+        if (comisionIds == null) return comisiones;
+        for (Long id : comisionIds) {
+            Optional<Comision> comisionOpt = comisionRepository.findById(id);
+            if (comisionOpt.isPresent()) {
+                Comision comision = comisionOpt.get();
+                comision.setEstadoComision(EstadoComision.PAGADA);
+                comision.setFechaPago(LocalDate.now());
+                comision.setNomina(nomina);
+                comisiones.add(comisionRepository.save(comision));
+            }
+        }
+        return comisiones;
+    }
+
+    @Transactional
+    public List<Comision> revertirComisionesDeNomina(Nomina nomina) {
+        List<Comision> comisiones = comisionRepository.findByNominaIdNomina(nomina.getIdNomina());
+        for (Comision comision : comisiones) {
+            comision.setEstadoComision(EstadoComision.PENDIENTE);
+            comision.setFechaPago(null);
+            comision.setNomina(null);
+            comisionRepository.save(comision);
         }
         return comisiones;
     }

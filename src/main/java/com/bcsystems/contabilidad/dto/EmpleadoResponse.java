@@ -4,6 +4,8 @@ import com.bcsystems.contabilidad.domain.Empleado;
 import com.bcsystems.contabilidad.domain.en.PersonType;
 import com.bcsystems.contabilidad.domain.en.Position;
 
+import java.math.BigDecimal;
+
 public record EmpleadoResponse(
         Long id,
         String nombre,
@@ -11,6 +13,7 @@ public record EmpleadoResponse(
         String segundoApellido,
         PersonType personType,
         Position position,
+        BigDecimal sueldoBase,
         Boolean activo
 ) {
     public static EmpleadoResponse fromEntity(Empleado empleado) {
@@ -21,6 +24,7 @@ public record EmpleadoResponse(
                 empleado.getPersona() != null ? empleado.getPersona().getSegundoApellido() : null,
                 empleado.getPersona() != null ? empleado.getPersona().getPersonType() : null,
                 empleado.getPosition(),
+                empleado.getSueldoBase(),
                 empleado.getActivo()
         );
     }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /*
@@ -28,6 +29,8 @@ public class Empleado {
     private Boolean activo;
     @Enumerated(EnumType.STRING)
     private Position position;
+    @Column(precision = 12, scale = 2)
+    private BigDecimal sueldoBase;
     @OneToOne
     @JoinColumn(name = "id_person")
     private Persona persona;

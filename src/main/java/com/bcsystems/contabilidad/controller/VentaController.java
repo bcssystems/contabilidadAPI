@@ -1,5 +1,7 @@
 package com.bcsystems.contabilidad.controller;
 
+import com.bcsystems.contabilidad.domain.Persona;
+import com.bcsystems.contabilidad.domain.Usuario;
 import com.bcsystems.contabilidad.domain.Venta;
 import com.bcsystems.contabilidad.domain.VentaDetalle;
 import com.bcsystems.contabilidad.domain.VentaPago;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -27,7 +30,7 @@ public class VentaController {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody Map<String, Object> body) {
+    public ResponseEntity<?> save(@RequestBody Map<String, Object> body, Authentication authentication) {
         Venta venta = new Venta();
         if (body.get("idCaja") != null) {
             com.bcsystems.contabilidad.domain.Caja caja = new com.bcsystems.contabilidad.domain.Caja();
@@ -39,10 +42,16 @@ public class VentaController {
             cliente.setIdCliente(Integer.valueOf(body.get("idCliente").toString()));
             venta.setCliente(cliente);
         }
-        if (body.get("idUsuario") != null) {
-            com.bcsystems.contabilidad.domain.Persona usuario = new com.bcsystems.contabilidad.domain.Persona();
-            usuario.setIdPerson(Integer.valueOf(body.get("idUsuario").toString()));
-            venta.setUsuario(usuario);
+        Persona vendedor = null;
+        if (authentication != null && authentication.getPrincipal() instanceof Usuario) {
+            vendedor = ((Usuario) authentication.getPrincipal()).getPersona();
+        }
+        if (vendedor == null || vendedor.getIdPerson() == null) {
+            vendedor = null;
+        }
+        if (body.get("idUsuario") != null && vendedor == null) {
+            vendedor = new Persona();
+            vendedor.setIdPerson(Integer.valueOf(body.get("idUsuario").toString()));
         }
         venta.setTipoVenta(com.bcsystems.contabilidad.domain.en.TipoVenta.valueOf(body.get("tipoVenta").toString()));
         venta.setPrecioSeleccionado(body.get("precioSeleccionado") != null ? Integer.valueOf(body.get("precioSeleccionado").toString()) : 1);
@@ -87,7 +96,7 @@ public class VentaController {
             }
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(ventaService.save(venta, detalles, pagos));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ventaService.save(venta, detalles, pagos, vendedor));
     }
 
     @GetMapping

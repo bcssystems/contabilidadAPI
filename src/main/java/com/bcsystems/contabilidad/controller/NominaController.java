@@ -43,6 +43,11 @@ public class NominaController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @GetMapping("/desglose/{empleadoId}")
+    public ResponseEntity<?> desglose(@PathVariable Integer empleadoId) {
+        return ResponseEntity.status(HttpStatus.OK).body(nominaService.desglose(empleadoId));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(nominaService.findById(id));
@@ -51,6 +56,11 @@ public class NominaController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody NominaUpdateRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(nominaService.update(id, request));
+    }
+
+    @PostMapping("/{id}/cancelar")
+    public ResponseEntity<?> cancelar(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(nominaService.cancelar(id));
     }
 
     @DeleteMapping("/{id}")

@@ -13,4 +13,5 @@ public interface ComisionRepository extends JpaRepository<Comision, Long> {
     List<Comision> findByEmpleadoIdEmpleado(Long empleadoId);
     List<Comision> findByEmpleadoIdEmpleadoAndEstadoComision(Long empleadoId, EstadoComision estado);
     List<Comision> findByEstadoComision(EstadoComision estado);
+    List<Comision> findByNominaIdNomina(Long nominaId);
 }
