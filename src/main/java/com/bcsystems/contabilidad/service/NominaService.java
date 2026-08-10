@@ -1,17 +1,25 @@
 package com.bcsystems.contabilidad.service;
 
 import com.bcsystems.contabilidad.domain.AsientoContable;
+import com.bcsystems.contabilidad.domain.Comision;
 import com.bcsystems.contabilidad.domain.CuentaContable;
+import com.bcsystems.contabilidad.domain.Deduccion;
 import com.bcsystems.contabilidad.domain.Empleado;
 import com.bcsystems.contabilidad.domain.MovimientoContable;
 import com.bcsystems.contabilidad.domain.Nomina;
+import com.bcsystems.contabilidad.domain.en.EstadoNomina;
 import com.bcsystems.contabilidad.domain.en.TipoAsientoContable;
+import com.bcsystems.contabilidad.dto.ComisionResponse;
+import com.bcsystems.contabilidad.dto.DeduccionResponse;
+import com.bcsystems.contabilidad.dto.NominaDesgloseResponse;
 import com.bcsystems.contabilidad.dto.NominaRegisterRequest;
 import com.bcsystems.contabilidad.dto.NominaResponse;
 import com.bcsystems.contabilidad.dto.NominaUpdateRequest;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.AsientoContableRepository;
+import com.bcsystems.contabilidad.repository.ComisionRepository;
 import com.bcsystems.contabilidad.repository.CuentaContableRepository;
+import com.bcsystems.contabilidad.repository.DeduccionRepository;
 import com.bcsystems.contabilidad.repository.EmpleadoRepository;
 import com.bcsystems.contabilidad.repository.NominaRepository;
 import jakarta.transaction.Transactional;
@@ -23,6 +31,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -32,42 +41,72 @@ public class NominaService {
     private final EmpleadoRepository empleadoRepository;
     private final AsientoContableRepository asientoContableRepository;
     private final CuentaContableRepository cuentaContableRepository;
+    private final ComisionRepository comisionRepository;
+    private final DeduccionRepository deduccionRepository;
+    private final ComisionService comisionService;
+    private final DeduccionService deduccionService;
 
     public NominaService(NominaRepository nominaRepository,
-                      EmpleadoRepository empleadoRepository,
-                      AsientoContableRepository asientoContableRepository,
-                      CuentaContableRepository cuentaContableRepository) {
+                         EmpleadoRepository empleadoRepository,
+                         AsientoContableRepository asientoContableRepository,
+                         CuentaContableRepository cuentaContableRepository,
+                         ComisionRepository comisionRepository,
+                         DeduccionRepository deduccionRepository,
+                         ComisionService comisionService,
+                         DeduccionService deduccionService) {
         this.nominaRepository = nominaRepository;
         this.empleadoRepository = empleadoRepository;
         this.asientoContableRepository = asientoContableRepository;
         this.cuentaContableRepository = cuentaContableRepository;
+        this.comisionRepository = comisionRepository;
+        this.deduccionRepository = deduccionRepository;
+        this.comisionService = comisionService;
+        this.deduccionService = deduccionService;
     }
 
     @Transactional
-    public Nomina save(NominaRegisterRequest request) {
+    public NominaResponse save(NominaRegisterRequest request) {
+        if (request.empleadoId() == null) {
+            throw new NotFoundException("Empleado requerido");
+        }
+        Empleado empleado = empleadoRepository.findById(request.empleadoId())
+                .orElseThrow(() -> new NotFoundException("Empleado no encontrado"));
+
+        List<Comision> comisiones = comisionRepository.findAllById(
+                request.comisionIds() != null ? request.comisionIds() : List.of());
+        List<Deduccion> deducciones = deduccionRepository.findAllById(
+                request.deduccionIds() != null ? request.deduccionIds() : List.of());
+
+        BigDecimal sueldoBase = empleado.getSueldoBase() != null ? empleado.getSueldoBase() : BigDecimal.ZERO;
+        BigDecimal totalComisiones = comisiones.stream()
+                .map(Comision::getMontoComision)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal totalDeducciones = deducciones.stream()
+                .map(Deduccion::getMonto)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal sueldo = sueldoBase.add(totalComisiones).subtract(totalDeducciones);
+
         Nomina nomina = Nomina.builder()
-                .fecha_nomina(request.fecha_nomina())
-                .sueldo(request.sueldo())
+                .fecha_nomina(request.fecha_nomina() != null ? request.fecha_nomina() : LocalDate.now())
+                .sueldo(sueldo)
+                .sueldoBase(sueldoBase)
+                .totalComisiones(totalComisiones)
+                .totalDeducciones(totalDeducciones)
+                .estado(EstadoNomina.GENERADA)
+                .empleado(empleado)
                 .build();
+        nomina = nominaRepository.save(nomina);
 
-        if (request.empleadoId() != null) {
-            Optional<Empleado> empleado = empleadoRepository.findById(request.empleadoId());
-            if (empleado.isPresent()) {
-                nomina.setEmpleado(empleado.get());
-            }
-        }
+        comisionService.pagarComisionesPorNomina(request.comisionIds(), nomina);
+        deduccionService.aplicarDeduccionesPorNomina(request.deduccionIds(), nomina);
 
-        if (request.asientoId() == null) {
-            AsientoContable asiento = crearAsientoAutomaticoNomina(nomina);
-            nomina.setAsientoContable(asiento);
-        } else {
-            Optional<AsientoContable> asiento = asientoContableRepository.findById(request.asientoId());
-            if (asiento.isPresent()) {
-                nomina.setAsientoContable(asiento.get());
-            }
-        }
+        AsientoContable asiento = crearAsientoAutomaticoNomina(nomina);
+        nomina.setAsientoContable(asiento);
+        nomina = nominaRepository.save(nomina);
 
-        return nominaRepository.save(nomina);
+        return NominaResponse.fromEntity(nomina);
     }
 
     private AsientoContable crearAsientoAutomaticoNomina(Nomina nomina) {
@@ -116,68 +155,78 @@ public class NominaService {
         return asientoContableRepository.save(asiento);
     }
 
-    public List<Nomina> findAll() {
-        return nominaRepository.findAll();
-    }
-
+    @Transactional
     public Page<NominaResponse> findAllPageable(PageRequest pageRequest) {
         Page<Nomina> nominas = nominaRepository.findAll(pageRequest);
-        return nominas.map(this::toResponse);
-    }
-
-    private NominaResponse toResponse(Nomina nomina) {
-        return new NominaResponse(
-                nomina.getIdNomina(),
-                nomina.getFecha_nomina(),
-                nomina.getSueldo(),
-                nomina.getEmpleado() != null ? nomina.getEmpleado().getIdEmpleado().longValue() : null,
-                nomina.getAsientoContable() != null ? nomina.getAsientoContable().getIdAsientoContable() : null
-        );
-    }
-
-    public Optional<Nomina> findById(Long id) {
-        Optional<Nomina> nomina = nominaRepository.findById(id);
-        if (nomina.isPresent()) return nomina;
-        throw new NotFoundException("Nómina no encontrada");
+        return nominas.map(NominaResponse::fromEntity);
     }
 
     @Transactional
-    public Nomina update(Long id, NominaUpdateRequest request) {
-        Optional<Nomina> nominaOpt = nominaRepository.findById(id);
-        if (!nominaOpt.isPresent()) {
-            throw new NotFoundException("Nómina no encontrada");
-        }
+    public NominaResponse findById(Long id) {
+        Nomina nomina = nominaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Nómina no encontrada"));
+        return NominaResponse.fromEntity(nomina);
+    }
 
-        Nomina nomina = nominaOpt.get();
-
+    @Transactional
+    public NominaResponse update(Long id, NominaUpdateRequest request) {
+        Nomina nomina = nominaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Nómina no encontrada"));
         if (request.fecha_nomina() != null) {
             nomina.setFecha_nomina(request.fecha_nomina());
         }
-        if (request.sueldo() != null) {
-            nomina.setSueldo(request.sueldo());
-        }
-        if (request.empleadoId() != null) {
-            Optional<Empleado> empleado = empleadoRepository.findById(request.empleadoId());
-            if (empleado.isPresent()) {
-                nomina.setEmpleado(empleado.get());
-            }
-        }
-        if (request.asientoId() != null) {
-            Optional<AsientoContable> asiento = asientoContableRepository.findById(request.asientoId());
-            if (asiento.isPresent()) {
-                nomina.setAsientoContable(asiento.get());
-            }
-        }
+        return NominaResponse.fromEntity(nominaRepository.save(nomina));
+    }
 
-        return nominaRepository.save(nomina);
+    @Transactional
+    public NominaResponse cancelar(Long id) {
+        Nomina nomina = nominaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Nómina no encontrada"));
+        if (nomina.getEstado() == EstadoNomina.CANCELADA) {
+            throw new NotFoundException("La nómina ya está cancelada");
+        }
+        comisionService.revertirComisionesDeNomina(nomina);
+        deduccionService.revertirDeduccionesDeNomina(nomina);
+        nomina.setEstado(EstadoNomina.CANCELADA);
+        nomina = nominaRepository.save(nomina);
+        return NominaResponse.fromEntity(nomina);
     }
 
     @Transactional
     public void delete(Long id) {
-        Optional<Nomina> nominaOpt = nominaRepository.findById(id);
-        if (!nominaOpt.isPresent()) {
-            throw new NotFoundException("Nómina no encontrada");
-        }
-        nominaRepository.delete(nominaOpt.get());
+        Nomina nomina = nominaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Nómina no encontrada"));
+        comisionService.revertirComisionesDeNomina(nomina);
+        deduccionService.revertirDeduccionesDeNomina(nomina);
+        nominaRepository.delete(nomina);
+    }
+
+    @Transactional
+    public NominaDesgloseResponse desglose(Integer empleadoId) {
+        Empleado empleado = empleadoRepository.findById(empleadoId.longValue())
+                .orElseThrow(() -> new NotFoundException("Empleado no encontrado"));
+
+        List<ComisionResponse> comisiones = comisionService.findPendientesByEmpleado(empleadoId.longValue())
+                .stream().map(comisionService::toResponse).toList();
+        List<DeduccionResponse> deducciones = deduccionService.findPendientesByEmpleadoResponse(empleadoId);
+
+        BigDecimal totalComisiones = comisiones.stream()
+                .map(ComisionResponse::montoComision)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal totalDeducciones = deducciones.stream()
+                .map(DeduccionResponse::monto)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return new NominaDesgloseResponse(
+                empleadoId.longValue(),
+                empleado.getPersona() != null ? empleado.getPersona().getNombre() : null,
+                empleado.getSueldoBase(),
+                comisiones,
+                deducciones,
+                totalComisiones,
+                totalDeducciones
+        );
     }
 }

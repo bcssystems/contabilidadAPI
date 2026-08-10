@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class ProductoController {
     }
 
     @GetMapping("/ecommerce")
+    @Transactional(readOnly = true)
     public ResponseEntity<?> ecommerce() {
         List<Producto> productos = productoRepository.findAllEcommerce();
         List<ProductoEcommerceResponse> response = productos.stream().map(this::toEcommerceResponse).toList();

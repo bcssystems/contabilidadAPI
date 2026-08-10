@@ -1,12 +1,12 @@
 package com.bcsystems.contabilidad.dto;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public record NominaRegisterRequest(
         LocalDate fecha_nomina,
-        BigDecimal sueldo,
         Long empleadoId,
-        Long asientoId
+        List<Long> comisionIds,
+        List<Long> deduccionIds
 ) {
 }

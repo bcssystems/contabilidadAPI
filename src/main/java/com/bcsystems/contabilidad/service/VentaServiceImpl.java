@@ -2,6 +2,7 @@ package com.bcsystems.contabilidad.service;
 
 import com.bcsystems.contabilidad.domain.*;
 import com.bcsystems.contabilidad.domain.en.EstadoVenta;
+import com.bcsystems.contabilidad.domain.en.Position;
 import com.bcsystems.contabilidad.domain.en.TipoMovimiento;
 import com.bcsystems.contabilidad.dto.VentaDetalleResponse;
 import com.bcsystems.contabilidad.dto.VentaPagoResponse;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VentaServiceImpl implements VentaService {
@@ -28,6 +30,8 @@ public class VentaServiceImpl implements VentaService {
     private final PersonaRepository personaRepository;
     private final MovimientoStockRepository movimientoStockRepository;
     private final InventarioSucursalRepository inventarioSucursalRepository;
+    private final EmpleadoRepository empleadoRepository;
+    private final ComisionService comisionService;
 
     public VentaServiceImpl(VentaRepository ventaRepository,
                             VentaDetalleRepository ventaDetalleRepository,
@@ -37,7 +41,9 @@ public class VentaServiceImpl implements VentaService {
                             ClienteRepository clienteRepository,
                             PersonaRepository personaRepository,
                             MovimientoStockRepository movimientoStockRepository,
-                            InventarioSucursalRepository inventarioSucursalRepository) {
+                            InventarioSucursalRepository inventarioSucursalRepository,
+                            EmpleadoRepository empleadoRepository,
+                            ComisionService comisionService) {
         this.ventaRepository = ventaRepository;
         this.ventaDetalleRepository = ventaDetalleRepository;
         this.ventaPagoRepository = ventaPagoRepository;
@@ -47,13 +53,20 @@ public class VentaServiceImpl implements VentaService {
         this.personaRepository = personaRepository;
         this.movimientoStockRepository = movimientoStockRepository;
         this.inventarioSucursalRepository = inventarioSucursalRepository;
+        this.empleadoRepository = empleadoRepository;
+        this.comisionService = comisionService;
     }
 
     @Override
     @Transactional
-    public VentaResponse save(Venta venta, List<VentaDetalle> detalles, List<VentaPago> pagos) {
+    public VentaResponse save(Venta venta, List<VentaDetalle> detalles, List<VentaPago> pagos, Persona vendedor) {
         venta.setFecha(LocalDateTime.now());
         venta.setEstado(EstadoVenta.COMPLETADA);
+
+        if (vendedor != null && vendedor.getIdPerson() != null) {
+            Persona persona = personaRepository.findById(vendedor.getIdPerson()).orElse(null);
+            venta.setUsuario(persona);
+        }
 
         if (venta.getCaja() != null && venta.getCaja().getIdCaja() != null) {
             Caja caja = cajaRepository.findById(venta.getCaja().getIdCaja())
@@ -110,6 +123,16 @@ public class VentaServiceImpl implements VentaService {
             for (VentaPago pago : pagos) {
                 pago.setVenta(venta);
                 ventaPagoRepository.save(pago);
+            }
+        }
+
+        if (vendedor != null && vendedor.getIdPerson() != null) {
+            Optional<Empleado> empleadoOpt = empleadoRepository.findByPersonaIdPerson(vendedor.getIdPerson());
+            if (empleadoOpt.isPresent()) {
+                Empleado empleado = empleadoOpt.get();
+                if (Boolean.TRUE.equals(empleado.getActivo()) && empleado.getPosition() == Position.VENDEDOR) {
+                    comisionService.generarComisionAutomaticaVenta(venta, empleado);
+                }
             }
         }
 

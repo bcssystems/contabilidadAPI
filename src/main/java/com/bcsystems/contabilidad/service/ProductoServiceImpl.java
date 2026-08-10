@@ -2,9 +2,11 @@ package com.bcsystems.contabilidad.service;
 
 import com.bcsystems.contabilidad.domain.*;
 import com.bcsystems.contabilidad.domain.en.TipoMovimiento;
+import com.bcsystems.contabilidad.dto.*;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.*;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +33,7 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     @Transactional
-    public Producto save(Producto producto) {
+    public ProductoResponse save(Producto producto) {
         if (producto.getStockActual() == null) producto.setStockActual(0);
         producto.setActivo(true);
         producto = productoRepository.save(producto);
@@ -43,29 +45,34 @@ public class ProductoServiceImpl implements ProductoService {
             }
         }
 
-        return producto;
+        return toResponse(producto);
     }
 
     @Override
-    public Page<Producto> buscarConFiltros(String search, Boolean activo, Boolean tieneVariantes, Pageable pageable) {
-        return productoRepository.buscarConFiltros(search, activo, tieneVariantes, pageable);
+    @Transactional(readOnly = true)
+    public Page<ProductoResponse> buscarConFiltros(String search, Boolean activo, Boolean tieneVariantes, Pageable pageable) {
+        return toResponsePage(productoRepository.buscarConFiltros(search, activo, tieneVariantes, pageable));
     }
 
     @Override
-    public Producto findById(Integer id) {
-        return productoRepository.findById(id)
+    @Transactional(readOnly = true)
+    public ProductoResponse findById(Integer id) {
+        Producto producto = productoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Producto no encontrado"));
+        return toResponse(producto);
     }
 
     @Override
-    public Page<Producto> findBySucursal(Integer idSucursal, Pageable pageable) {
-        return productoRepository.findByActivoAndSucursal(idSucursal, pageable);
+    @Transactional(readOnly = true)
+    public Page<ProductoResponse> findBySucursal(Integer idSucursal, Pageable pageable) {
+        return toResponsePage(productoRepository.findByActivoAndSucursal(idSucursal, pageable));
     }
 
     @Override
     @Transactional
-    public Producto update(Integer id, Producto producto) {
-        Producto existing = findById(id);
+    public ProductoResponse update(Integer id, Producto producto) {
+        Producto existing = productoRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Producto no encontrado"));
         if (producto.getSku() != null) existing.setSku(producto.getSku());
         if (producto.getNombre() != null) existing.setNombre(producto.getNombre());
         if (producto.getDescripcion() != null) existing.setDescripcion(producto.getDescripcion());
@@ -81,13 +88,14 @@ public class ProductoServiceImpl implements ProductoService {
         if (producto.getTieneVariantes() != null) existing.setTieneVariantes(producto.getTieneVariantes());
         if (producto.getActivo() != null) existing.setActivo(producto.getActivo());
 
-        return productoRepository.save(existing);
+        return toResponse(productoRepository.save(existing));
     }
 
     @Override
     @Transactional
     public void delete(Integer id) {
-        Producto producto = findById(id);
+        Producto producto = productoRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Producto no encontrado"));
         producto.setActivo(false);
         productoRepository.save(producto);
     }
@@ -107,8 +115,9 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     @Transactional
-    public Producto registrarMovimientoStock(Integer idProducto, String tipoMovimiento, Integer cantidad, Integer idSucursal, String referencia, String observacion) {
-        Producto producto = findById(idProducto);
+    public ProductoResponse registrarMovimientoStock(Integer idProducto, String tipoMovimiento, Integer cantidad, Integer idSucursal, String referencia, String observacion) {
+        Producto producto = productoRepository.findById(idProducto)
+                .orElseThrow(() -> new NotFoundException("Producto no encontrado"));
         TipoMovimiento tipo = TipoMovimiento.valueOf(tipoMovimiento);
 
         int stockAnterior = producto.getStockActual();
@@ -156,13 +165,14 @@ public class ProductoServiceImpl implements ProductoService {
             }
         }
 
-        return producto;
+        return toResponse(producto);
     }
 
     @Override
     @Transactional
-    public Producto transferirStock(Integer idProducto, Integer idSucursalOrigen, Integer idSucursalDestino, Integer cantidad, String referencia, String observacion) {
-        Producto producto = findById(idProducto);
+    public ProductoResponse transferirStock(Integer idProducto, Integer idSucursalOrigen, Integer idSucursalDestino, Integer cantidad, String referencia, String observacion) {
+        Producto producto = productoRepository.findById(idProducto)
+                .orElseThrow(() -> new NotFoundException("Producto no encontrado"));
 
         InventarioSucursal origen = inventarioSucursalRepository
                 .findByProductoIdProductoAndSucursalIdSucursal(idProducto, idSucursalOrigen)
@@ -194,6 +204,92 @@ public class ProductoServiceImpl implements ProductoService {
                 .build();
         movimientoStockRepository.save(mov);
 
-        return producto;
+        return toResponse(producto);
+    }
+
+    private ProductoResponse toResponse(Producto p) {
+        Map<Integer, List<Producto>> childrenByParent = new HashMap<>();
+        if (Boolean.TRUE.equals(p.getTieneVariantes())) {
+            childrenByParent.put(p.getIdProducto(), productoRepository.findByProductoPadreIdProducto(p.getIdProducto()));
+        }
+        return buildResponse(p, childrenByParent);
+    }
+
+    private Page<ProductoResponse> toResponsePage(Page<Producto> page) {
+        List<Producto> content = page.getContent();
+        Set<Integer> parentIds = new HashSet<>();
+        for (Producto p : content) {
+            if (Boolean.TRUE.equals(p.getTieneVariantes())) {
+                parentIds.add(p.getIdProducto());
+            }
+        }
+        Map<Integer, List<Producto>> childrenByParent = new HashMap<>();
+        if (!parentIds.isEmpty()) {
+            for (Producto child : productoRepository.findByProductoPadreIdProductoIn(parentIds)) {
+                childrenByParent
+                        .computeIfAbsent(child.getProductoPadre().getIdProducto(), k -> new ArrayList<>())
+                        .add(child);
+            }
+        }
+        List<ProductoResponse> dto = content.stream()
+                .map(p -> buildResponse(p, childrenByParent))
+                .toList();
+        return new PageImpl<>(dto, page.getPageable(), page.getTotalElements());
+    }
+
+    private ProductoResponse buildResponse(Producto p, Map<Integer, List<Producto>> childrenByParent) {
+        List<ProductoResponse> variantes = childrenByParent.getOrDefault(p.getIdProducto(), List.of())
+                .stream()
+                .map(c -> buildResponse(c, Map.of()))
+                .toList();
+        return new ProductoResponse(
+                p.getIdProducto(),
+                p.getSku(),
+                p.getNombre(),
+                p.getDescripcion(),
+                p.getMarca(),
+                p.getModelo(),
+                p.getCategoria(),
+                p.getPrecio1(),
+                p.getPrecio2(),
+                p.getPrecio3(),
+                p.getPrecio4(),
+                p.getPrecioPersonalizado(),
+                p.getStockActual(),
+                p.getStockMinimo(),
+                p.getStockMaximo(),
+                p.getCostoPromedio(),
+                p.getTieneVariantes(),
+                p.getProductoPadre() != null ? p.getProductoPadre().getIdProducto() : null,
+                p.getProductoPadre() != null ? p.getProductoPadre().getNombre() : null,
+                p.getActivo(),
+                p.getFechaCreacion(),
+                p.getFechaActualizacion(),
+                p.getMultimedia().stream().map(ProductoMultimediaResponse::fromEntity).toList(),
+                p.getInventarioSucursales().stream().map(this::toInventarioResponse).toList(),
+                p.getVarianteAtributos().stream().map(this::toAtributoResponse).toList(),
+                variantes
+        );
+    }
+
+    private InventarioSucursalResponse toInventarioResponse(InventarioSucursal inv) {
+        return new InventarioSucursalResponse(
+                inv.getId(),
+                inv.getSucursal() != null ? inv.getSucursal().getIdSucursal() : null,
+                inv.getSucursal() != null ? inv.getSucursal().getNombre() : null,
+                inv.getStock(),
+                inv.getStockMinimo(),
+                inv.getStockMaximo()
+        );
+    }
+
+    private AtributoAsignadoResponse toAtributoResponse(ProductoVarianteAtributo pva) {
+        return new AtributoAsignadoResponse(
+                pva.getAtributo() != null ? pva.getAtributo().getIdAtributo() : null,
+                pva.getAtributo() != null ? pva.getAtributo().getNombre() : null,
+                pva.getValor() != null ? pva.getValor().getIdValor() : null,
+                pva.getValor() != null ? pva.getValor().getValor() : null,
+                pva.getValor() != null ? pva.getValor().getCodigoSku() : null
+        );
     }
 }

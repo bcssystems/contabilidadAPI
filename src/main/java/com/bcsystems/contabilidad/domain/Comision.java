@@ -40,4 +40,8 @@ public class Comision {
     private EstadoComision estadoComision;
     private LocalDate fechaComision = LocalDate.now();
     private LocalDate fechaPago;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinColumn(name = "nomina_id")
+    private Nomina nomina;
 }
