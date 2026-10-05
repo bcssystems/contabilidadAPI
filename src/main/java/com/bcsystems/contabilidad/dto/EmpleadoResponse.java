@@ -14,6 +14,7 @@ public record EmpleadoResponse(
         PersonType personType,
         Position position,
         BigDecimal sueldoBase,
+        BigDecimal sueldoSemanal,
         Boolean activo
 ) {
     public static EmpleadoResponse fromEntity(Empleado empleado) {
@@ -25,6 +26,7 @@ public record EmpleadoResponse(
                 empleado.getPersona() != null ? empleado.getPersona().getPersonType() : null,
                 empleado.getPosition(),
                 empleado.getSueldoBase(),
+                empleado.getSueldoSemanal(),
                 empleado.getActivo()
         );
     }

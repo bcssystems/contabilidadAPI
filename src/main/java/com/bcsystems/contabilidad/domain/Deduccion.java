@@ -1,6 +1,8 @@
 package com.bcsystems.contabilidad.domain;
 
 import com.bcsystems.contabilidad.domain.en.EstadoDeduccion;
+import com.bcsystems.contabilidad.domain.en.OrigenDeduccion;
+import com.bcsystems.contabilidad.domain.en.TipoDeduccion;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,6 +38,17 @@ public class Deduccion {
 
     @Enumerated(EnumType.STRING)
     private EstadoDeduccion estado;
+
+    @Enumerated(EnumType.STRING)
+    private TipoDeduccion tipo;
+
+    @Enumerated(EnumType.STRING)
+    private OrigenDeduccion origen;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinColumn(name = "asistencia_id")
+    private Asistencia asistencia;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "corte_id")

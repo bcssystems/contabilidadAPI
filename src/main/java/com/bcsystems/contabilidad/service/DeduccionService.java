@@ -5,6 +5,8 @@ import com.bcsystems.contabilidad.domain.Deduccion;
 import com.bcsystems.contabilidad.domain.Empleado;
 import com.bcsystems.contabilidad.domain.Nomina;
 import com.bcsystems.contabilidad.domain.en.EstadoDeduccion;
+import com.bcsystems.contabilidad.domain.en.OrigenDeduccion;
+import com.bcsystems.contabilidad.domain.en.TipoDeduccion;
 import com.bcsystems.contabilidad.dto.DeduccionRegisterRequest;
 import com.bcsystems.contabilidad.dto.DeduccionResponse;
 import com.bcsystems.contabilidad.dto.DeduccionUpdateRequest;
@@ -48,6 +50,8 @@ public class DeduccionService {
                 .monto(request.monto())
                 .fecha(request.fecha() != null ? request.fecha() : LocalDate.now())
                 .estado(EstadoDeduccion.PENDIENTE)
+                .tipo(TipoDeduccion.MANUAL)
+                .origen(OrigenDeduccion.MANUAL)
                 .build();
 
         if (request.corteCajaId() != null) {
@@ -115,6 +119,18 @@ public class DeduccionService {
     public List<DeduccionResponse> findPendientesByEmpleadoResponse(Integer empleadoId) {
         return deduccionRepository.findByEmpleadoIdEmpleadoAndEstado(empleadoId, EstadoDeduccion.PENDIENTE)
                 .stream().map(DeduccionResponse::fromEntity).toList();
+    }
+
+    @Transactional
+    public DeduccionResponse reviewAttendance(Long id, boolean approve) {
+        Deduccion deduction = deduccionRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Deducción no encontrada"));
+        if (deduction.getOrigen() != OrigenDeduccion.ASISTENCIA || deduction.getNomina() != null
+                || deduction.getEstado() != EstadoDeduccion.PENDIENTE) {
+            throw new IllegalArgumentException("La deducción no es una incidencia de asistencia pendiente");
+        }
+        deduction.setEstado(approve ? EstadoDeduccion.APROBADA : EstadoDeduccion.RECHAZADA);
+        return DeduccionResponse.fromEntity(deduccionRepository.save(deduction));
     }
 
     @Transactional

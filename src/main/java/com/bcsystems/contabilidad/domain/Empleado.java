@@ -31,6 +31,12 @@ public class Empleado {
     private Position position;
     @Column(precision = 12, scale = 2)
     private BigDecimal sueldoBase;
+    @Column(precision = 12, scale = 2)
+    private BigDecimal sueldoSemanal;
+    @OneToOne
+    @JoinColumn(name = "id_usuario", unique = true)
+    @JsonIgnore
+    private Usuario usuario;
     @OneToOne
     @JoinColumn(name = "id_person")
     private Persona persona;

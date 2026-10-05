@@ -12,6 +12,10 @@ public record EmpleadoUpdateRequest(
         PersonType personType,
         Position position,
         BigDecimal sueldoBase,
+        BigDecimal sueldoSemanal,
         Boolean activo
 ) {
+    public EmpleadoUpdateRequest(String nombre, String primerApellido, String segundoApellido, PersonType personType, Position position, BigDecimal sueldoBase, Boolean activo) {
+        this(nombre, primerApellido, segundoApellido, personType, position, sueldoBase, null, activo);
+    }
 }

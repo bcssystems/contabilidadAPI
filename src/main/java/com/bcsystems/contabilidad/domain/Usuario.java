@@ -3,6 +3,7 @@ package com.bcsystems.contabilidad.domain;
 import com.bcsystems.contabilidad.domain.en.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /*
 * En esta clase se modela al usuario, el cual va a estar ingresando al sistema, tenemos el username,
@@ -33,4 +34,7 @@ public class Usuario {
     @ManyToOne
     @JoinColumn(name = "id_person")
     private Persona persona;
+    @OneToOne(mappedBy = "usuario")
+    @JsonIgnore
+    private Empleado empleado;
 }

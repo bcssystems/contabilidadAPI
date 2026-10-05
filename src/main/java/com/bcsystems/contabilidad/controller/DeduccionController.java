@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/v1/deduccion")
@@ -61,6 +62,18 @@ public class DeduccionController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody DeduccionUpdateRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(deduccionService.update(id, request));
+    }
+
+    @PostMapping("/{id}/aprobar")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> approve(@PathVariable Long id) {
+        return ResponseEntity.ok(deduccionService.reviewAttendance(id, true));
+    }
+
+    @PostMapping("/{id}/rechazar")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> reject(@PathVariable Long id) {
+        return ResponseEntity.ok(deduccionService.reviewAttendance(id, false));
     }
 
     @DeleteMapping("/{id}")
