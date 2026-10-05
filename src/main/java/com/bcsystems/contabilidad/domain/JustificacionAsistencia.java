@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Table(name = "justificacion_asistencia")
 public class JustificacionAsistencia {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Integer id;
-    @ManyToOne(optional = false) @JoinColumn(name = "id_empleado") @JsonIgnore private Empleado empleado;
+    @ManyToOne(optional = false) @JoinColumn(name = "id_usuario") @JsonIgnore private Usuario usuario;
     @ManyToOne @JoinColumn(name = "id_asistencia") @JsonIgnore private Asistencia asistencia;
     @Column(nullable = false, length = 2000) private String comentario;
     private String nombreArchivo;

@@ -14,21 +14,19 @@ import java.util.List;
 @Service
 public class HorarioService {
     private final HorarioRepository horarios;
-    private final EmpleadoRepository empleados;
-    private final EmpleadoHorarioRepository asignaciones;
-    public HorarioService(HorarioRepository horarios, EmpleadoRepository empleados, EmpleadoHorarioRepository asignaciones) {
-        this.horarios = horarios; this.empleados = empleados; this.asignaciones = asignaciones;
+    private final UsuarioRepository usuarios;
+    private final UsuarioHorarioRepository asignaciones;
+    public HorarioService(HorarioRepository horarios, UsuarioRepository usuarios, UsuarioHorarioRepository asignaciones) {
+        this.horarios = horarios; this.usuarios = usuarios; this.asignaciones = asignaciones;
     }
     public List<Horario> findAll() { return horarios.findAll(); }
     public Horario find(Integer id) { return horarios.findById(id).orElseThrow(() -> new NotFoundException("Horario no encontrado")); }
     @Transactional public Horario save(HorarioRequest r) {
-        Horario h = Horario.builder().nombre(r.nombre()).toleranciaEntradaMinutos(value(r.toleranciaEntradaMinutos()))
-                .toleranciaSalidaMinutos(value(r.toleranciaSalidaMinutos())).activo(true).build();
+        Horario h = Horario.builder().nombre(r.nombre()).activo(true).build();
         fill(h, r); return horarios.save(h);
     }
-    @Transactional public Horario update(Integer id, HorarioRequest r) { Horario h = find(id); h.setNombre(r.nombre()); h.setToleranciaEntradaMinutos(value(r.toleranciaEntradaMinutos())); h.setToleranciaSalidaMinutos(value(r.toleranciaSalidaMinutos())); h.getDias().clear(); fill(h, r); return horarios.save(h); }
+    @Transactional public Horario update(Integer id, HorarioRequest r) { Horario h = find(id); h.setNombre(r.nombre()); h.getDias().clear(); fill(h, r); return horarios.save(h); }
     public void delete(Integer id) { Horario h = find(id); h.setActivo(false); horarios.save(h); }
-    private int value(Integer value) { return value == null ? 0 : Math.max(value, 0); }
     private void fill(Horario h, HorarioRequest r) {
         if (r.dias() == null) return;
         for (HorarioRequest.DiaRequest d : r.dias()) {
@@ -41,13 +39,13 @@ public class HorarioService {
             h.getDias().add(hd);
         }
     }
-    @Transactional public EmpleadoHorario assign(Integer employeeId, AsignarHorarioRequest r) {
-        Empleado e = empleados.findByIdEmpleado(employeeId).orElseThrow(() -> new NotFoundException("Empleado no encontrado"));
+    @Transactional public UsuarioHorario assign(Integer userId, AsignarHorarioRequest r) {
+        Usuario user = usuarios.findById(userId).orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
         Horario h = find(r.horarioId());
-        asignaciones.findFirstByEmpleadoIdEmpleadoAndActivoTrueOrderByIdDesc(employeeId).ifPresent(a -> { a.setActivo(false); asignaciones.save(a); });
-        return asignaciones.save(EmpleadoHorario.builder().empleado(e).horario(h).vigenteDesde(r.vigenteDesde() == null ? LocalDate.now() : r.vigenteDesde()).vigenteHasta(r.vigenteHasta()).activo(true).build());
+        asignaciones.findFirstByUsuarioIdUserAndActivoTrueOrderByIdDesc(userId).ifPresent(a -> { a.setActivo(false); asignaciones.save(a); });
+        return asignaciones.save(UsuarioHorario.builder().usuario(user).horario(h).vigenteDesde(r.vigenteDesde() == null ? LocalDate.now() : r.vigenteDesde()).vigenteHasta(r.vigenteHasta()).activo(true).build());
     }
-    public EmpleadoHorario assigned(Integer employeeId) { return asignaciones.findFirstByEmpleadoIdEmpleadoAndActivoTrueOrderByIdDesc(employeeId).orElseThrow(() -> new NotFoundException("Horario no asignado")); }
+    public UsuarioHorario assigned(Integer userId) { return asignaciones.findFirstByUsuarioIdUserAndActivoTrueOrderByIdDesc(userId).orElseThrow(() -> new NotFoundException("Horario no asignado")); }
     public BigDecimal weeklyHours(Horario horario) {
         long minutes = horario.getDias().stream().mapToLong(d -> {
             long total = Duration.between(d.getEntrada(), d.getSalida()).toMinutes();

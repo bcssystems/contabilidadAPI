@@ -10,8 +10,8 @@ import java.util.List;
 @Repository
 public interface ComisionRepository extends JpaRepository<Comision, Long> {
     List<Comision> findByVentaIdVenta(Long ventaId);
-    List<Comision> findByEmpleadoIdEmpleado(Long empleadoId);
-    List<Comision> findByEmpleadoIdEmpleadoAndEstadoComision(Long empleadoId, EstadoComision estado);
+    List<Comision> findByUsuarioIdUser(Integer usuarioId);
+    List<Comision> findByUsuarioIdUserAndEstadoComision(Integer usuarioId, EstadoComision estado);
     List<Comision> findByEstadoComision(EstadoComision estado);
     List<Comision> findByNominaIdNomina(Long nominaId);
 }

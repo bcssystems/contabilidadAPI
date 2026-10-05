@@ -44,14 +44,14 @@ public class DeduccionController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/empleado/{empleadoId}")
-    public ResponseEntity<?> findByEmpleado(@PathVariable Integer empleadoId) {
-        return ResponseEntity.status(HttpStatus.OK).body(deduccionService.findByEmpleado(empleadoId));
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<?> findByUsuario(@PathVariable Integer usuarioId) {
+        return ResponseEntity.status(HttpStatus.OK).body(deduccionService.findByUsuario(usuarioId));
     }
 
-    @GetMapping("/pendientes/empleado/{empleadoId}")
-    public ResponseEntity<?> findPendientesByEmpleado(@PathVariable Integer empleadoId) {
-        return ResponseEntity.status(HttpStatus.OK).body(deduccionService.findPendientesByEmpleadoResponse(empleadoId));
+    @GetMapping("/pendientes/usuario/{usuarioId}")
+    public ResponseEntity<?> findPendientesByUsuario(@PathVariable Integer usuarioId) {
+        return ResponseEntity.status(HttpStatus.OK).body(deduccionService.findPendientesByUsuarioResponse(usuarioId));
     }
 
     @GetMapping("/{id}")

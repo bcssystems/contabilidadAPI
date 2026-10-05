@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 public record ComisionRegisterRequest(
         TipoComision tipoComision,
         Long ventaId,
-        Long empleadoId,
+        Long usuarioId,
         BigDecimal montoBase,
         BigDecimal porcentajeComision
 ) {

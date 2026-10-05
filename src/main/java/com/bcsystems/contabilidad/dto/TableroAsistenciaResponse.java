@@ -1,9 +1,9 @@
 package com.bcsystems.contabilidad.dto;
 
 import com.bcsystems.contabilidad.domain.Asistencia;
-import com.bcsystems.contabilidad.domain.EmpleadoHorario;
+import com.bcsystems.contabilidad.domain.UsuarioHorario;
 import java.math.BigDecimal;
 import java.util.List;
 
-public record TableroAsistenciaResponse(List<Asistencia> asistencias, EmpleadoHorario horario,
+    public record TableroAsistenciaResponse(List<Asistencia> asistencias, UsuarioHorario horario,
                                          BigDecimal horasLaboralesSemanales, BigDecimal sueldoPorHora) { }

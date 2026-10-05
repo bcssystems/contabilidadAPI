@@ -5,7 +5,7 @@ import java.util.List;
 
 public record NominaRegisterRequest(
         LocalDate fecha_nomina,
-        Long empleadoId,
+        Long usuarioId,
         List<Long> comisionIds,
         List<Long> deduccionIds
 ) {

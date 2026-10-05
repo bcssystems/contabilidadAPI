@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record DeduccionRegisterRequest(
-        Long empleadoId,
+        Long usuarioId,
         String concepto,
         BigDecimal monto,
         LocalDate fecha,

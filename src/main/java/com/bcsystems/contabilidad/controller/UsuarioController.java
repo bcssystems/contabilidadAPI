@@ -37,7 +37,9 @@ public class UsuarioController {
                         u.getPersona().getNombre(), u.getPersona().getPrimerApellido(),
                         u.getPersona().getSegundoApellido(),
                         u.getPersona().getPersonType().name(),
-                        u.getActivo(), u.getPersona().getFechaRegistro()))
+                        u.getActivo(), u.getPersona().getFechaRegistro(),
+                        u.getPosition() != null ? u.getPosition().name() : null,
+                        u.getSueldoBase(), u.getSueldoSemanal()))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -46,7 +48,8 @@ public class UsuarioController {
     public ResponseEntity<?> create(@RequestBody UserRegisterRequest request) {
         try {
             authService.register(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "Usuario creado exitosamente"));
+            Integer id = usuarioService.findByUsername(request.username()).orElseThrow().getIdUser();
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("id", id, "message", "Usuario creado exitosamente"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("message", "Error al crear usuario: " + e.getMessage()));
         }
@@ -65,7 +68,7 @@ public class UsuarioController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
-            usuarioService.updateUser(id, new UserUpdateRequest(null, null, null, null, null, false));
+            usuarioService.updateUser(id, new UserUpdateRequest(null, null, null, null, null, false, null, null, null));
             return ResponseEntity.ok(Map.of("message", "Usuario desactivado exitosamente"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("message", "Error al desactivar usuario: " + e.getMessage()));

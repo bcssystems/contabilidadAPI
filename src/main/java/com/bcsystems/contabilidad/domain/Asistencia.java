@@ -7,10 +7,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-@Table(name = "asistencia", uniqueConstraints = @UniqueConstraint(columnNames = {"id_empleado", "fecha"}))
+@Table(name = "asistencia", uniqueConstraints = @UniqueConstraint(columnNames = {"id_usuario", "fecha"}))
 public class Asistencia {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Integer id;
-    @ManyToOne(optional = false) @JoinColumn(name = "id_empleado") @JsonIgnore private Empleado empleado;
+    @ManyToOne(optional = false) @JoinColumn(name = "id_usuario") @JsonIgnore private Usuario usuario;
     @Column(nullable = false) private LocalDate fecha;
     private LocalDateTime entrada;
     private LocalDateTime salida;

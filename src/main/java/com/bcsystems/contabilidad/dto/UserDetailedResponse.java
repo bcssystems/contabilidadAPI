@@ -1,6 +1,7 @@
 package com.bcsystems.contabilidad.dto;
 
 import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 public record UserDetailedResponse(
     Integer idUsuario,
@@ -11,6 +12,9 @@ public record UserDetailedResponse(
     String segundoApellido,
     String tipoPersona,
     Boolean activo,
-    LocalDateTime fechaRegistro
+    LocalDateTime fechaRegistro,
+    String position,
+    BigDecimal sueldoBase,
+    BigDecimal sueldoSemanal
 ) {
 }

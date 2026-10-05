@@ -84,9 +84,9 @@ public class ComisionController {
         return ResponseEntity.status(HttpStatus.OK).body(comisionService.findByVenta(ventaId));
     }
 
-    @GetMapping("/empleado/{empleadoId}")
-    public ResponseEntity<?> findByEmpleado(@PathVariable Long empleadoId) {
-        return ResponseEntity.status(HttpStatus.OK).body(comisionService.findByEmpleado(empleadoId));
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<?> findByUsuario(@PathVariable Long usuarioId) {
+        return ResponseEntity.status(HttpStatus.OK).body(comisionService.findByUsuario(usuarioId));
     }
 
     @GetMapping("/pendientes")
@@ -94,8 +94,8 @@ public class ComisionController {
         return ResponseEntity.status(HttpStatus.OK).body(comisionService.findPendientes());
     }
 
-    @GetMapping("/pendientes/empleado/{empleadoId}")
-    public ResponseEntity<?> findPendientesByEmpleado(@PathVariable Long empleadoId) {
-        return ResponseEntity.status(HttpStatus.OK).body(comisionService.findPendientesByEmpleado(empleadoId));
+    @GetMapping("/pendientes/usuario/{usuarioId}")
+    public ResponseEntity<?> findPendientesByUsuario(@PathVariable Long usuarioId) {
+        return ResponseEntity.status(HttpStatus.OK).body(comisionService.findPendientesByUsuario(usuarioId));
     }
 }

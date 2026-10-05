@@ -25,8 +25,8 @@ public class Deduccion {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    @JoinColumn(name = "empleado_id", nullable = false)
-    private Empleado empleado;
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario;
 
     @Column(length = 200)
     private String concepto;

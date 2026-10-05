@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public record NominaDesgloseResponse(
-        Long empleadoId,
-        String empleadoNombre,
+        Long usuarioId,
+        String usuarioNombre,
         BigDecimal sueldoBase,
         BigDecimal sueldoSemanal,
         List<ComisionResponse> comisiones,

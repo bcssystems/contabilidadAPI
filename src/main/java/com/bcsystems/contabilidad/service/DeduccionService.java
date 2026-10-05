@@ -2,7 +2,7 @@ package com.bcsystems.contabilidad.service;
 
 import com.bcsystems.contabilidad.domain.CorteCaja;
 import com.bcsystems.contabilidad.domain.Deduccion;
-import com.bcsystems.contabilidad.domain.Empleado;
+import com.bcsystems.contabilidad.domain.Usuario;
 import com.bcsystems.contabilidad.domain.Nomina;
 import com.bcsystems.contabilidad.domain.en.EstadoDeduccion;
 import com.bcsystems.contabilidad.domain.en.OrigenDeduccion;
@@ -13,7 +13,7 @@ import com.bcsystems.contabilidad.dto.DeduccionUpdateRequest;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.CorteCajaRepository;
 import com.bcsystems.contabilidad.repository.DeduccionRepository;
-import com.bcsystems.contabilidad.repository.EmpleadoRepository;
+import com.bcsystems.contabilidad.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,24 +28,24 @@ import java.util.Optional;
 public class DeduccionService {
 
     private final DeduccionRepository deduccionRepository;
-    private final EmpleadoRepository empleadoRepository;
+    private final UsuarioRepository usuarioRepository;
     private final CorteCajaRepository corteCajaRepository;
 
     public DeduccionService(DeduccionRepository deduccionRepository,
-                            EmpleadoRepository empleadoRepository,
+                            UsuarioRepository usuarioRepository,
                             CorteCajaRepository corteCajaRepository) {
         this.deduccionRepository = deduccionRepository;
-        this.empleadoRepository = empleadoRepository;
+        this.usuarioRepository = usuarioRepository;
         this.corteCajaRepository = corteCajaRepository;
     }
 
     @Transactional
     public Deduccion save(DeduccionRegisterRequest request) {
-        Empleado empleado = empleadoRepository.findById(request.empleadoId())
-                .orElseThrow(() -> new NotFoundException("Empleado no encontrado"));
+        Usuario usuario = usuarioRepository.findById(request.usuarioId().intValue())
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
 
         Deduccion deduccion = Deduccion.builder()
-                .empleado(empleado)
+                .usuario(usuario)
                 .concepto(request.concepto())
                 .monto(request.monto())
                 .fecha(request.fecha() != null ? request.fecha() : LocalDate.now())
@@ -107,17 +107,17 @@ public class DeduccionService {
         deduccionRepository.delete(deduccion);
     }
 
-    public List<DeduccionResponse> findByEmpleado(Integer empleadoId) {
-        return deduccionRepository.findByEmpleadoIdEmpleado(empleadoId)
+    public List<DeduccionResponse> findByUsuario(Integer usuarioId) {
+        return deduccionRepository.findByUsuarioIdUser(usuarioId)
                 .stream().map(DeduccionResponse::fromEntity).toList();
     }
 
-    public List<Deduccion> findPendientesByEmpleado(Integer empleadoId) {
-        return deduccionRepository.findByEmpleadoIdEmpleadoAndEstado(empleadoId, EstadoDeduccion.PENDIENTE);
+    public List<Deduccion> findPendientesByUsuario(Integer usuarioId) {
+        return deduccionRepository.findByUsuarioIdUserAndEstado(usuarioId, EstadoDeduccion.PENDIENTE);
     }
 
-    public List<DeduccionResponse> findPendientesByEmpleadoResponse(Integer empleadoId) {
-        return deduccionRepository.findByEmpleadoIdEmpleadoAndEstado(empleadoId, EstadoDeduccion.PENDIENTE)
+    public List<DeduccionResponse> findPendientesByUsuarioResponse(Integer usuarioId) {
+        return deduccionRepository.findByUsuarioIdUserAndEstado(usuarioId, EstadoDeduccion.PENDIENTE)
                 .stream().map(DeduccionResponse::fromEntity).toList();
     }
 

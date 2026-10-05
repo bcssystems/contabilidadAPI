@@ -1,7 +1,7 @@
 package com.bcsystems.contabilidad.service;
 
 import com.bcsystems.contabilidad.domain.Comision;
-import com.bcsystems.contabilidad.domain.Empleado;
+import com.bcsystems.contabilidad.domain.Usuario;
 import com.bcsystems.contabilidad.domain.Nomina;
 import com.bcsystems.contabilidad.domain.Venta;
 import com.bcsystems.contabilidad.domain.en.EstadoComision;
@@ -11,7 +11,7 @@ import com.bcsystems.contabilidad.dto.ComisionResponse;
 import com.bcsystems.contabilidad.dto.ComisionUpdateRequest;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.ComisionRepository;
-import com.bcsystems.contabilidad.repository.EmpleadoRepository;
+import com.bcsystems.contabilidad.repository.UsuarioRepository;
 import com.bcsystems.contabilidad.repository.VentaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -32,14 +32,14 @@ public class ComisionService {
 
     private final ComisionRepository comisionRepository;
     private final VentaRepository ventaRepository;
-    private final EmpleadoRepository empleadoRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public ComisionService(ComisionRepository comisionRepository,
                           VentaRepository ventaRepository,
-                          EmpleadoRepository empleadoRepository) {
+                           UsuarioRepository usuarioRepository) {
         this.comisionRepository = comisionRepository;
         this.ventaRepository = ventaRepository;
-        this.empleadoRepository = empleadoRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Transactional
@@ -49,9 +49,9 @@ public class ComisionService {
             throw new NotFoundException("Venta no encontrada");
         }
 
-        Optional<Empleado> empleado = empleadoRepository.findById(request.empleadoId());
-        if (empleado.isEmpty()) {
-            throw new NotFoundException("Empleado no encontrado");
+        Optional<Usuario> usuario = usuarioRepository.findById(request.usuarioId().intValue());
+        if (usuario.isEmpty()) {
+            throw new NotFoundException("Usuario no encontrado");
         }
 
         BigDecimal montoComision = BigDecimal.ZERO;
@@ -64,7 +64,7 @@ public class ComisionService {
         Comision comision = Comision.builder()
                 .tipoComision(request.tipoComision())
                 .venta(venta.get())
-                .empleado(empleado.get())
+                .usuario(usuario.get())
                 .montoBase(request.montoBase())
                 .porcentajeComision(request.porcentajeComision())
                 .montoComision(montoComision)
@@ -88,7 +88,7 @@ public class ComisionService {
         Venta venta = ventaOpt.get();
         List<Comision> comisiones = new java.util.ArrayList<>();
 
-        Optional<Empleado> vendedor = empleadoRepository.findById(empleadoVendedorId);
+        Optional<Usuario> vendedor = usuarioRepository.findById(empleadoVendedorId.intValue());
         if (vendedor.isPresent()) {
             BigDecimal montoComisionVenta = BigDecimal.valueOf(venta.getTotal())
                     .multiply(porcentajeVenta)
@@ -97,7 +97,7 @@ public class ComisionService {
             Comision comisionVenta = Comision.builder()
                     .tipoComision(TipoComision.VENTA)
                     .venta(venta)
-                    .empleado(vendedor.get())
+                    .usuario(vendedor.get())
                     .montoBase(BigDecimal.valueOf(venta.getTotal()))
                     .porcentajeComision(porcentajeVenta)
                     .montoComision(montoComisionVenta)
@@ -107,7 +107,7 @@ public class ComisionService {
             comisiones.add(comisionRepository.save(comisionVenta));
         }
 
-        Optional<Empleado> cobrador = empleadoRepository.findById(empleadoCobradorId);
+        Optional<Usuario> cobrador = usuarioRepository.findById(empleadoCobradorId.intValue());
         if (cobrador.isPresent()) {
             BigDecimal montoComisionCobranza = BigDecimal.valueOf(venta.getTotal())
                     .multiply(porcentajeCobranza)
@@ -116,7 +116,7 @@ public class ComisionService {
             Comision comisionCobranza = Comision.builder()
                     .tipoComision(TipoComision.COBRANZA)
                     .venta(venta)
-                    .empleado(cobrador.get())
+                    .usuario(cobrador.get())
                     .montoBase(BigDecimal.valueOf(venta.getTotal()))
                     .porcentajeComision(porcentajeCobranza)
                     .montoComision(montoComisionCobranza)
@@ -149,7 +149,7 @@ public class ComisionService {
                 comision.getEstadoComision(),
                 comision.getFechaComision(),
                 comision.getFechaPago(),
-                comision.getEmpleado() != null ? comision.getEmpleado().getIdEmpleado().longValue() : null,
+                comision.getUsuario() != null ? comision.getUsuario().getIdUser().longValue() : null,
                 comision.getVenta() != null ? comision.getVenta().getIdVenta().longValue() : null
         );
     }
@@ -211,16 +211,16 @@ public class ComisionService {
         return comisionRepository.findByVentaIdVenta(ventaId);
     }
 
-    public List<Comision> findByEmpleado(Long empleadoId) {
-        return comisionRepository.findByEmpleadoIdEmpleado(empleadoId);
+    public List<Comision> findByUsuario(Long usuarioId) {
+        return comisionRepository.findByUsuarioIdUser(usuarioId.intValue());
     }
 
     public List<Comision> findPendientes() {
         return comisionRepository.findByEstadoComision(EstadoComision.PENDIENTE);
     }
 
-    public List<Comision> findPendientesByEmpleado(Long empleadoId) {
-        return comisionRepository.findByEmpleadoIdEmpleadoAndEstadoComision(empleadoId, EstadoComision.PENDIENTE);
+    public List<Comision> findPendientesByUsuario(Long usuarioId) {
+        return comisionRepository.findByUsuarioIdUserAndEstadoComision(usuarioId.intValue(), EstadoComision.PENDIENTE);
     }
 
     @Transactional
@@ -239,7 +239,7 @@ public class ComisionService {
     }
 
     @Transactional
-    public Comision generarComisionAutomaticaVenta(Venta venta, Empleado empleado) {
+    public Comision generarComisionAutomaticaVenta(Venta venta, Usuario usuario) {
         BigDecimal montoBase = BigDecimal.valueOf(venta.getTotal());
         BigDecimal montoComision = montoBase
                 .multiply(PORCENTAJE_COMISION_VENTA)
@@ -248,7 +248,7 @@ public class ComisionService {
         Comision comision = Comision.builder()
                 .tipoComision(TipoComision.VENTA)
                 .venta(venta)
-                .empleado(empleado)
+                .usuario(usuario)
                 .montoBase(montoBase)
                 .porcentajeComision(PORCENTAJE_COMISION_VENTA)
                 .montoComision(montoComision)
