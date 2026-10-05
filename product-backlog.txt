@@ -1,0 +1,161 @@
+PRODUCT BACKLOG - OMI CONTABILIDAD
+==================================
+
+Ultima actualizacion: 2026-10-04
+Estado general: En implementacion
+
+OBJETIVO DE ESTA FASE
+---------------------
+Implementar la administracion laboral y el checador: todos los usuarios seran empleados,
+con sueldo semanal, horarios fijos, breaks configurables, marcaje obligatorio de entrada
+y salida con selfie y ubicacion, revision administrativa, justificaciones e integracion
+con nomina.
+
+DECISIONES CONFIRMADAS
+----------------------
+[x] Todos los usuarios, sin importar su rol, son empleados.
+[x] Administradores y usuarios deben marcar entrada y salida.
+[x] El sueldo es semanal.
+[x] Los breaks no cuentan como tiempo laboral y no requieren selfie.
+[x] No se permiten horarios que crucen medianoche.
+[x] No hay cambios de horario por dia en esta primera version; el horario semanal es fijo.
+[x] La selfie es obligatoria para entrada y salida.
+[x] La ubicacion se valida contra puntos geograficos autorizados.
+[x] El radio inicial de cada punto geografico es de 100 metros.
+[x] Fuera del radio se permite el marcaje, pero queda como incidencia pendiente.
+[x] Si se supera el umbral de entrada o salida, se descuenta una hora completa.
+[x] Las justificaciones las aprueban administradores.
+[x] Las deducciones de asistencia requieren aprobacion antes de entrar a nomina.
+[x] La nomina es semanal.
+[x] Se usara Google Maps para seleccionar puntos geograficos.
+[ ] Definir si se descuenta una hora por cada evento o por cada bloque completo en retardos mayores.
+[ ] Definir politica de retencion de selfies y coordenadas.
+
+FASE 0 - DOCUMENTACION Y CONTROL
+---------------------------------
+[x] Crear este backlog en la raiz del backend.
+[x] Mantener este archivo actualizado despues de cada cambio importante.
+[x] Registrar migraciones, decisiones y riesgos tecnicos.
+
+FASE 1 - RESTRICCION DE MODULOS Y NAVEGACION
+---------------------------------------------
+[x] Dejar funcionales Inicio, Configuracion, Usuarios, Empleados, Horarios,
+    Puntos geograficos, Asistencias, Revision, Justificaciones y Nomina.
+[x] Marcar los demas modulos como "En desarrollo" en la barra lateral.
+[x] Impedir clic y navegacion en modulos deshabilitados.
+[x] Proteger tambien los endpoints deshabilitados en backend.
+[x] Convertir la barra lateral en acordeon: un solo grupo abierto a la vez.
+[x] Mantener el comportamiento correcto en movil.
+
+FASE 2 - UNIFICACION USUARIO / EMPLEADO
+---------------------------------------
+[x] Agregar relacion directa Usuario-Empleado con restriccion unica.
+[ ] Evitar duplicar Persona durante altas y ediciones.
+[x] Crear automaticamente Empleado al crear Usuario.
+[ ] Migrar usuarios existentes que no tengan empleado.
+[ ] Reportar relaciones duplicadas o inconsistentes.
+[ ] Corregir tipos de ID inconsistentes en entidades y repositorios.
+[x] Agregar datos laborales: estado y sueldo semanal.
+[ ] Evitar exponer contrasenas y tokens en respuestas administrativas.
+
+FASE 3 - HORARIOS Y SUELDO
+--------------------------
+[x] Crear Horario y configuracion de dias laborales.
+[x] Crear breaks configurables por horario.
+[x] Permitir cero, uno o varios breaks.
+[x] Prohibir horarios que crucen medianoche.
+[x] Crear asignacion de horario con vigencia.
+[x] Configurar umbral de entrada y salida.
+[x] Calcular horas laborales semanales excluyendo breaks.
+[x] Calcular sueldo por hora a partir del sueldo semanal.
+[ ] Crear historial de cambios salariales.
+
+FASE 4 - PUNTOS GEOGRAFICOS
+---------------------------
+[x] Crear entidad y CRUD de puntos geograficos.
+[x] Agregar latitud, longitud, radio y estado activo.
+[x] Integrar Google Maps JavaScript API.
+[x] Permitir seleccionar ubicacion desde el mapa.
+[x] Preparar visualmente el radio configurable para puntos.
+[x] Permitir editar y desactivar puntos.
+[x] Configurar la clave mediante variable de entorno, nunca en Git.
+
+FASE 5 - CHECADOR
+-----------------
+[x] Crear asistencia diaria.
+[x] Crear marcajes de entrada y salida.
+[x] Registrar hora del servidor.
+[x] Solicitar selfie obligatoria.
+[x] Solicitar geolocalizacion obligatoria.
+[x] Guardar precision GPS y distancia al punto autorizado.
+[x] Permitir marcaje fuera de geocerca como incidencia pendiente.
+[x] Impedir segundo check-in o segundo check-out valido el mismo dia.
+[x] Crear tablero personal de asistencia.
+[x] Mostrar horario, entrada, salida, retardos e incidencias.
+
+FASE 6 - SELFIES, REVISION Y JUSTIFICACIONES
+---------------------------------------------
+[x] Guardar selfies en almacenamiento privado.
+[x] Asociar selfie al marcaje y empleado.
+[x] Crear estados de revision de evidencia.
+[x] Crear bandeja administrativa de selfies pendientes.
+[x] Aprobar o rechazar selfies.
+[x] Crear justificaciones con comentario y archivo opcional.
+[x] Aprobar o rechazar justificaciones como administrador.
+[ ] Registrar auditoria de cambios y decisiones.
+
+FASE 7 - NOMINA SEMANAL
+-----------------------
+[ ] Crear periodo semanal de nomina.
+[ ] Generar incidencias de retardo, salida temprana y falta.
+[x] Descontar una hora completa al superar el umbral.
+[x] Crear deducciones pendientes ligadas a asistencia.
+[x] Aprobar deducciones antes del calculo de nomina.
+[x] Mostrar sueldo base, sueldo por hora e incidencias en desglose.
+[x] Integrar comisiones y deducciones existentes.
+[ ] Implementar estados BORRADOR, EN_REVISION, APROBADA, PAGADA y CANCELADA.
+[ ] Congelar desglose al aprobar o pagar.
+
+FASE 8 - SEGURIDAD, PRIVACIDAD Y CALIDAD
+----------------------------------------
+[x] Aplicar permisos backend por rol y recurso.
+[ ] Restringir cada empleado a sus propios datos.
+[ ] Restringir salarios, selfies y ubicaciones a administradores.
+[ ] Definir retencion y eliminacion de evidencias.
+[ ] Validar tamano, tipo y contenido de selfies.
+[ ] Agregar pruebas de reglas de asistencia y nomina.
+[ ] Agregar pruebas de migracion usuario-empleado.
+[x] Ejecutar compilacion y pruebas de backend y validacion del frontend.
+
+CONFIGURACION GOOGLE MAPS
+-------------------------
+La clave debe configurarse como variable de entorno o parametro de despliegue.
+No se debe escribir una clave real en este archivo ni en el repositorio.
+
+Variable propuesta:
+GOOGLE_MAPS_API_KEY
+
+APIs necesarias:
+- Maps JavaScript API
+- Places API, solamente si se habilita busqueda de direcciones
+
+Checklist de la clave:
+[ ] Crear proyecto en Google Cloud Console.
+[ ] Habilitar facturacion.
+[ ] Habilitar Maps JavaScript API.
+[ ] Habilitar Places API si aplica.
+[ ] Crear API key.
+[ ] Restringir por HTTP referrers del frontend.
+[ ] Restringir la clave solamente a las APIs necesarias.
+[ ] Configurar la clave en el entorno local y produccion.
+[ ] Verificar limites y alertas de facturacion.
+
+REGISTRO DE CAMBIOS
+-------------------
+2026-10-04 - Se creo el backlog inicial con las reglas confirmadas por el usuario.
+2026-10-04 - Se agrego la base backend de usuarios-empleados, horarios, geocercas, checador, evidencias y justificaciones.
+2026-10-04 - Se alinearon horarios semanales con breaks, revision administrativa, tablero personal, geocerca configurable y permisos ADMIN.
+2026-10-04 - Se agrego configuracion persistida de asistencia; las deducciones finales de nomina quedan preparadas pero pendientes de rediseño de Nomina.
+2026-10-04 - Se integro la generacion idempotente de deducciones de retardo y salida temprana, su aprobacion administrativa y validacion por empleado en nomina.
+2026-10-04 - La nomina usa sueldo semanal con fallback a sueldo base y expone ambos valores en sus respuestas.
+2026-10-04 - Se deshabilitaron modulos legacy en frontend y backend, se activo el acordeon exclusivo y se corrigio la ruta local de imagenes mediante UPLOAD_DIR.

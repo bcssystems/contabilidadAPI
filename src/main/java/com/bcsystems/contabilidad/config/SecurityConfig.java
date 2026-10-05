@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Arrays;
@@ -24,6 +25,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -49,10 +51,36 @@ public class SecurityConfig {
                     configuration.setAllowCredentials(true);
                     return configuration;
                 }))
-                .authorizeHttpRequests(req ->
-                        req.requestMatchers("/api/v1/auth/**").permitAll()
-                                .requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/inventory/**").hasAnyRole("ADMIN")
+                 .authorizeHttpRequests(req ->
+                         req.requestMatchers("/api/v1/auth/**").permitAll()
+                                 .requestMatchers("/api/auth/**").permitAll()
+                                 // Legacy modules remain unavailable while the labor phase is developed.
+                                 .requestMatchers(
+                                         "/api/v1/venta/**",
+                                         "/api/v1/compra/**",
+                                         "/api/v1/productos/**",
+                                         "/api/v1/productos-padre/**",
+                                         "/api/v1/variantes/**",
+                                         "/api/v1/almacen/**",
+                                         "/api/v1/cajas/**",
+                                         "/api/v1/cortes/**",
+                                         "/api/v1/creditos/**",
+                                         "/api/v1/gasto/**",
+                                         "/api/v1/pedidos/**",
+                                         "/api/v1/sucursales/**",
+                                         "/api/v1/clientes/**",
+                                         "/api/v1/tipos-pago/**",
+                                         "/api/v1/atributos/**",
+                                         "/api/v1/proveedor/**",
+                                         "/api/v1/proveedores/**",
+                                         "/api/v1/comision/**",
+                                         "/api/v1/kardex/**",
+                                         "/api/v1/cuenta-contable/**",
+                                         "/api/v1/asiento-contable/**",
+                                         "/api/v1/movimiento-contable/**",
+                                         "/api/v1/promociones/**"
+                                 ).denyAll()
+                                 .requestMatchers("/api/inventory/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/api/v1/productos/ecommerce/**").permitAll()
                                 .requestMatchers("/api/v1/productos/**").hasAnyRole("ADMIN", "ALMACEN")
                                 .requestMatchers("/api/v1/productos-padre/**").hasAnyRole("ADMIN", "ALMACEN")
@@ -65,7 +93,14 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/almacen/salida-solicitar").authenticated()
                                 .requestMatchers("/api/v1/almacen/salida-pdf/**").authenticated()
                                 .requestMatchers("/api/v1/almacen/**").authenticated()
-                                .requestMatchers("/api/v1/usuarios/**").hasRole("ADMIN")
+                                  .requestMatchers("/api/v1/usuarios/**").hasRole("ADMIN")
+                                  .requestMatchers("/api/v1/empleado/**", "/api/v1/nomina/**", "/api/v1/deduccion/**").hasRole("ADMIN")
+                                   .requestMatchers("/api/v1/horarios/**", "/api/v1/puntos-geograficos/**", "/api/v1/configuracion/asistencia").hasRole("ADMIN")
+                                  .requestMatchers("/api/v1/empleados/*/horario").hasRole("ADMIN")
+                                  .requestMatchers("/api/v1/asistencias/evidencias/pendientes", "/api/v1/asistencias/evidencias/*/aprobar", "/api/v1/asistencias/evidencias/*/rechazar", "/api/v1/justificaciones/pendientes", "/api/v1/justificaciones/*/aprobar", "/api/v1/justificaciones/*/rechazar").hasRole("ADMIN")
+                                  .requestMatchers("/api/v1/asistencias/**").hasRole("ADMIN")
+                                  .requestMatchers("/api/v1/checador/**", "/api/v1/justificaciones/mias").authenticated()
+                                  .requestMatchers("/api/v1/justificaciones").authenticated()
                                 .requestMatchers("/api/images/**").permitAll()
                                 .requestMatchers("/uploads/**").permitAll()
                                 .requestMatchers("/error").permitAll()

@@ -11,6 +11,10 @@ public record EmpleadoRegisterRequest(
         String segundoApellido,
         PersonType personType,
         Position position,
-        BigDecimal sueldoBase
+        BigDecimal sueldoBase,
+        BigDecimal sueldoSemanal
 ) {
+    public EmpleadoRegisterRequest(String nombre, String primerApellido, String segundoApellido, PersonType personType, Position position, BigDecimal sueldoBase) {
+        this(nombre, primerApellido, segundoApellido, personType, position, sueldoBase, sueldoBase);
+    }
 }

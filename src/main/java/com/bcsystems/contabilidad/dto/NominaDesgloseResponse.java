@@ -7,6 +7,7 @@ public record NominaDesgloseResponse(
         Long empleadoId,
         String empleadoNombre,
         BigDecimal sueldoBase,
+        BigDecimal sueldoSemanal,
         List<ComisionResponse> comisiones,
         List<DeduccionResponse> deducciones,
         BigDecimal totalComisiones,

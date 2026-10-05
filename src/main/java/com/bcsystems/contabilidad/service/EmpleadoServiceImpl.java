@@ -42,6 +42,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
                 .activo(true)
                 .position(empleadoRegisterRequest.position())
                 .sueldoBase(empleadoRegisterRequest.sueldoBase())
+                .sueldoSemanal(empleadoRegisterRequest.sueldoSemanal() != null ? empleadoRegisterRequest.sueldoSemanal() : empleadoRegisterRequest.sueldoBase())
                 .persona(personasaved)
                 .build();
         empleado = empleadoRepository.save(empleado);
@@ -104,6 +105,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         if(empleadoUpdateRequest.personType() != null) personaUpdate.setPersonType(empleadoUpdateRequest.personType());
         if(empleadoUpdateRequest.position() != null) usr.setPosition(empleadoUpdateRequest.position());
         if(empleadoUpdateRequest.sueldoBase() != null) usr.setSueldoBase(empleadoUpdateRequest.sueldoBase());
+        if(empleadoUpdateRequest.sueldoSemanal() != null) usr.setSueldoSemanal(empleadoUpdateRequest.sueldoSemanal());
         if(empleadoUpdateRequest.activo() != null) usr.setActivo(empleadoUpdateRequest.activo());
 
         Persona savedPersona = personaService.save(personaUpdate);

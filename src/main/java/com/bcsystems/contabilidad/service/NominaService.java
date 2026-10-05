@@ -8,6 +8,8 @@ import com.bcsystems.contabilidad.domain.Empleado;
 import com.bcsystems.contabilidad.domain.MovimientoContable;
 import com.bcsystems.contabilidad.domain.Nomina;
 import com.bcsystems.contabilidad.domain.en.EstadoNomina;
+import com.bcsystems.contabilidad.domain.en.EstadoDeduccion;
+import com.bcsystems.contabilidad.domain.en.OrigenDeduccion;
 import com.bcsystems.contabilidad.domain.en.TipoAsientoContable;
 import com.bcsystems.contabilidad.dto.ComisionResponse;
 import com.bcsystems.contabilidad.dto.DeduccionResponse;
@@ -76,8 +78,15 @@ public class NominaService {
                 request.comisionIds() != null ? request.comisionIds() : List.of());
         List<Deduccion> deducciones = deduccionRepository.findAllById(
                 request.deduccionIds() != null ? request.deduccionIds() : List.of());
+        int requestedDeductions = request.deduccionIds() == null ? 0 : request.deduccionIds().size();
+        if (deducciones.size() != requestedDeductions || deducciones.stream().anyMatch(d ->
+                d.getEmpleado() == null || !d.getEmpleado().getIdEmpleado().equals(empleado.getIdEmpleado()) ||
+                        (d.getOrigen() == OrigenDeduccion.ASISTENCIA && d.getEstado() != EstadoDeduccion.APROBADA))) {
+            throw new IllegalArgumentException("Las deducciones seleccionadas no pertenecen al empleado o no están aprobadas");
+        }
 
-        BigDecimal sueldoBase = empleado.getSueldoBase() != null ? empleado.getSueldoBase() : BigDecimal.ZERO;
+        BigDecimal sueldoBase = empleado.getSueldoSemanal() != null ? empleado.getSueldoSemanal() :
+                (empleado.getSueldoBase() != null ? empleado.getSueldoBase() : BigDecimal.ZERO);
         BigDecimal totalComisiones = comisiones.stream()
                 .map(Comision::getMontoComision)
                 .filter(Objects::nonNull)
@@ -222,7 +231,8 @@ public class NominaService {
         return new NominaDesgloseResponse(
                 empleadoId.longValue(),
                 empleado.getPersona() != null ? empleado.getPersona().getNombre() : null,
-                empleado.getSueldoBase(),
+                empleado.getSueldoSemanal() != null ? empleado.getSueldoSemanal() : empleado.getSueldoBase(),
+                empleado.getSueldoSemanal(),
                 comisiones,
                 deducciones,
                 totalComisiones,

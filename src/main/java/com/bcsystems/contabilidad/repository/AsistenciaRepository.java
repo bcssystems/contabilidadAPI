@@ -1,0 +1,9 @@
+package com.bcsystems.contabilidad.repository;
+import com.bcsystems.contabilidad.domain.Asistencia;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.time.LocalDate;
+import java.util.*;
+public interface AsistenciaRepository extends JpaRepository<Asistencia, Integer> {
+    Optional<Asistencia> findByEmpleadoIdEmpleadoAndFecha(Integer empleadoId, LocalDate fecha);
+    List<Asistencia> findByEmpleadoIdEmpleadoOrderByFechaDesc(Integer empleadoId);
+}
