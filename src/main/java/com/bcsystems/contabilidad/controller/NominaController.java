@@ -43,9 +43,9 @@ public class NominaController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/desglose/{empleadoId}")
-    public ResponseEntity<?> desglose(@PathVariable Integer empleadoId) {
-        return ResponseEntity.status(HttpStatus.OK).body(nominaService.desglose(empleadoId));
+    @GetMapping("/desglose/{usuarioId}")
+    public ResponseEntity<?> desglose(@PathVariable Integer usuarioId) {
+        return ResponseEntity.status(HttpStatus.OK).body(nominaService.desglose(usuarioId));
     }
 
     @GetMapping("/{id}")

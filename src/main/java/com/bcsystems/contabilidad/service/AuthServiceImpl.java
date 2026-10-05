@@ -1,7 +1,6 @@
 package com.bcsystems.contabilidad.service;
 
 import com.bcsystems.contabilidad.domain.Persona;
-import com.bcsystems.contabilidad.domain.Empleado;
 import com.bcsystems.contabilidad.domain.Usuario;
 import com.bcsystems.contabilidad.domain.auth.Token;
 import com.bcsystems.contabilidad.domain.en.Role;
@@ -10,7 +9,6 @@ import com.bcsystems.contabilidad.dto.TokenResponse;
 import com.bcsystems.contabilidad.dto.UserAuthRequest;
 import com.bcsystems.contabilidad.dto.UserRegisterRequest;
 import com.bcsystems.contabilidad.exception.InvalidEntryException;
-import com.bcsystems.contabilidad.repository.EmpleadoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,15 +26,13 @@ public class AuthServiceImpl implements AuthService {
     private final PersonaService personaService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final EmpleadoRepository empleadoRepository;
 
-    public AuthServiceImpl(TokenService tokenService, UsuarioService usuarioService, PersonaService personaService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, EmpleadoRepository empleadoRepository) {
+    public AuthServiceImpl(TokenService tokenService, UsuarioService usuarioService, PersonaService personaService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
         this.tokenService = tokenService;
         this.usuarioService = usuarioService;
         this.personaService = personaService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
-        this.empleadoRepository = empleadoRepository;
     }
 
 
@@ -57,20 +53,11 @@ public class AuthServiceImpl implements AuthService {
                 .role(userRegisterRequest.role() != null ? userRegisterRequest.role() : Role.USER)
                 .activo(true)
                 .persona(personaSaved)
+                .position(userRegisterRequest.position())
+                .sueldoBase(userRegisterRequest.sueldoBase() != null ? userRegisterRequest.sueldoBase() : java.math.BigDecimal.ZERO)
+                .sueldoSemanal(userRegisterRequest.sueldoSemanal() != null ? userRegisterRequest.sueldoSemanal() : userRegisterRequest.sueldoBase())
                 .build();
-        Usuario savedUsuario = usuarioService.save(usuario);
-        if (empleadoRepository.findByUsuarioIdUser(savedUsuario.getIdUser()).isEmpty()) {
-            Empleado empleado = empleadoRepository.findByPersonaIdPerson(personaSaved.getIdPerson()).orElseGet(() -> Empleado.builder()
-                    .persona(personaSaved)
-                    .activo(true)
-                    .sueldoBase(java.math.BigDecimal.ZERO)
-                    .sueldoSemanal(java.math.BigDecimal.ZERO)
-                    .build());
-            empleado.setUsuario(savedUsuario);
-            if (empleado.getSueldoSemanal() == null) empleado.setSueldoSemanal(java.math.BigDecimal.ZERO);
-            if (empleado.getSueldoBase() == null) empleado.setSueldoBase(java.math.BigDecimal.ZERO);
-            empleadoRepository.save(empleado);
-        }
+        usuario = usuarioService.save(usuario);
         String token = tokenService.generateToken(usuario);
         String refreshToken = tokenService.generateRefreshToken(usuario);
 

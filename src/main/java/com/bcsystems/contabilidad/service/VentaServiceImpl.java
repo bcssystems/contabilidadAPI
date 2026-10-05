@@ -30,7 +30,7 @@ public class VentaServiceImpl implements VentaService {
     private final PersonaRepository personaRepository;
     private final MovimientoStockRepository movimientoStockRepository;
     private final InventarioSucursalRepository inventarioSucursalRepository;
-    private final EmpleadoRepository empleadoRepository;
+    private final UsuarioRepository usuarioRepository;
     private final ComisionService comisionService;
 
     public VentaServiceImpl(VentaRepository ventaRepository,
@@ -42,7 +42,7 @@ public class VentaServiceImpl implements VentaService {
                             PersonaRepository personaRepository,
                             MovimientoStockRepository movimientoStockRepository,
                             InventarioSucursalRepository inventarioSucursalRepository,
-                            EmpleadoRepository empleadoRepository,
+                             UsuarioRepository usuarioRepository,
                             ComisionService comisionService) {
         this.ventaRepository = ventaRepository;
         this.ventaDetalleRepository = ventaDetalleRepository;
@@ -53,7 +53,7 @@ public class VentaServiceImpl implements VentaService {
         this.personaRepository = personaRepository;
         this.movimientoStockRepository = movimientoStockRepository;
         this.inventarioSucursalRepository = inventarioSucursalRepository;
-        this.empleadoRepository = empleadoRepository;
+        this.usuarioRepository = usuarioRepository;
         this.comisionService = comisionService;
     }
 
@@ -127,11 +127,11 @@ public class VentaServiceImpl implements VentaService {
         }
 
         if (vendedor != null && vendedor.getIdPerson() != null) {
-            Optional<Empleado> empleadoOpt = empleadoRepository.findByPersonaIdPerson(vendedor.getIdPerson());
-            if (empleadoOpt.isPresent()) {
-                Empleado empleado = empleadoOpt.get();
-                if (Boolean.TRUE.equals(empleado.getActivo()) && empleado.getPosition() == Position.VENDEDOR) {
-                    comisionService.generarComisionAutomaticaVenta(venta, empleado);
+            Optional<Usuario> usuarioOpt = usuarioRepository.findByPersonaIdPerson(vendedor.getIdPerson());
+            if (usuarioOpt.isPresent()) {
+                Usuario usuario = usuarioOpt.get();
+                if (Boolean.TRUE.equals(usuario.getActivo()) && usuario.getPosition() == Position.VENDEDOR) {
+                    comisionService.generarComisionAutomaticaVenta(venta, usuario);
                 }
             }
         }

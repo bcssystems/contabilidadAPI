@@ -1,6 +1,8 @@
 package com.bcsystems.contabilidad.domain;
 
 import com.bcsystems.contabilidad.domain.en.Role;
+import com.bcsystems.contabilidad.domain.en.Position;
+import java.math.BigDecimal;
 import jakarta.persistence.*;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,7 +36,10 @@ public class Usuario {
     @ManyToOne
     @JoinColumn(name = "id_person")
     private Persona persona;
-    @OneToOne(mappedBy = "usuario")
-    @JsonIgnore
-    private Empleado empleado;
+    @Enumerated(EnumType.STRING)
+    private Position position;
+    @Column(precision = 12, scale = 2)
+    private BigDecimal sueldoBase;
+    @Column(precision = 12, scale = 2)
+    private BigDecimal sueldoSemanal;
 }

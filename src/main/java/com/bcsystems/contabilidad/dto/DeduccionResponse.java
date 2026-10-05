@@ -10,8 +10,8 @@ import java.time.LocalDate;
 
 public record DeduccionResponse(
         Long id,
-        Long empleadoId,
-        String empleadoNombre,
+        Long usuarioId,
+        String usuarioNombre,
         String concepto,
         BigDecimal monto,
         LocalDate fecha,
@@ -25,9 +25,9 @@ public record DeduccionResponse(
     public static DeduccionResponse fromEntity(Deduccion deduccion) {
         return new DeduccionResponse(
                 deduccion.getIdDeduccion(),
-                deduccion.getEmpleado() != null ? deduccion.getEmpleado().getIdEmpleado().longValue() : null,
-                deduccion.getEmpleado() != null && deduccion.getEmpleado().getPersona() != null
-                        ? deduccion.getEmpleado().getPersona().getNombre() : null,
+                deduccion.getUsuario() != null ? deduccion.getUsuario().getIdUser().longValue() : null,
+                deduccion.getUsuario() != null && deduccion.getUsuario().getPersona() != null
+                        ? deduccion.getUsuario().getPersona().getNombre() : null,
                 deduccion.getConcepto(),
                 deduccion.getMonto(),
                 deduccion.getFecha(),

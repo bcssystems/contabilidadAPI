@@ -28,5 +28,5 @@ public class AsistenciaController {
     @GetMapping("/justificaciones/pendientes") @PreAuthorize("hasRole('ADMIN')") public Object pendingJustifications(){return service.pendingJustifications();}
     @PostMapping("/justificaciones/{id}/aprobar") @PreAuthorize("hasRole('ADMIN')") public Object approveJustification(@PathVariable Integer id){return service.reviewJustification(id,true);}
     @PostMapping("/justificaciones/{id}/rechazar") @PreAuthorize("hasRole('ADMIN')") public Object rejectJustification(@PathVariable Integer id){return service.reviewJustification(id,false);}
-    @PostMapping("/nomina/asistencia/generar") @PreAuthorize("hasRole('ADMIN')") public Object generatePayrollDeductions(@RequestBody GenerarDeduccionesAsistenciaRequest request){return service.generateAttendanceDeductions(request.empleadoId(),request.inicio(),request.fin());}
+    @PostMapping("/nomina/asistencia/generar") @PreAuthorize("hasRole('ADMIN')") public Object generatePayrollDeductions(@RequestBody GenerarDeduccionesAsistenciaRequest request){return service.generateAttendanceDeductions(request.usuarioId(),request.inicio(),request.fin());}
 }

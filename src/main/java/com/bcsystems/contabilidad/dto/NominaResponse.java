@@ -15,8 +15,8 @@ public record NominaResponse(
         BigDecimal totalComisiones,
         BigDecimal totalDeducciones,
         EstadoNomina estado,
-        String empleadoNombre,
-        Long empleadoId,
+        String usuarioNombre,
+        Long usuarioId,
         Long asientoId
 ) {
     public static NominaResponse fromEntity(Nomina nomina) {
@@ -25,12 +25,12 @@ public record NominaResponse(
                 nomina.getFecha_nomina(),
                 nomina.getSueldo(),
                 nomina.getSueldoBase(),
-                nomina.getEmpleado() != null ? nomina.getEmpleado().getSueldoSemanal() : null,
+                nomina.getUsuario() != null ? nomina.getUsuario().getSueldoSemanal() : null,
                 nomina.getTotalComisiones(),
                 nomina.getTotalDeducciones(),
                 nomina.getEstado(),
-                nomina.getEmpleado() != null ? nomina.getEmpleado().getPersona().getNombre() : null,
-                nomina.getEmpleado() != null ? nomina.getEmpleado().getIdEmpleado().longValue() : null,
+                nomina.getUsuario() != null ? nomina.getUsuario().getPersona().getNombre() : null,
+                nomina.getUsuario() != null ? nomina.getUsuario().getIdUser().longValue() : null,
                 nomina.getAsientoContable() != null ? nomina.getAsientoContable().getIdAsientoContable() : null
         );
     }

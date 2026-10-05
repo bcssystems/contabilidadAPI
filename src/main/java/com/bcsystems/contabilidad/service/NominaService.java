@@ -4,7 +4,7 @@ import com.bcsystems.contabilidad.domain.AsientoContable;
 import com.bcsystems.contabilidad.domain.Comision;
 import com.bcsystems.contabilidad.domain.CuentaContable;
 import com.bcsystems.contabilidad.domain.Deduccion;
-import com.bcsystems.contabilidad.domain.Empleado;
+import com.bcsystems.contabilidad.domain.Usuario;
 import com.bcsystems.contabilidad.domain.MovimientoContable;
 import com.bcsystems.contabilidad.domain.Nomina;
 import com.bcsystems.contabilidad.domain.en.EstadoNomina;
@@ -22,7 +22,7 @@ import com.bcsystems.contabilidad.repository.AsientoContableRepository;
 import com.bcsystems.contabilidad.repository.ComisionRepository;
 import com.bcsystems.contabilidad.repository.CuentaContableRepository;
 import com.bcsystems.contabilidad.repository.DeduccionRepository;
-import com.bcsystems.contabilidad.repository.EmpleadoRepository;
+import com.bcsystems.contabilidad.repository.UsuarioRepository;
 import com.bcsystems.contabilidad.repository.NominaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -40,7 +40,7 @@ import java.util.Optional;
 public class NominaService {
 
     private final NominaRepository nominaRepository;
-    private final EmpleadoRepository empleadoRepository;
+    private final UsuarioRepository usuarioRepository;
     private final AsientoContableRepository asientoContableRepository;
     private final CuentaContableRepository cuentaContableRepository;
     private final ComisionRepository comisionRepository;
@@ -49,7 +49,7 @@ public class NominaService {
     private final DeduccionService deduccionService;
 
     public NominaService(NominaRepository nominaRepository,
-                         EmpleadoRepository empleadoRepository,
+                         UsuarioRepository usuarioRepository,
                          AsientoContableRepository asientoContableRepository,
                          CuentaContableRepository cuentaContableRepository,
                          ComisionRepository comisionRepository,
@@ -57,7 +57,7 @@ public class NominaService {
                          ComisionService comisionService,
                          DeduccionService deduccionService) {
         this.nominaRepository = nominaRepository;
-        this.empleadoRepository = empleadoRepository;
+        this.usuarioRepository = usuarioRepository;
         this.asientoContableRepository = asientoContableRepository;
         this.cuentaContableRepository = cuentaContableRepository;
         this.comisionRepository = comisionRepository;
@@ -68,11 +68,11 @@ public class NominaService {
 
     @Transactional
     public NominaResponse save(NominaRegisterRequest request) {
-        if (request.empleadoId() == null) {
-            throw new NotFoundException("Empleado requerido");
+        if (request.usuarioId() == null) {
+            throw new NotFoundException("Usuario requerido");
         }
-        Empleado empleado = empleadoRepository.findById(request.empleadoId())
-                .orElseThrow(() -> new NotFoundException("Empleado no encontrado"));
+        Usuario usuario = usuarioRepository.findById(request.usuarioId().intValue())
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
 
         List<Comision> comisiones = comisionRepository.findAllById(
                 request.comisionIds() != null ? request.comisionIds() : List.of());
@@ -80,13 +80,13 @@ public class NominaService {
                 request.deduccionIds() != null ? request.deduccionIds() : List.of());
         int requestedDeductions = request.deduccionIds() == null ? 0 : request.deduccionIds().size();
         if (deducciones.size() != requestedDeductions || deducciones.stream().anyMatch(d ->
-                d.getEmpleado() == null || !d.getEmpleado().getIdEmpleado().equals(empleado.getIdEmpleado()) ||
+                d.getUsuario() == null || !d.getUsuario().getIdUser().equals(usuario.getIdUser()) ||
                         (d.getOrigen() == OrigenDeduccion.ASISTENCIA && d.getEstado() != EstadoDeduccion.APROBADA))) {
             throw new IllegalArgumentException("Las deducciones seleccionadas no pertenecen al empleado o no están aprobadas");
         }
 
-        BigDecimal sueldoBase = empleado.getSueldoSemanal() != null ? empleado.getSueldoSemanal() :
-                (empleado.getSueldoBase() != null ? empleado.getSueldoBase() : BigDecimal.ZERO);
+        BigDecimal sueldoBase = usuario.getSueldoSemanal() != null ? usuario.getSueldoSemanal() :
+                (usuario.getSueldoBase() != null ? usuario.getSueldoBase() : BigDecimal.ZERO);
         BigDecimal totalComisiones = comisiones.stream()
                 .map(Comision::getMontoComision)
                 .filter(Objects::nonNull)
@@ -104,7 +104,7 @@ public class NominaService {
                 .totalComisiones(totalComisiones)
                 .totalDeducciones(totalDeducciones)
                 .estado(EstadoNomina.GENERADA)
-                .empleado(empleado)
+                .usuario(usuario)
                 .build();
         nomina = nominaRepository.save(nomina);
 
@@ -142,7 +142,7 @@ public class NominaService {
                 .build();
         movimientos.add(movHaber);
 
-        String nombreEmpleado = nomina.getEmpleado() != null ? nomina.getEmpleado().getPersona().getNombre() : "General";
+        String nombreEmpleado = nomina.getUsuario() != null ? nomina.getUsuario().getPersona().getNombre() : "General";
         String referencia = "Nomina-" + nombreEmpleado + "-" + LocalDate.now();
         String descripcion = "Pago de nómina a " + nombreEmpleado + " por " + nomina.getSueldo();
 
@@ -211,13 +211,13 @@ public class NominaService {
     }
 
     @Transactional
-    public NominaDesgloseResponse desglose(Integer empleadoId) {
-        Empleado empleado = empleadoRepository.findById(empleadoId.longValue())
-                .orElseThrow(() -> new NotFoundException("Empleado no encontrado"));
+    public NominaDesgloseResponse desglose(Integer usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
 
-        List<ComisionResponse> comisiones = comisionService.findPendientesByEmpleado(empleadoId.longValue())
+        List<ComisionResponse> comisiones = comisionService.findPendientesByUsuario(usuarioId.longValue())
                 .stream().map(comisionService::toResponse).toList();
-        List<DeduccionResponse> deducciones = deduccionService.findPendientesByEmpleadoResponse(empleadoId);
+        List<DeduccionResponse> deducciones = deduccionService.findPendientesByUsuarioResponse(usuarioId);
 
         BigDecimal totalComisiones = comisiones.stream()
                 .map(ComisionResponse::montoComision)
@@ -229,10 +229,10 @@ public class NominaService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return new NominaDesgloseResponse(
-                empleadoId.longValue(),
-                empleado.getPersona() != null ? empleado.getPersona().getNombre() : null,
-                empleado.getSueldoSemanal() != null ? empleado.getSueldoSemanal() : empleado.getSueldoBase(),
-                empleado.getSueldoSemanal(),
+                usuarioId.longValue(),
+                usuario.getPersona() != null ? usuario.getPersona().getNombre() : null,
+                usuario.getSueldoSemanal() != null ? usuario.getSueldoSemanal() : usuario.getSueldoBase(),
+                usuario.getSueldoSemanal(),
                 comisiones,
                 deducciones,
                 totalComisiones,

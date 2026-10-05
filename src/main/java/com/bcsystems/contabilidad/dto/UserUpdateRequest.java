@@ -2,6 +2,8 @@ package com.bcsystems.contabilidad.dto;
 
 import com.bcsystems.contabilidad.domain.en.PersonType;
 import com.bcsystems.contabilidad.domain.en.Role;
+import com.bcsystems.contabilidad.domain.en.Position;
+import java.math.BigDecimal;
 
 public record UserUpdateRequest(
         String nombre,
@@ -9,6 +11,9 @@ public record UserUpdateRequest(
         String segundoApellido,
         Role role,
         PersonType personType,
-        Boolean activo
+        Boolean activo,
+        Position position,
+        BigDecimal sueldoBase,
+        BigDecimal sueldoSemanal
 ) {
 }

@@ -15,7 +15,7 @@ public record ComisionResponse(
         EstadoComision estadoComision,
         LocalDate fechaGeneracion,
         LocalDate fechaPago,
-        Long empleadoId,
+        Long usuarioId,
         Long ventaId
 ) {
 }

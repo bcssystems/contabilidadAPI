@@ -31,8 +31,8 @@ public class Comision {
     private Venta venta;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    @JoinColumn(name = "empleado_id", nullable = false)
-    private Empleado empleado;
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario;
     private BigDecimal montoBase;
     private BigDecimal porcentajeComision;
     private BigDecimal montoComision;

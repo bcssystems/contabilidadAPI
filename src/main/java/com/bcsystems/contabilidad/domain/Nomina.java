@@ -29,8 +29,8 @@ public class Nomina {
     @Enumerated(EnumType.STRING)
     private EstadoNomina estado;
     @ManyToOne
-    @JoinColumn(name = "empleado_id")
-    private Empleado empleado;
+    @JoinColumn(name = "id_usuario")
+    private Usuario usuario;
     @ManyToOne
     @JoinColumn(name = "asiento_id")
     private AsientoContable asientoContable;

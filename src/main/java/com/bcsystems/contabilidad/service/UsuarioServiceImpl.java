@@ -50,7 +50,10 @@ public class UsuarioServiceImpl implements UsuarioService {
                 usr.getPersona().getSegundoApellido(),
                 usr.getPersona().getPersonType().toString(),
                 usr.getActivo(),
-                usr.getPersona().getFechaRegistro()
+                usr.getPersona().getFechaRegistro(),
+                usr.getPosition() != null ? usr.getPosition().name() : null,
+                usr.getSueldoBase(),
+                usr.getSueldoSemanal()
         );
         else throw new NotFoundException("User not found");
     }
@@ -69,7 +72,10 @@ public class UsuarioServiceImpl implements UsuarioService {
                     usuario.getPersona().getSegundoApellido(),
                     usuario.getPersona().getPersonType().name(),
                     usuario.getActivo(),
-                    usuario.getPersona().getFechaRegistro()
+                    usuario.getPersona().getFechaRegistro(),
+                    usuario.getPosition() != null ? usuario.getPosition().name() : null,
+                    usuario.getSueldoBase(),
+                    usuario.getSueldoSemanal()
             ));
         }
         return users;
@@ -112,6 +118,9 @@ public class UsuarioServiceImpl implements UsuarioService {
         if(userUpdateRequest.role() != null) usr.setRole(userUpdateRequest.role());
         if(userUpdateRequest.personType() != null) personaUpdate.setPersonType(userUpdateRequest.personType());
         if(userUpdateRequest.activo() != null) usr.setActivo(userUpdateRequest.activo());
+        if(userUpdateRequest.position() != null) usr.setPosition(userUpdateRequest.position());
+        if(userUpdateRequest.sueldoBase() != null) usr.setSueldoBase(userUpdateRequest.sueldoBase());
+        if(userUpdateRequest.sueldoSemanal() != null) usr.setSueldoSemanal(userUpdateRequest.sueldoSemanal());
 
         Persona savedPersona = personaService.save(personaUpdate);
         usr.setPersona(savedPersona);
