@@ -69,6 +69,14 @@ public class AsistenciaService {
         Usuario user = usuario(username);
         LocalDateTime now = LocalDateTime.now();
         LocalDate date = now.toLocalDate();
+        UsuarioHorario assignment = asignaciones.findFirstByUsuarioIdUserAndActivoTrueOrderByIdDesc(user.getIdUser())
+                .orElseThrow(() -> new IllegalArgumentException("No tienes un horario asignado. No puedes registrar asistencia."));
+        DiaSemana scheduledDay = DiaSemana.values()[date.getDayOfWeek().getValue() - 1];
+        HorarioDia todaySchedule = assignment.getHorario().getDias().stream()
+                .filter(day -> day.getDia() == scheduledDay).findFirst().orElse(null);
+        if (todaySchedule == null) {
+            throw new IllegalArgumentException("Hoy no tienes jornada asignada. Es un día de descanso.");
+        }
         Asistencia attendance = asistencias.findByUsuarioIdUserAndFecha(user.getIdUser(), date)
                 .orElseGet(() -> asistencias.save(Asistencia.builder()
                         .usuario(user).fecha(date).estado(EstadoIncidencia.PENDIENTE).build()));
@@ -227,13 +235,16 @@ public class AsistenciaService {
         BigDecimal hourlySalary = weeklySalary.divide(weeklyHours, 2, java.math.RoundingMode.HALF_UP);
         ConfiguracionAsistencia settings = configuracion.get();
         List<DeduccionResponse> generated = new ArrayList<>();
-        for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
+        LocalDate lastEvaluableDate = end.isBefore(LocalDate.now()) ? end : LocalDate.now().minusDays(1);
+        for (LocalDate date = start; !date.isAfter(lastEvaluableDate); date = date.plusDays(1)) {
             Optional<Asistencia> attendance = asistencias.findByUsuarioIdUserAndFecha(usuarioId, date);
-            if (attendance.isPresent() && attendance.get().getEstado() != EstadoIncidencia.RECHAZADA
+            DiaSemana scheduledDay = DiaSemana.values()[date.getDayOfWeek().getValue() - 1];
+            HorarioDia daySchedule = assignment.getHorario().getDias().stream().filter(day -> day.getDia() == scheduledDay).findFirst().orElse(null);
+            if (daySchedule != null) {
+                if (attendance.isEmpty()) {
+                    createAbsenceDeduction(user, date, hourlySalary, scheduledMinutes(daySchedule), generated);
+                } else if (attendance.get().getEstado() != EstadoIncidencia.RECHAZADA
                     && !justificaciones.existsByAsistenciaIdAndEstado(attendance.get().getId(), EstadoJustificacion.APROBADA)) {
-                DiaSemana scheduledDay = DiaSemana.values()[date.getDayOfWeek().getValue() - 1];
-                HorarioDia daySchedule = assignment.getHorario().getDias().stream().filter(day -> day.getDia() == scheduledDay).findFirst().orElse(null);
-                if (daySchedule != null) {
                     Asistencia a = attendance.get();
                     if (a.getEntrada() != null) {
                         long lateMinutes = java.time.Duration.between(daySchedule.getEntrada().plusMinutes(settings.getToleranciaEntrada()), a.getEntrada().toLocalTime()).toMinutes();
@@ -258,6 +269,21 @@ public class AsistenciaService {
                 .concepto(concept).monto(amount)
                 .fecha(attendance.getFecha()).estado(EstadoDeduccion.PENDIENTE).tipo(type).origen(OrigenDeduccion.ASISTENCIA).build());
         generated.add(DeduccionResponse.fromEntity(deduction));
+    }
+
+    private void createAbsenceDeduction(Usuario user, LocalDate date, BigDecimal hourlySalary, long minutes, List<DeduccionResponse> generated) {
+        if (deduccionRepository.existsByUsuarioIdUserAndFechaAndTipo(user.getIdUser(), date, TipoDeduccion.FALTA)) return;
+        long scheduledHours = Math.max(1, (minutes + 59) / 60);
+        BigDecimal amount = hourlySalary.multiply(BigDecimal.valueOf(scheduledHours));
+        Deduccion deduction = deduccionRepository.save(Deduccion.builder().usuario(user)
+                .concepto("Falta (" + scheduledHours + " h)").monto(amount).fecha(date)
+                .estado(EstadoDeduccion.PENDIENTE).tipo(TipoDeduccion.FALTA).origen(OrigenDeduccion.ASISTENCIA).build());
+        generated.add(DeduccionResponse.fromEntity(deduction));
+    }
+
+    private long scheduledMinutes(HorarioDia day) {
+        long total = java.time.Duration.between(day.getEntrada(), day.getSalida()).toMinutes();
+        return total - day.getBreaks().stream().mapToLong(item -> java.time.Duration.between(item.getInicio(), item.getFin()).toMinutes()).sum();
     }
 
     private double distance(double lat1, double lon1, double lat2, double lon2) {
