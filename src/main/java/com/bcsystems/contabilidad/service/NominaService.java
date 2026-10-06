@@ -212,7 +212,6 @@ public class NominaService {
         nominaRepository.delete(nomina);
     }
 
-    @Transactional
     public NominaDesgloseResponse desglose(Integer usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
