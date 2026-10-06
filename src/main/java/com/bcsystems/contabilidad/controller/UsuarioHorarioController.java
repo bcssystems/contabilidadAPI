@@ -4,6 +4,8 @@ import com.bcsystems.contabilidad.dto.AsignarHorarioRequest;
 import com.bcsystems.contabilidad.service.HorarioService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import com.bcsystems.contabilidad.exception.NotFoundException;
 
 @RestController
 @RequestMapping("/api/v1/usuarios/{id}/horario")
@@ -14,7 +16,10 @@ public class UsuarioHorarioController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public Object get(@PathVariable Integer id) { return service.assigned(id); }
+    public ResponseEntity<?> get(@PathVariable Integer id) {
+        try { return ResponseEntity.ok(service.assigned(id)); }
+        catch (NotFoundException ignored) { return ResponseEntity.noContent().build(); }
+    }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")

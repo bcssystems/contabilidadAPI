@@ -34,3 +34,5 @@ build/
 
 migrate_products.py
 nul
+
+uploads/productos/asistencias/*

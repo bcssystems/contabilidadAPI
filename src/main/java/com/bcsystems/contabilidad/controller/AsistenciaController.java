@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.access.prepost.PreAuthorize;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.FileSystemResource;
 @RestController @RequestMapping("/api/v1")
 public class AsistenciaController {
     private final AsistenciaService service;
@@ -19,6 +23,14 @@ public class AsistenciaController {
     @GetMapping("/asistencias") @PreAuthorize("hasRole('ADMIN')") public Object all(){return service.all();}
     @GetMapping("/asistencias/{id}") @PreAuthorize("hasRole('ADMIN')") public Object one(@PathVariable Integer id){return service.one(id);}
     @GetMapping("/asistencias/evidencias/pendientes") @PreAuthorize("hasRole('ADMIN')") public Object pendingEvidence(){return service.pendingEvidence();}
+    @GetMapping("/asistencias/evidencias") @PreAuthorize("hasRole('ADMIN')") public Object allEvidence(){return service.allEvidence();}
+    @GetMapping("/asistencias/evidencias/{id}/archivo") @PreAuthorize("hasRole('ADMIN')") public ResponseEntity<Resource> evidenceFile(@PathVariable Integer id) throws java.io.IOException {
+        Path path = service.evidencePath(id);
+        if (!Files.isRegularFile(path)) return ResponseEntity.notFound().build();
+        String contentType = Files.probeContentType(path);
+        MediaType mediaType = contentType == null ? MediaType.IMAGE_JPEG : MediaType.parseMediaType(contentType);
+        return ResponseEntity.ok().contentType(mediaType).body(new FileSystemResource(path));
+    }
     @PostMapping("/asistencias/evidencias/{id}/aprobar") @PreAuthorize("hasRole('ADMIN')") public Object approveEvidence(@PathVariable Integer id){return service.reviewEvidence(id,true);}
     @PostMapping("/asistencias/evidencias/{id}/rechazar") @PreAuthorize("hasRole('ADMIN')") public Object rejectEvidence(@PathVariable Integer id){return service.reviewEvidence(id,false);}
     @PostMapping("/justificaciones") public Object justification(Authentication a,@RequestBody JustificacionRequest r){return service.justification(a.getName(),r.asistenciaId(),r.comentario(),null);}

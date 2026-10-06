@@ -25,7 +25,15 @@ public class HorarioService {
         Horario h = Horario.builder().nombre(r.nombre()).activo(true).build();
         fill(h, r); return horarios.save(h);
     }
-    @Transactional public Horario update(Integer id, HorarioRequest r) { Horario h = find(id); h.setNombre(r.nombre()); h.getDias().clear(); fill(h, r); return horarios.save(h); }
+    @Transactional public Horario update(Integer id, HorarioRequest r) {
+        Horario h = find(id);
+        h.setNombre(r.nombre());
+        h.getDias().clear();
+        // Flush orphan removals before inserting days with the same (horario, dia) keys.
+        horarios.flush();
+        fill(h, r);
+        return horarios.save(h);
+    }
     public void delete(Integer id) { Horario h = find(id); h.setActivo(false); horarios.save(h); }
     private void fill(Horario h, HorarioRequest r) {
         if (r.dias() == null) return;
