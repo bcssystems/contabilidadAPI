@@ -47,6 +47,7 @@ public class NominaService {
     private final DeduccionRepository deduccionRepository;
     private final ComisionService comisionService;
     private final DeduccionService deduccionService;
+    private final AsistenciaService asistenciaService;
 
     public NominaService(NominaRepository nominaRepository,
                          UsuarioRepository usuarioRepository,
@@ -55,7 +56,8 @@ public class NominaService {
                          ComisionRepository comisionRepository,
                          DeduccionRepository deduccionRepository,
                          ComisionService comisionService,
-                         DeduccionService deduccionService) {
+                         DeduccionService deduccionService,
+                         AsistenciaService asistenciaService) {
         this.nominaRepository = nominaRepository;
         this.usuarioRepository = usuarioRepository;
         this.asientoContableRepository = asientoContableRepository;
@@ -64,6 +66,7 @@ public class NominaService {
         this.deduccionRepository = deduccionRepository;
         this.comisionService = comisionService;
         this.deduccionService = deduccionService;
+        this.asistenciaService = asistenciaService;
     }
 
     @Transactional
@@ -81,12 +84,11 @@ public class NominaService {
         int requestedDeductions = request.deduccionIds() == null ? 0 : request.deduccionIds().size();
         if (deducciones.size() != requestedDeductions || deducciones.stream().anyMatch(d ->
                 d.getUsuario() == null || !d.getUsuario().getIdUser().equals(usuario.getIdUser()) ||
-                        (d.getOrigen() == OrigenDeduccion.ASISTENCIA && d.getEstado() != EstadoDeduccion.APROBADA))) {
+                        (d.getOrigen() == OrigenDeduccion.ASISTENCIA && d.getEstado() == EstadoDeduccion.RECHAZADA))) {
             throw new IllegalArgumentException("Las deducciones seleccionadas no pertenecen al empleado o no están aprobadas");
         }
 
-        BigDecimal sueldoBase = usuario.getSueldoSemanal() != null ? usuario.getSueldoSemanal() :
-                (usuario.getSueldoBase() != null ? usuario.getSueldoBase() : BigDecimal.ZERO);
+        BigDecimal sueldoBase = usuario.getSueldoSemanal() != null ? usuario.getSueldoSemanal() : BigDecimal.ZERO;
         BigDecimal totalComisiones = comisiones.stream()
                 .map(Comision::getMontoComision)
                 .filter(Objects::nonNull)
@@ -217,6 +219,9 @@ public class NominaService {
 
         List<ComisionResponse> comisiones = comisionService.findPendientesByUsuario(usuarioId.longValue())
                 .stream().map(comisionService::toResponse).toList();
+        LocalDate today = LocalDate.now();
+        LocalDate periodStart = today.withDayOfMonth(1);
+        try { asistenciaService.generateAttendanceDeductions(usuarioId, periodStart, today); } catch (NotFoundException ignored) { }
         List<DeduccionResponse> deducciones = deduccionService.findPendientesByUsuarioResponse(usuarioId);
 
         BigDecimal totalComisiones = comisiones.stream()
@@ -231,7 +236,7 @@ public class NominaService {
         return new NominaDesgloseResponse(
                 usuarioId.longValue(),
                 usuario.getPersona() != null ? usuario.getPersona().getNombre() : null,
-                usuario.getSueldoSemanal() != null ? usuario.getSueldoSemanal() : usuario.getSueldoBase(),
+                usuario.getSueldoSemanal(),
                 usuario.getSueldoSemanal(),
                 comisiones,
                 deducciones,

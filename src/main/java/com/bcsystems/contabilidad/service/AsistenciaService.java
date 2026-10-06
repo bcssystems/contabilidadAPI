@@ -67,11 +67,14 @@ public class AsistenciaService {
         if (lat == null || lon == null) throw new IllegalArgumentException("La ubicacion es obligatoria");
 
         Usuario user = usuario(username);
-        LocalDateTime now = LocalDateTime.now(java.time.Clock.systemUTC());
+        LocalDateTime now = LocalDateTime.now();
         LocalDate date = now.toLocalDate();
         Asistencia attendance = asistencias.findByUsuarioIdUserAndFecha(user.getIdUser(), date)
                 .orElseGet(() -> asistencias.save(Asistencia.builder()
                         .usuario(user).fecha(date).estado(EstadoIncidencia.PENDIENTE).build()));
+        if (type == TipoMarcaje.SALIDA && attendance.getEntrada() == null) {
+            throw new IllegalArgumentException("No puedes registrar la salida sin una entrada registrada hoy");
+        }
         if (marcajes.existsByAsistenciaIdAndTipo(attendance.getId(), type)) {
             throw new IllegalArgumentException("El marcaje ya existe para hoy");
         }
@@ -121,11 +124,30 @@ public class AsistenciaService {
     public List<Asistencia> all() { return asistencias.findAll(); }
 
     public List<EvidenciaRevisionResponse> pendingEvidence() {
-        return evidencias.findByEstadoOrderByCreadoEnDesc(EstadoEvidencia.PENDIENTE).stream()
-                .map(e -> new EvidenciaRevisionResponse(e.getId(), e.getMarcaje().getId(),
-                        e.getMarcaje().getAsistencia().getId(), e.getMarcaje().getAsistencia().getUsuario().getIdUser(),
-                        e.getMarcaje().getTipo().name(), e.getMarcaje().getMarcadoEn(),
-                        e.getMarcaje().getDistanciaMetros(), e.getEstado())).toList();
+        return evidencias.findByEstadoOrderByCreadoEnDesc(EstadoEvidencia.PENDIENTE).stream().map(this::evidenceResponse).toList();
+    }
+
+    public List<EvidenciaRevisionResponse> allEvidence() {
+        return evidencias.findAllByOrderByCreadoEnDesc().stream().map(this::evidenceResponse).toList();
+    }
+
+    public Path evidencePath(Integer id) {
+        EvidenciaAsistencia evidence = evidencias.findById(id).orElseThrow(() -> new NotFoundException("Evidencia no encontrada"));
+        return uploadDir.resolve(evidence.getNombreArchivo()).normalize();
+    }
+
+    private EvidenciaRevisionResponse evidenceResponse(EvidenciaAsistencia evidence) {
+        return new EvidenciaRevisionResponse(evidence.getId(), evidence.getMarcaje().getId(),
+                evidence.getMarcaje().getAsistencia().getId(), evidence.getMarcaje().getAsistencia().getUsuario().getIdUser(),
+                nombreUsuario(evidence.getMarcaje().getAsistencia().getUsuario()), evidence.getMarcaje().getTipo().name(),
+                evidence.getMarcaje().getMarcadoEn(), evidence.getMarcaje().getDistanciaMetros(),
+                evidence.getMarcaje().getEstadoUbicacion().name(), evidence.getEstado());
+    }
+
+    private String nombreUsuario(Usuario user) {
+        if (user == null || user.getPersona() == null) return "-";
+        return java.util.stream.Stream.of(user.getPersona().getNombre(), user.getPersona().getPrimerApellido(), user.getPersona().getSegundoApellido())
+                .filter(java.util.Objects::nonNull).filter(value -> !value.isBlank()).reduce((a, b) -> a + " " + b).orElse("-");
     }
 
     public List<JustificacionRevisionResponse> pendingJustifications() {
@@ -146,7 +168,10 @@ public class AsistenciaService {
         BigDecimal hours = assignment == null ? BigDecimal.ZERO : horarios.weeklyHours(assignment.getHorario());
         BigDecimal hourly = hours.signum() == 0 || user.getSueldoSemanal() == null
                 ? BigDecimal.ZERO : user.getSueldoSemanal().divide(hours, 2, java.math.RoundingMode.HALF_UP);
-        return new TableroAsistenciaResponse(mine(username), assignment, hours, hourly);
+        List<AsistenciaTableroResponse> records = mine(username).stream()
+                .map(item -> AsistenciaTableroResponse.fromEntity(item, marcajes.findFirstByAsistenciaIdOrderByMarcadoEnDesc(item.getId())))
+                .toList();
+        return new TableroAsistenciaResponse(records, assignment, hours, hourly);
     }
 
     public Asistencia one(Integer id) { return asistencias.findById(id).orElseThrow(() -> new NotFoundException("Asistencia no encontrada")); }
@@ -175,6 +200,10 @@ public class AsistenciaService {
     public Object reviewEvidence(Integer id, boolean approve) {
         EvidenciaAsistencia evidence = evidencias.findById(id).orElseThrow(() -> new NotFoundException("Evidencia no encontrada"));
         evidence.setEstado(approve ? EstadoEvidencia.APROBADA : EstadoEvidencia.RECHAZADA);
+        Asistencia attendance = evidence.getMarcaje().getAsistencia();
+        if (!approve) attendance.setEstado(EstadoIncidencia.RECHAZADA);
+        else if (evidence.getMarcaje().getEstadoUbicacion() == EstadoIncidencia.APROBADA) attendance.setEstado(EstadoIncidencia.APROBADA);
+        asistencias.save(attendance);
         return evidencias.save(evidence);
     }
 
@@ -193,31 +222,40 @@ public class AsistenciaService {
         UsuarioHorario assignment = asignaciones.findFirstByUsuarioIdUserAndActivoTrueOrderByIdDesc(usuarioId)
                 .orElseThrow(() -> new NotFoundException("Horario no asignado"));
         BigDecimal weeklyHours = horarios.weeklyHours(assignment.getHorario());
-        BigDecimal weeklySalary = user.getSueldoSemanal() != null ? user.getSueldoSemanal() : user.getSueldoBase();
+        BigDecimal weeklySalary = user.getSueldoSemanal();
         if (weeklySalary == null || weeklyHours.signum() == 0) throw new IllegalArgumentException("No se puede calcular sueldo por hora sin sueldo u horas semanales");
         BigDecimal hourlySalary = weeklySalary.divide(weeklyHours, 2, java.math.RoundingMode.HALF_UP);
         ConfiguracionAsistencia settings = configuracion.get();
         List<DeduccionResponse> generated = new ArrayList<>();
         for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
             Optional<Asistencia> attendance = asistencias.findByUsuarioIdUserAndFecha(usuarioId, date);
-            if (attendance.isPresent() && attendance.get().getEstado() == EstadoIncidencia.APROBADA
+            if (attendance.isPresent() && attendance.get().getEstado() != EstadoIncidencia.RECHAZADA
                     && !justificaciones.existsByAsistenciaIdAndEstado(attendance.get().getId(), EstadoJustificacion.APROBADA)) {
                 DiaSemana scheduledDay = DiaSemana.values()[date.getDayOfWeek().getValue() - 1];
                 HorarioDia daySchedule = assignment.getHorario().getDias().stream().filter(day -> day.getDia() == scheduledDay).findFirst().orElse(null);
                 if (daySchedule != null) {
                     Asistencia a = attendance.get();
-                    if (a.getEntrada() != null && a.getEntrada().toLocalTime().isAfter(daySchedule.getEntrada().plusMinutes(settings.getToleranciaEntrada()))) createAttendanceDeduction(a, TipoDeduccion.RETARDO, hourlySalary, generated);
-                    if (a.getSalida() != null && a.getSalida().toLocalTime().isBefore(daySchedule.getSalida().minusMinutes(settings.getToleranciaSalida()))) createAttendanceDeduction(a, TipoDeduccion.SALIDA_TEMPRANA, hourlySalary, generated);
+                    if (a.getEntrada() != null) {
+                        long lateMinutes = java.time.Duration.between(daySchedule.getEntrada().plusMinutes(settings.getToleranciaEntrada()), a.getEntrada().toLocalTime()).toMinutes();
+                        if (lateMinutes > 0) createAttendanceDeduction(a, TipoDeduccion.RETARDO, hourlySalary, lateMinutes, generated);
+                    }
+                    if (a.getSalida() != null) {
+                        long earlyMinutes = java.time.Duration.between(a.getSalida().toLocalTime(), daySchedule.getSalida().minusMinutes(settings.getToleranciaSalida())).toMinutes();
+                        if (earlyMinutes > 0) createAttendanceDeduction(a, TipoDeduccion.SALIDA_TEMPRANA, hourlySalary, earlyMinutes, generated);
+                    }
                 }
             }
         }
         return generated;
     }
 
-    private void createAttendanceDeduction(Asistencia attendance, TipoDeduccion type, BigDecimal amount, List<DeduccionResponse> generated) {
+    private void createAttendanceDeduction(Asistencia attendance, TipoDeduccion type, BigDecimal hourlySalary, long minutes, List<DeduccionResponse> generated) {
         if (deduccionRepository.existsByAsistenciaIdAndTipo(attendance.getId(), type)) return;
+        long deductedHours = Math.max(1, (minutes + 59) / 60);
+        BigDecimal amount = hourlySalary.multiply(BigDecimal.valueOf(deductedHours));
+        String concept = type == TipoDeduccion.RETARDO ? "Retardo (" + deductedHours + " h)" : "Salida temprana (" + deductedHours + " h)";
         Deduccion deduction = deduccionRepository.save(Deduccion.builder().usuario(attendance.getUsuario()).asistencia(attendance)
-                .concepto(type == TipoDeduccion.RETARDO ? "Retardo" : "Salida temprana").monto(amount)
+                .concepto(concept).monto(amount)
                 .fecha(attendance.getFecha()).estado(EstadoDeduccion.PENDIENTE).tipo(type).origen(OrigenDeduccion.ASISTENCIA).build());
         generated.add(DeduccionResponse.fromEntity(deduction));
     }

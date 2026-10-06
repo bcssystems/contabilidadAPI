@@ -5,4 +5,5 @@ import com.bcsystems.contabilidad.domain.en.EstadoEvidencia;
 import java.util.List;
 public interface EvidenciaAsistenciaRepository extends JpaRepository<EvidenciaAsistencia, Integer> {
     List<EvidenciaAsistencia> findByEstadoOrderByCreadoEnDesc(EstadoEvidencia estado);
+    List<EvidenciaAsistencia> findAllByOrderByCreadoEnDesc();
 }
