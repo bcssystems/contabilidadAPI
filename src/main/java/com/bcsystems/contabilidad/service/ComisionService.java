@@ -16,6 +16,7 @@ import com.bcsystems.contabilidad.repository.VentaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -44,18 +45,16 @@ public class ComisionService {
 
     @Transactional
     public Comision save(ComisionRegisterRequest request) {
-        Optional<Venta> venta = ventaRepository.findById(request.ventaId().intValue());
-        if (venta.isEmpty()) {
-            throw new NotFoundException("Venta no encontrada");
-        }
+        Optional<Venta> venta = request.ventaId() == null ? Optional.empty() : ventaRepository.findById(request.ventaId().intValue());
+        if (request.ventaId() != null && venta.isEmpty()) throw new NotFoundException("Venta no encontrada");
 
         Optional<Usuario> usuario = usuarioRepository.findById(request.usuarioId().intValue());
         if (usuario.isEmpty()) {
             throw new NotFoundException("Usuario no encontrado");
         }
 
-        BigDecimal montoComision = BigDecimal.ZERO;
-        if (request.montoBase() != null && request.porcentajeComision() != null) {
+        BigDecimal montoComision = request.monto();
+        if (montoComision == null && request.montoBase() != null && request.porcentajeComision() != null) {
             montoComision = request.montoBase()
                     .multiply(request.porcentajeComision())
                     .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
@@ -63,9 +62,10 @@ public class ComisionService {
 
         Comision comision = Comision.builder()
                 .tipoComision(request.tipoComision())
-                .venta(venta.get())
+                .concepto(request.concepto())
+                .venta(venta.orElse(null))
                 .usuario(usuario.get())
-                .montoBase(request.montoBase())
+                .montoBase(request.montoBase() == null ? montoComision : request.montoBase())
                 .porcentajeComision(request.porcentajeComision())
                 .montoComision(montoComision)
                 .estadoComision(EstadoComision.PENDIENTE)
@@ -139,6 +139,20 @@ public class ComisionService {
         return comisiones.map(this::toResponse);
     }
 
+    @Transactional
+    public Page<ComisionResponse> findFiltered(PageRequest request, String search, EstadoComision estado, Integer usuarioId, LocalDate desde, LocalDate hasta) {
+        List<Comision> filtered = comisionRepository.findAll(request.getSort()).stream().filter(c ->
+                (estado == null || c.getEstadoComision() == estado)
+                        && (usuarioId == null || (c.getUsuario() != null && c.getUsuario().getIdUser().equals(usuarioId)))
+                        && (desde == null || c.getFechaComision() == null || !c.getFechaComision().isBefore(desde))
+                        && (hasta == null || c.getFechaComision() == null || !c.getFechaComision().isAfter(hasta))
+                        && (search == null || search.isBlank() || (c.getConcepto() != null && c.getConcepto().toLowerCase().contains(search.toLowerCase()))
+                        || (c.getUsuario() != null && c.getUsuario().getPersona() != null && c.getUsuario().getPersona().getNombre().toLowerCase().contains(search.toLowerCase())))).toList();
+        int start = Math.min(request.getPageNumber() * request.getPageSize(), filtered.size());
+        int end = Math.min(start + request.getPageSize(), filtered.size());
+        return new PageImpl<>(filtered.subList(start, end).stream().map(this::toResponse).toList(), request, filtered.size());
+    }
+
     public ComisionResponse toResponse(Comision comision) {
         return new ComisionResponse(
                 comision.getIdComision(),
@@ -150,7 +164,14 @@ public class ComisionService {
                 comision.getFechaComision(),
                 comision.getFechaPago(),
                 comision.getUsuario() != null ? comision.getUsuario().getIdUser().longValue() : null,
-                comision.getVenta() != null ? comision.getVenta().getIdVenta().longValue() : null
+                comision.getVenta() != null ? comision.getVenta().getIdVenta().longValue() : null,
+                comision.getConcepto(),
+                comision.getUsuario() != null && comision.getUsuario().getPersona() != null
+                        ? String.join(" ", java.util.stream.Stream.of(
+                                comision.getUsuario().getPersona().getNombre(),
+                                comision.getUsuario().getPersona().getPrimerApellido(),
+                                comision.getUsuario().getPersona().getSegundoApellido())
+                                .filter(java.util.Objects::nonNull).filter(s -> !s.isBlank()).toList()) : null
         );
     }
 
@@ -176,6 +197,7 @@ public class ComisionService {
         if (request.tipoComision() != null) {
             comision.setTipoComision(request.tipoComision());
         }
+        if (request.concepto() != null) comision.setConcepto(request.concepto().trim());
         if (request.estadoComision() != null) {
             comision.setEstadoComision(request.estadoComision());
             if (request.estadoComision() == EstadoComision.PAGADA) {
@@ -190,6 +212,11 @@ public class ComisionService {
         }
         if (request.montoComision() != null) {
             comision.setMontoComision(request.montoComision());
+        } else if (request.monto() != null) {
+            comision.setMontoComision(request.monto());
+        } else if (comision.getMontoBase() != null && comision.getPorcentajeComision() != null) {
+            comision.setMontoComision(comision.getMontoBase().multiply(comision.getPorcentajeComision())
+                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
         }
         if (request.fechaPago() != null) {
             comision.setFechaPago(request.fechaPago());

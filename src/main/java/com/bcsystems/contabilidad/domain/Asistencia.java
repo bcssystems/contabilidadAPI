@@ -14,5 +14,8 @@ public class Asistencia {
     @Column(nullable = false) private LocalDate fecha;
     private LocalDateTime entrada;
     private LocalDateTime salida;
+    @Builder.Default private Integer minutosRetardo = 0;
+    @Builder.Default private Integer minutosSalidaTemprana = 0;
+    @Builder.Default private Boolean fueraDePunto = false;
     @Enumerated(EnumType.STRING) @Column(nullable = false) private com.bcsystems.contabilidad.domain.en.EstadoIncidencia estado = com.bcsystems.contabilidad.domain.en.EstadoIncidencia.PENDIENTE;
 }

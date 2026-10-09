@@ -19,4 +19,5 @@ public class Marcaje {
     private BigDecimal precisionMetros;
     private Double distanciaMetros;
     @Enumerated(EnumType.STRING) @Column(nullable = false) private EstadoIncidencia estadoUbicacion;
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "punto_geografico_id") @JsonIgnore private PuntoGeografico puntoGeografico;
 }

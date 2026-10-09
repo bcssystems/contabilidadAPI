@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import com.bcsystems.contabilidad.domain.en.EstadoComision;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/v1/comision")
@@ -51,14 +53,19 @@ public class ComisionController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(defaultValue = "idComision") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDir) {
+            @RequestParam(defaultValue = "asc") String sortDir,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) EstadoComision estadoComision,
+            @RequestParam(required = false) Integer usuarioId,
+            @RequestParam(required = false) LocalDate desde,
+            @RequestParam(required = false) LocalDate hasta) {
         
         Sort sort = sortDir.equalsIgnoreCase("desc") 
             ? Sort.by(sortBy).descending() 
             : Sort.by(sortBy).ascending();
         
         PageRequest pageRequest = PageRequest.of(page, size, sort);
-        Page<ComisionResponse> result = comisionService.findAllPageable(pageRequest);
+        Page<ComisionResponse> result = comisionService.findFiltered(pageRequest, search, estadoComision, usuarioId, desde, hasta);
         
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

@@ -99,14 +99,24 @@ public class AsistenciaService {
         Marcaje mark = marcajes.save(Marcaje.builder().asistencia(attendance).tipo(type).marcadoEn(now)
                 .latitud(lat).longitud(lon).precisionMetros(precision)
                 .distanciaMetros(closest == null ? null : distance)
-                .estadoUbicacion(inside ? EstadoIncidencia.APROBADA : EstadoIncidencia.PENDIENTE).build());
+                .estadoUbicacion(inside ? EstadoIncidencia.APROBADA : EstadoIncidencia.PENDIENTE)
+                .puntoGeografico(closest).build());
 
         if (selfie != null && !selfie.isEmpty()) saveEvidence(selfie, mark, now);
         attendance.setEstado(inside ? EstadoIncidencia.APROBADA : EstadoIncidencia.PENDIENTE);
+        if (!inside) attendance.setFueraDePunto(true);
+        if (type == TipoMarcaje.ENTRADA) {
+            long minutes = java.time.Duration.between(todaySchedule.getEntrada(), now.toLocalTime()).toMinutes();
+            attendance.setMinutosRetardo((int) Math.max(0, minutes));
+        } else {
+            long minutes = java.time.Duration.between(now.toLocalTime(), todaySchedule.getSalida()).toMinutes();
+            attendance.setMinutosSalidaTemprana((int) Math.max(0, minutes));
+        }
         asistencias.save(attendance);
         return new MarcajeResponse(attendance.getId(), mark.getId(), type, now, attendance.getEntrada(),
                 attendance.getSalida(), mark.getDistanciaMetros(), mark.getEstadoUbicacion().name(),
-                attendance.getEstado().name(), !inside);
+                attendance.getEstado().name(), !inside, closest == null ? null : closest.getNombre(),
+                lat.doubleValue(), lon.doubleValue(), closest == null ? null : closest.getRadioMetros());
     }
 
     private void saveEvidence(MultipartFile selfie, Marcaje mark, LocalDateTime now) {
@@ -174,8 +184,9 @@ public class AsistenciaService {
         Usuario user = usuario(username);
         UsuarioHorario assignment = asignaciones.findFirstByUsuarioIdUserAndActivoTrueOrderByIdDesc(user.getIdUser()).orElse(null);
         BigDecimal hours = assignment == null ? BigDecimal.ZERO : horarios.weeklyHours(assignment.getHorario());
-        BigDecimal hourly = hours.signum() == 0 || user.getSueldoSemanal() == null
-                ? BigDecimal.ZERO : user.getSueldoSemanal().divide(hours, 2, java.math.RoundingMode.HALF_UP);
+        BigDecimal hourly = user.getSueldoHora() != null ? user.getSueldoHora()
+                : (hours.signum() == 0 || user.getSueldoSemanal() == null
+                ? BigDecimal.ZERO : user.getSueldoSemanal().divide(hours, 2, java.math.RoundingMode.HALF_UP));
         List<AsistenciaTableroResponse> records = mine(username).stream()
                 .map(item -> AsistenciaTableroResponse.fromEntity(item, marcajes.findFirstByAsistenciaIdOrderByMarcadoEnDesc(item.getId())))
                 .toList();
@@ -232,7 +243,8 @@ public class AsistenciaService {
         BigDecimal weeklyHours = horarios.weeklyHours(assignment.getHorario());
         BigDecimal weeklySalary = user.getSueldoSemanal();
         if (weeklySalary == null || weeklyHours.signum() == 0) throw new IllegalArgumentException("No se puede calcular sueldo por hora sin sueldo u horas semanales");
-        BigDecimal hourlySalary = weeklySalary.divide(weeklyHours, 2, java.math.RoundingMode.HALF_UP);
+        BigDecimal hourlySalary = user.getSueldoHora() != null ? user.getSueldoHora()
+                : weeklySalary.divide(weeklyHours, 2, java.math.RoundingMode.HALF_UP);
         ConfiguracionAsistencia settings = configuracion.get();
         List<DeduccionResponse> generated = new ArrayList<>();
         LocalDate lastEvaluableDate = end.isBefore(LocalDate.now()) ? end : LocalDate.now().minusDays(1);

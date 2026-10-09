@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface UsuarioService {
     Usuario save(Usuario usuario);
     Optional<Usuario> findByUsername(String username);
+
+    String generateUsername(String nombre, String primerApellido, String segundoApellido);
     UserDetailedResponse findByUsernameDetailed(String username);
     List<UserDetailedResponse> findAll();
     Optional<Usuario> findById(Integer idUser);

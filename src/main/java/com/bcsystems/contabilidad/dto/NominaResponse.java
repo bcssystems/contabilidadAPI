@@ -29,7 +29,7 @@ public record NominaResponse(
                 nomina.getTotalComisiones(),
                 nomina.getTotalDeducciones(),
                 nomina.getEstado(),
-                nomina.getUsuario() != null ? nomina.getUsuario().getPersona().getNombre() : null,
+                nomina.getUsuario() != null && nomina.getUsuario().getPersona() != null ? nomina.getUsuario().getPersona().getNombre() : null,
                 nomina.getUsuario() != null ? nomina.getUsuario().getIdUser().longValue() : null,
                 nomina.getAsientoContable() != null ? nomina.getAsientoContable().getIdAsientoContable() : null
         );
