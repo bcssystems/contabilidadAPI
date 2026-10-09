@@ -15,6 +15,7 @@ public record UserDetailedResponse(
     LocalDateTime fechaRegistro,
     String position,
     BigDecimal sueldoBase,
-    BigDecimal sueldoSemanal
+    BigDecimal sueldoSemanal,
+    BigDecimal sueldoHora
 ) {
 }

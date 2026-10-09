@@ -73,7 +73,6 @@ public class SecurityConfig {
                                          "/api/v1/atributos/**",
                                          "/api/v1/proveedor/**",
                                          "/api/v1/proveedores/**",
-                                         "/api/v1/comision/**",
                                          "/api/v1/kardex/**",
                                          "/api/v1/cuenta-contable/**",
                                          "/api/v1/asiento-contable/**",
@@ -81,6 +80,7 @@ public class SecurityConfig {
                                          "/api/v1/promociones/**"
                                  ).denyAll()
                                  .requestMatchers("/api/inventory/**").hasAnyRole("ADMIN")
+                                 .requestMatchers("/api/v1/prestamos/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/productos/ecommerce/**").permitAll()
                                 .requestMatchers("/api/v1/productos/**").hasAnyRole("ADMIN", "ALMACEN")
                                 .requestMatchers("/api/v1/productos-padre/**").hasAnyRole("ADMIN", "ALMACEN")
@@ -94,7 +94,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/almacen/salida-pdf/**").authenticated()
                                 .requestMatchers("/api/v1/almacen/**").authenticated()
                                   .requestMatchers("/api/v1/usuarios/**").hasRole("ADMIN")
-                                  .requestMatchers("/api/v1/empleado/**", "/api/v1/nomina/**", "/api/v1/deduccion/**").hasRole("ADMIN")
+                                   .requestMatchers("/api/v1/empleado/**", "/api/v1/nomina/**", "/api/v1/deduccion/**", "/api/v1/comision/**").hasRole("ADMIN")
                                    .requestMatchers("/api/v1/horarios/**", "/api/v1/puntos-geograficos/**", "/api/v1/configuracion/asistencia").hasRole("ADMIN")
                                   .requestMatchers("/api/v1/empleados/*/horario").hasRole("ADMIN")
                                   .requestMatchers("/api/v1/asistencias/evidencias/pendientes", "/api/v1/asistencias/evidencias/*/aprobar", "/api/v1/asistencias/evidencias/*/rechazar", "/api/v1/justificaciones/pendientes", "/api/v1/justificaciones/*/aprobar", "/api/v1/justificaciones/*/rechazar").hasRole("ADMIN")

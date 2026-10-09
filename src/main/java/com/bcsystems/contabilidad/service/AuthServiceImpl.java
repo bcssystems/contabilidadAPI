@@ -48,15 +48,16 @@ public class AuthServiceImpl implements AuthService {
         Persona personaSaved = personaService.save(persona);
         Usuario usuario = Usuario
                 .builder()
-                .username(userRegisterRequest.username())
+                .username(usuarioService.generateUsername(userRegisterRequest.nombre(), userRegisterRequest.primerApellido(), userRegisterRequest.segundoApellido()))
                 .password(passwordEncoder.encode(userRegisterRequest.password()))
                 .role(userRegisterRequest.role() != null ? userRegisterRequest.role() : Role.USER)
                 .activo(true)
                 .persona(personaSaved)
                 .position(userRegisterRequest.position())
                 .sueldoBase(userRegisterRequest.sueldoBase() != null ? userRegisterRequest.sueldoBase() : java.math.BigDecimal.ZERO)
-                .sueldoSemanal(userRegisterRequest.sueldoSemanal() != null ? userRegisterRequest.sueldoSemanal() : userRegisterRequest.sueldoBase())
-                .build();
+                 .sueldoSemanal(userRegisterRequest.sueldoSemanal() != null ? userRegisterRequest.sueldoSemanal() : userRegisterRequest.sueldoBase())
+                 .sueldoHora(java.math.BigDecimal.ZERO)
+                 .build();
         usuario = usuarioService.save(usuario);
         String token = tokenService.generateToken(usuario);
         String refreshToken = tokenService.generateRefreshToken(usuario);

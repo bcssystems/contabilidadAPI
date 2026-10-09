@@ -5,5 +5,6 @@ public enum TipoDeduccion {
     SALIDA_TEMPRANA,
     FALTA,
     ASISTENCIA,
-    MANUAL
+    MANUAL,
+    PRESTAMO
 }

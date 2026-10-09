@@ -34,12 +34,12 @@ public class UsuarioController {
         return usuarioService.findById(id)
                 .map(u -> new UserDetailedResponse(
                         u.getIdUser(), u.getUsername(), u.getRole().name(),
-                        u.getPersona().getNombre(), u.getPersona().getPrimerApellido(),
-                        u.getPersona().getSegundoApellido(),
-                        u.getPersona().getPersonType().name(),
-                        u.getActivo(), u.getPersona().getFechaRegistro(),
+                         u.getPersona() != null ? u.getPersona().getNombre() : null, u.getPersona() != null ? u.getPersona().getPrimerApellido() : null,
+                         u.getPersona() != null ? u.getPersona().getSegundoApellido() : null,
+                         u.getPersona() != null && u.getPersona().getPersonType() != null ? u.getPersona().getPersonType().name() : null,
+                         u.getActivo(), u.getPersona() != null ? u.getPersona().getFechaRegistro() : null,
                         u.getPosition() != null ? u.getPosition().name() : null,
-                        u.getSueldoBase(), u.getSueldoSemanal()))
+                         u.getSueldoBase(), u.getSueldoSemanal(), u.getSueldoHora()))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -47,9 +47,10 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody UserRegisterRequest request) {
         try {
-            authService.register(request);
-            Integer id = usuarioService.findByUsername(request.username()).orElseThrow().getIdUser();
-            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("id", id, "message", "Usuario creado exitosamente"));
+             String username = usuarioService.generateUsername(request.nombre(), request.primerApellido(), request.segundoApellido());
+             authService.register(request);
+             Integer id = usuarioService.findByUsername(username).orElseThrow().getIdUser();
+             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("id", id, "username", username, "message", "Usuario creado exitosamente"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("message", "Error al crear usuario: " + e.getMessage()));
         }

@@ -25,6 +25,8 @@ public class Comision {
     private Long idComision;
     @Enumerated(EnumType.STRING)
     private TipoComision tipoComision;
+    @Column(length = 200)
+    private String concepto;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "venta_id")
     @JsonBackReference

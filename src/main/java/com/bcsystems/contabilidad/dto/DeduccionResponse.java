@@ -21,6 +21,7 @@ public record DeduccionResponse(
         Integer asistenciaId,
         Long corteCajaId,
         Long nominaId
+        ,Long prestamoParcialidadId
 ) {
     public static DeduccionResponse fromEntity(Deduccion deduccion) {
         return new DeduccionResponse(
@@ -37,6 +38,7 @@ public record DeduccionResponse(
                 deduccion.getAsistencia() != null ? deduccion.getAsistencia().getId() : null,
                 deduccion.getCorteCaja() != null ? deduccion.getCorteCaja().getIdCorte().longValue() : null,
                 deduccion.getNomina() != null ? deduccion.getNomina().getIdNomina() : null
+                ,deduccion.getPrestamoParcialidad() != null ? deduccion.getPrestamoParcialidad().getIdParcialidad() : null
         );
     }
 }

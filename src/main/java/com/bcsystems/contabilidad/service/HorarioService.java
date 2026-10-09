@@ -32,7 +32,9 @@ public class HorarioService {
         // Flush orphan removals before inserting days with the same (horario, dia) keys.
         horarios.flush();
         fill(h, r);
-        return horarios.save(h);
+        Horario saved = horarios.save(h);
+        recalculateHourlyRates(id, saved);
+        return saved;
     }
     public void delete(Integer id) { Horario h = find(id); h.setActivo(false); horarios.save(h); }
     private void fill(Horario h, HorarioRequest r) {
@@ -51,14 +53,45 @@ public class HorarioService {
         Usuario user = usuarios.findById(userId).orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
         Horario h = find(r.horarioId());
         asignaciones.findFirstByUsuarioIdUserAndActivoTrueOrderByIdDesc(userId).ifPresent(a -> { a.setActivo(false); asignaciones.save(a); });
-        return asignaciones.save(UsuarioHorario.builder().usuario(user).horario(h).vigenteDesde(r.vigenteDesde() == null ? LocalDate.now() : r.vigenteDesde()).vigenteHasta(r.vigenteHasta()).activo(true).build());
+        UsuarioHorario assignment = asignaciones.save(UsuarioHorario.builder().usuario(user).horario(h).vigenteDesde(r.vigenteDesde() == null ? LocalDate.now() : r.vigenteDesde()).vigenteHasta(r.vigenteHasta()).activo(true).build());
+        user.setSueldoHora(hourlyRate(user, h));
+        usuarios.save(user);
+        return assignment;
     }
     public UsuarioHorario assigned(Integer userId) { return asignaciones.findFirstByUsuarioIdUserAndActivoTrueOrderByIdDesc(userId).orElseThrow(() -> new NotFoundException("Horario no asignado")); }
+    @Transactional public void recalculateHourlyRate(Integer userId) {
+        Usuario user = usuarios.findById(userId).orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
+        asignaciones.findFirstByUsuarioIdUserAndActivoTrueOrderByIdDesc(userId)
+                .ifPresent(assignment -> {
+                    user.setSueldoHora(hourlyRate(user, assignment.getHorario()));
+                    usuarios.save(user);
+                });
+        if (asignaciones.findFirstByUsuarioIdUserAndActivoTrueOrderByIdDesc(userId).isEmpty()) {
+            user.setSueldoHora(BigDecimal.ZERO);
+            usuarios.save(user);
+        }
+    }
     public BigDecimal weeklyHours(Horario horario) {
         long minutes = horario.getDias().stream().mapToLong(d -> {
             long total = Duration.between(d.getEntrada(), d.getSalida()).toMinutes();
             return total - d.getBreaks().stream().mapToLong(b -> Duration.between(b.getInicio(), b.getFin()).toMinutes()).sum();
         }).sum();
         return BigDecimal.valueOf(minutes).divide(BigDecimal.valueOf(60), 2, java.math.RoundingMode.HALF_UP);
+    }
+
+    private void recalculateHourlyRates(Integer horarioId, Horario horario) {
+        asignaciones.findByHorarioId(horarioId).forEach(assignment -> {
+            Usuario user = assignment.getUsuario();
+            user.setSueldoHora(hourlyRate(user, horario));
+            usuarios.save(user);
+        });
+    }
+
+    private BigDecimal hourlyRate(Usuario user, Horario horario) {
+        BigDecimal weeklySalary = user.getSueldoSemanal();
+        BigDecimal hours = weeklyHours(horario);
+        return weeklySalary == null || hours.signum() == 0
+                ? BigDecimal.ZERO
+                : weeklySalary.divide(hours, 2, java.math.RoundingMode.HALF_UP);
     }
 }

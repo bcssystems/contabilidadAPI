@@ -11,16 +11,20 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.text.Normalizer;
+import java.util.Locale;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final PersonaService personaService;
+    private final HorarioService horarioService;
 
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, PersonaService personaService) {
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, PersonaService personaService, HorarioService horarioService) {
         this.usuarioRepository = usuarioRepository;
         this.personaService = personaService;
+        this.horarioService = horarioService;
     }
 
 
@@ -28,6 +32,30 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Usuario save(Usuario usuario) {
         if (usuarioRepository.findByUsername(usuario.getUsername()).isPresent()) return usuarioRepository.save(usuario);
         return usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public String generateUsername(String nombre, String primerApellido, String segundoApellido) {
+        String[] nombres = normalize(nombre).split("\\s+");
+        String surname = normalize(primerApellido);
+        String initials = java.util.Arrays.stream(nombres).filter(s -> !s.isBlank()).map(s -> s.substring(0, 1)).collect(java.util.stream.Collectors.joining());
+        String base = (initials + surname)
+                .toLowerCase(Locale.ROOT);
+        if (base.isBlank()) base = "usuario";
+        String candidate = base;
+        int suffix = 2;
+        while (usuarioRepository.existsByUsername(candidate)) {
+            candidate = base + suffix++;
+        }
+        return candidate;
+    }
+
+    private String normalize(String value) {
+        if (value == null) return "";
+        return Normalizer.normalize(value.trim(), Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")
+                .replaceAll("[^A-Za-z0-9 ]", "")
+                .replaceAll("\\s+", " ");
     }
 
     @Override
@@ -45,15 +73,16 @@ public class UsuarioServiceImpl implements UsuarioService {
                 usr.getIdUser(),
                 usr.getUsername(),
                 usr.getRole().toString(),
-                usr.getPersona().getNombre(),
-                usr.getPersona().getPrimerApellido(),
-                usr.getPersona().getSegundoApellido(),
-                usr.getPersona().getPersonType().toString(),
+                usr.getPersona() != null ? usr.getPersona().getNombre() : null,
+                usr.getPersona() != null ? usr.getPersona().getPrimerApellido() : null,
+                usr.getPersona() != null ? usr.getPersona().getSegundoApellido() : null,
+                usr.getPersona() != null && usr.getPersona().getPersonType() != null ? usr.getPersona().getPersonType().toString() : null,
                 usr.getActivo(),
-                usr.getPersona().getFechaRegistro(),
+                usr.getPersona() != null ? usr.getPersona().getFechaRegistro() : null,
                 usr.getPosition() != null ? usr.getPosition().name() : null,
                 usr.getSueldoBase(),
-                usr.getSueldoSemanal()
+                 usr.getSueldoSemanal(),
+                 usr.getSueldoHora()
         );
         else throw new NotFoundException("User not found");
     }
@@ -67,15 +96,16 @@ public class UsuarioServiceImpl implements UsuarioService {
                     usuario.getIdUser(),
                     usuario.getUsername(),
                     usuario.getRole().name(),
-                    usuario.getPersona().getNombre(),
-                    usuario.getPersona().getPrimerApellido(),
-                    usuario.getPersona().getSegundoApellido(),
-                    usuario.getPersona().getPersonType().name(),
+                    usuario.getPersona() != null ? usuario.getPersona().getNombre() : null,
+                    usuario.getPersona() != null ? usuario.getPersona().getPrimerApellido() : null,
+                    usuario.getPersona() != null ? usuario.getPersona().getSegundoApellido() : null,
+                    usuario.getPersona() != null && usuario.getPersona().getPersonType() != null ? usuario.getPersona().getPersonType().name() : null,
                     usuario.getActivo(),
-                    usuario.getPersona().getFechaRegistro(),
+                    usuario.getPersona() != null ? usuario.getPersona().getFechaRegistro() : null,
                     usuario.getPosition() != null ? usuario.getPosition().name() : null,
                     usuario.getSueldoBase(),
-                    usuario.getSueldoSemanal()
+                     usuario.getSueldoSemanal(),
+                     usuario.getSueldoHora()
             ));
         }
         return users;
@@ -121,9 +151,12 @@ public class UsuarioServiceImpl implements UsuarioService {
         if(userUpdateRequest.position() != null) usr.setPosition(userUpdateRequest.position());
         if(userUpdateRequest.sueldoBase() != null) usr.setSueldoBase(userUpdateRequest.sueldoBase());
         if(userUpdateRequest.sueldoSemanal() != null) usr.setSueldoSemanal(userUpdateRequest.sueldoSemanal());
+        if (userUpdateRequest.sueldoSemanal() != null && usr.getSueldoHora() == null) usr.setSueldoHora(java.math.BigDecimal.ZERO);
 
         Persona savedPersona = personaService.save(personaUpdate);
         usr.setPersona(savedPersona);
-        return usuarioRepository.save(usr);
+        Usuario saved = usuarioRepository.save(usr);
+        horarioService.recalculateHourlyRate(saved.getIdUser());
+        return saved;
     }
 }

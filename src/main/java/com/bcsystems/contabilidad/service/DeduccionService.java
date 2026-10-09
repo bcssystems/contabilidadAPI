@@ -4,6 +4,10 @@ import com.bcsystems.contabilidad.domain.CorteCaja;
 import com.bcsystems.contabilidad.domain.Deduccion;
 import com.bcsystems.contabilidad.domain.Usuario;
 import com.bcsystems.contabilidad.domain.Nomina;
+import com.bcsystems.contabilidad.domain.PrestamoParcialidad;
+import com.bcsystems.contabilidad.domain.PrestamoEmpleado;
+import com.bcsystems.contabilidad.domain.en.EstadoParcialidad;
+import com.bcsystems.contabilidad.domain.en.EstadoPrestamo;
 import com.bcsystems.contabilidad.domain.en.EstadoDeduccion;
 import com.bcsystems.contabilidad.domain.en.OrigenDeduccion;
 import com.bcsystems.contabilidad.domain.en.TipoDeduccion;
@@ -17,6 +21,7 @@ import com.bcsystems.contabilidad.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -66,6 +71,18 @@ public class DeduccionService {
         return deduccionRepository.findAll(pageRequest).map(DeduccionResponse::fromEntity);
     }
 
+    public Page<DeduccionResponse> findFiltered(PageRequest request, String search, EstadoDeduccion estado, OrigenDeduccion origen, Integer usuarioId, LocalDate desde, LocalDate hasta) {
+        List<Deduccion> filtered = deduccionRepository.findAll(request.getSort()).stream().filter(d ->
+                (estado == null || d.getEstado() == estado) && (origen == null || d.getOrigen() == origen)
+                        && (usuarioId == null || (d.getUsuario() != null && d.getUsuario().getIdUser().equals(usuarioId)))
+                        && (desde == null || d.getFecha() == null || !d.getFecha().isBefore(desde))
+                        && (hasta == null || d.getFecha() == null || !d.getFecha().isAfter(hasta))
+                        && (search == null || search.isBlank() || (d.getConcepto() != null && d.getConcepto().toLowerCase().contains(search.toLowerCase())))).toList();
+        int start = Math.min(request.getPageNumber() * request.getPageSize(), filtered.size());
+        int end = Math.min(start + request.getPageSize(), filtered.size());
+        return new PageImpl<>(filtered.subList(start, end).stream().map(DeduccionResponse::fromEntity).toList(), request, filtered.size());
+    }
+
     public DeduccionResponse findById(Long id) {
         return deduccionRepository.findById(id)
                 .map(DeduccionResponse::fromEntity)
@@ -113,11 +130,13 @@ public class DeduccionService {
     }
 
     public List<Deduccion> findPendientesByUsuario(Integer usuarioId) {
-        return deduccionRepository.findByUsuarioIdUserAndEstado(usuarioId, EstadoDeduccion.PENDIENTE);
+        return deduccionRepository.findByUsuarioIdUserAndEstadoIn(usuarioId,
+                List.of(EstadoDeduccion.PENDIENTE, EstadoDeduccion.APROBADA));
     }
 
     public List<DeduccionResponse> findPendientesByUsuarioResponse(Integer usuarioId) {
-        return deduccionRepository.findByUsuarioIdUserAndEstado(usuarioId, EstadoDeduccion.PENDIENTE)
+        return deduccionRepository.findByUsuarioIdUserAndEstadoIn(usuarioId,
+                        List.of(EstadoDeduccion.PENDIENTE, EstadoDeduccion.APROBADA))
                 .stream().map(DeduccionResponse::fromEntity).toList();
     }
 
@@ -143,6 +162,14 @@ public class DeduccionService {
                 Deduccion deduccion = deduccionOpt.get();
                 deduccion.setEstado(EstadoDeduccion.APLICADA);
                 deduccion.setNomina(nomina);
+                PrestamoParcialidad parcialidad = deduccion.getPrestamoParcialidad();
+                if (parcialidad != null) {
+                    parcialidad.setEstado(EstadoParcialidad.PAGADA);
+                    PrestamoEmpleado prestamo = parcialidad.getPrestamo();
+                    if (prestamo.getParcialidades().stream().allMatch(p -> p.getEstado() == EstadoParcialidad.PAGADA)) {
+                        prestamo.setEstado(EstadoPrestamo.LIQUIDADO);
+                    }
+                }
                 deducciones.add(deduccionRepository.save(deduccion));
             }
         }
@@ -155,6 +182,12 @@ public class DeduccionService {
         for (Deduccion deduccion : deducciones) {
             deduccion.setEstado(EstadoDeduccion.PENDIENTE);
             deduccion.setNomina(null);
+            PrestamoParcialidad parcialidad = deduccion.getPrestamoParcialidad();
+            if (parcialidad != null) {
+                parcialidad.setEstado(parcialidad.getFechaVencimiento().isBefore(LocalDate.now())
+                        ? EstadoParcialidad.VENCIDA : EstadoParcialidad.PENDIENTE);
+                parcialidad.getPrestamo().setEstado(EstadoPrestamo.ACTIVO);
+            }
             deduccionRepository.save(deduccion);
         }
         return deducciones;

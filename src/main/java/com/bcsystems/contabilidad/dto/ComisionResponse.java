@@ -16,6 +16,8 @@ public record ComisionResponse(
         LocalDate fechaGeneracion,
         LocalDate fechaPago,
         Long usuarioId,
-        Long ventaId
+        Long ventaId,
+        String concepto,
+        String usuarioNombre
 ) {
 }

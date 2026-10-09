@@ -58,4 +58,8 @@ public class Deduccion {
     @JsonIgnore
     @JoinColumn(name = "nomina_id")
     private Nomina nomina;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prestamo_parcialidad_id", unique = true)
+    private PrestamoParcialidad prestamoParcialidad;
 }

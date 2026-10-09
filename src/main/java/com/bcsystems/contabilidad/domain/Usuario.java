@@ -42,4 +42,6 @@ public class Usuario {
     private BigDecimal sueldoBase;
     @Column(precision = 12, scale = 2)
     private BigDecimal sueldoSemanal;
+    @Column(precision = 12, scale = 2)
+    private BigDecimal sueldoHora;
 }

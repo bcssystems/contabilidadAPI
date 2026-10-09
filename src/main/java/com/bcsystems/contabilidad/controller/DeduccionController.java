@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import com.bcsystems.contabilidad.domain.en.EstadoDeduccion;
+import com.bcsystems.contabilidad.domain.en.OrigenDeduccion;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/v1/deduccion")
@@ -32,14 +35,20 @@ public class DeduccionController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(defaultValue = "idDeduccion") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDir) {
+            @RequestParam(defaultValue = "asc") String sortDir,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) EstadoDeduccion estado,
+            @RequestParam(required = false) OrigenDeduccion origen,
+            @RequestParam(required = false) Integer usuarioId,
+            @RequestParam(required = false) LocalDate desde,
+            @RequestParam(required = false) LocalDate hasta) {
 
         Sort sort = sortDir.equalsIgnoreCase("desc")
                 ? Sort.by(sortBy).descending()
                 : Sort.by(sortBy).ascending();
 
         PageRequest pageRequest = PageRequest.of(page, size, sort);
-        Page<DeduccionResponse> result = deduccionService.findAllPageable(pageRequest);
+        Page<DeduccionResponse> result = deduccionService.findFiltered(pageRequest, search, estado, origen, usuarioId, desde, hasta);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
