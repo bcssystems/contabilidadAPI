@@ -14,6 +14,7 @@ public record UserUpdateRequest(
         Boolean activo,
         Position position,
         BigDecimal sueldoBase,
-        BigDecimal sueldoSemanal
+        BigDecimal sueldoSemanal,
+        String password
 ) {
 }
