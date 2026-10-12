@@ -7,6 +7,7 @@ import com.bcsystems.contabilidad.dto.UserUpdateRequest;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +21,13 @@ public class UsuarioServiceImpl implements UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PersonaService personaService;
     private final HorarioService horarioService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, PersonaService personaService, HorarioService horarioService) {
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, PersonaService personaService, HorarioService horarioService, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.personaService = personaService;
         this.horarioService = horarioService;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -152,6 +155,10 @@ public class UsuarioServiceImpl implements UsuarioService {
         if(userUpdateRequest.sueldoBase() != null) usr.setSueldoBase(userUpdateRequest.sueldoBase());
         if(userUpdateRequest.sueldoSemanal() != null) usr.setSueldoSemanal(userUpdateRequest.sueldoSemanal());
         if (userUpdateRequest.sueldoSemanal() != null && usr.getSueldoHora() == null) usr.setSueldoHora(java.math.BigDecimal.ZERO);
+        if (userUpdateRequest.password() != null && !userUpdateRequest.password().isBlank()) {
+            if (userUpdateRequest.password().length() < 6) throw new IllegalArgumentException("La contraseña debe tener al menos 6 caracteres");
+            usr.setPassword(passwordEncoder.encode(userUpdateRequest.password()));
+        }
 
         Persona savedPersona = personaService.save(personaUpdate);
         usr.setPersona(savedPersona);

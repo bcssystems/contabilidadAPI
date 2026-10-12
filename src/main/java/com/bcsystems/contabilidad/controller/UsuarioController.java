@@ -69,7 +69,7 @@ public class UsuarioController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
-            usuarioService.updateUser(id, new UserUpdateRequest(null, null, null, null, null, false, null, null, null));
+            usuarioService.updateUser(id, new UserUpdateRequest(null, null, null, null, null, false, null, null, null, null));
             return ResponseEntity.ok(Map.of("message", "Usuario desactivado exitosamente"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("message", "Error al desactivar usuario: " + e.getMessage()));
