@@ -62,6 +62,11 @@ public class NominaController {
         return ResponseEntity.status(HttpStatus.OK).body(nominaService.findById(id));
     }
 
+    @GetMapping("/{id}/desglose")
+    public ResponseEntity<?> desgloseNomina(@PathVariable Long id) {
+        return ResponseEntity.ok(nominaService.desgloseNomina(id));
+    }
+
     @GetMapping("/{id}/pdf")
     public ResponseEntity<byte[]> pdf(@PathVariable Long id) {
         return ResponseEntity.ok().header("Content-Type", "application/pdf")
