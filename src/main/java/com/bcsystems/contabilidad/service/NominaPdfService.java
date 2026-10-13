@@ -3,7 +3,11 @@ package com.bcsystems.contabilidad.service;
 import com.bcsystems.contabilidad.domain.Asistencia;
 import com.bcsystems.contabilidad.domain.Nomina;
 import com.bcsystems.contabilidad.domain.Usuario;
+import com.bcsystems.contabilidad.domain.Comision;
+import com.bcsystems.contabilidad.domain.Deduccion;
 import com.bcsystems.contabilidad.repository.AsistenciaRepository;
+import com.bcsystems.contabilidad.repository.ComisionRepository;
+import com.bcsystems.contabilidad.repository.DeduccionRepository;
 import com.bcsystems.contabilidad.repository.NominaRepository;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.itextpdf.kernel.geom.PageSize;
@@ -29,10 +33,15 @@ public class NominaPdfService {
     private static final float WIDTH = 226.77f;
     private final NominaRepository nominaRepository;
     private final AsistenciaRepository asistenciaRepository;
+    private final ComisionRepository comisionRepository;
+    private final DeduccionRepository deduccionRepository;
 
-    public NominaPdfService(NominaRepository nominaRepository, AsistenciaRepository asistenciaRepository) {
+    public NominaPdfService(NominaRepository nominaRepository, AsistenciaRepository asistenciaRepository,
+                            ComisionRepository comisionRepository, DeduccionRepository deduccionRepository) {
         this.nominaRepository = nominaRepository;
         this.asistenciaRepository = asistenciaRepository;
+        this.comisionRepository = comisionRepository;
+        this.deduccionRepository = deduccionRepository;
     }
 
     @Transactional
@@ -71,6 +80,28 @@ public class NominaPdfService {
         row(data, "Deducciones", money(nomina.getTotalDeducciones()));
         row(data, "SALDO NETO", money(nomina.getSueldo()));
         document.add(data);
+
+        document.add(new Paragraph("DESGLOSE DE PERCEPCIONES").setBold().setFontSize(8).setMarginTop(8));
+        Table perceptions = new Table(UnitValue.createPercentArray(new float[]{72, 28})).useAllAvailableWidth();
+        row(perceptions, "Sueldo base", money(nomina.getSueldoBase()));
+        for (Comision commission : comisionRepository.findByNominaIdNomina(nomina.getIdNomina())) {
+                String concept = commission.getConcepto() == null || commission.getConcepto().isBlank()
+                        ? "Comisión" : commission.getConcepto();
+                row(perceptions, concept, money(commission.getMontoComision()));
+        }
+        document.add(perceptions);
+
+        document.add(new Paragraph("DESGLOSE DE DEDUCCIONES").setBold().setFontSize(8).setMarginTop(6));
+        Table deductions = new Table(UnitValue.createPercentArray(new float[]{72, 28})).useAllAvailableWidth();
+        var deductionsList = deduccionRepository.findByNominaIdNomina(nomina.getIdNomina());
+        if (deductionsList.isEmpty()) {
+            row(deductions, "Sin deducciones", money(BigDecimal.ZERO));
+        } else {
+            for (Deduccion deduction : deductionsList) {
+                row(deductions, deduction.getConcepto(), money(deduction.getMonto()));
+            }
+        }
+        document.add(deductions);
         document.add(new Paragraph("\n\nFirma del empleado: ____________________").setFontSize(8));
         document.add(new Paragraph(" ").setFontSize(4));
     }

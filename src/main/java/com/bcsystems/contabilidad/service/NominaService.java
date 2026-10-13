@@ -218,6 +218,22 @@ public class NominaService {
     }
 
     @Transactional
+    public NominaDesgloseResponse desgloseNomina(Long id) {
+        Nomina nomina = nominaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Nómina no encontrada"));
+        List<ComisionResponse> comisiones = comisionRepository.findByNominaIdNomina(nomina.getIdNomina())
+                .stream().map(comisionService::toResponse).toList();
+        List<DeduccionResponse> deducciones = deduccionRepository.findByNominaIdNomina(nomina.getIdNomina())
+                .stream().map(DeduccionResponse::fromEntity).toList();
+        return new NominaDesgloseResponse(
+                nomina.getUsuario() == null ? null : nomina.getUsuario().getIdUser().longValue(),
+                nomina.getUsuario() != null && nomina.getUsuario().getPersona() != null
+                        ? nomina.getUsuario().getPersona().getNombre() : null,
+                nomina.getSueldoBase(), nomina.getSueldoBase(), comisiones, deducciones,
+                nomina.getTotalComisiones(), nomina.getTotalDeducciones());
+    }
+
+    @Transactional
     public NominaResponse update(Long id, NominaUpdateRequest request) {
         Nomina nomina = nominaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Nómina no encontrada"));

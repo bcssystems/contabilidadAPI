@@ -188,7 +188,15 @@ public class AsistenciaService {
                 : (hours.signum() == 0 || user.getSueldoSemanal() == null
                 ? BigDecimal.ZERO : user.getSueldoSemanal().divide(hours, 2, java.math.RoundingMode.HALF_UP));
         List<AsistenciaTableroResponse> records = mine(username).stream()
-                .map(item -> AsistenciaTableroResponse.fromEntity(item, marcajes.findFirstByAsistenciaIdOrderByMarcadoEnDesc(item.getId())))
+                .map(item -> {
+                    DiaSemana day = DiaSemana.values()[item.getFecha().getDayOfWeek().getValue() - 1];
+                    HorarioDia scheduleDay = assignment == null ? null : assignment.getHorario().getDias().stream()
+                            .filter(schedule -> schedule.getDia() == day).findFirst().orElse(null);
+                    List<AsistenciaBreakResponse> breaks = scheduleDay == null ? List.of() : scheduleDay.getBreaks().stream()
+                            .map(itemBreak -> new AsistenciaBreakResponse(itemBreak.getInicio(), itemBreak.getFin())).toList();
+                    return AsistenciaTableroResponse.fromEntity(item,
+                            marcajes.findFirstByAsistenciaIdOrderByMarcadoEnDesc(item.getId()), breaks);
+                })
                 .toList();
         return new TableroAsistenciaResponse(records, assignment, hours, hourly);
     }
