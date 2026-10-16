@@ -53,8 +53,10 @@ public class NominaController {
     }
 
     @GetMapping("/desglose/{usuarioId}")
-    public ResponseEntity<?> desglose(@PathVariable Integer usuarioId) {
-        return ResponseEntity.status(HttpStatus.OK).body(nominaService.desglose(usuarioId));
+    public ResponseEntity<?> desglose(@PathVariable Integer usuarioId,
+                                      @RequestParam(required = false) LocalDate inicio,
+                                      @RequestParam(required = false) LocalDate fin) {
+        return ResponseEntity.status(HttpStatus.OK).body(nominaService.desglose(usuarioId, inicio, fin));
     }
 
     @GetMapping("/{id}")

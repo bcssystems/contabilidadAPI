@@ -22,6 +22,8 @@ public class Nomina {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idNomina;
     private LocalDate fecha_nomina;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
     private BigDecimal sueldo;
     private BigDecimal sueldoBase;
     private BigDecimal totalComisiones;
