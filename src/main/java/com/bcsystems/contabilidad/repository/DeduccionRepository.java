@@ -17,6 +17,8 @@ public interface DeduccionRepository extends JpaRepository<Deduccion, Long> {
     List<Deduccion> findByNominaIdNomina(Long nominaId);
     boolean existsByAsistenciaIdAndTipo(Integer asistenciaId, TipoDeduccion tipo);
     boolean existsByUsuarioIdUserAndFechaAndTipo(Integer usuarioId, java.time.LocalDate fecha, TipoDeduccion tipo);
+    List<Deduccion> findByUsuarioIdUserAndFechaAndTipoAndEstadoIn(Integer usuarioId, java.time.LocalDate fecha,
+                                                                   TipoDeduccion tipo, List<EstadoDeduccion> estados);
     boolean existsByPrestamoParcialidadIdParcialidad(Long parcialidadId);
     List<Deduccion> findByPrestamoParcialidadIdParcialidad(Long parcialidadId);
 }

@@ -80,12 +80,18 @@ public class NominaService {
         }
         Usuario usuario = usuarioRepository.findById(request.usuarioId().intValue())
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
-        prestamoEmpleadoService.generarDeduccionesParaNomina(usuario.getIdUser(), request.fecha_nomina() != null ? request.fecha_nomina() : LocalDate.now());
+        LocalDate fechaPago = request.fecha_nomina() != null ? request.fecha_nomina() : LocalDate.now();
+        LocalDate fechaInicio = request.fechaInicio() != null ? request.fechaInicio() : fechaPago.minusDays(6);
+        LocalDate fechaFin = request.fechaFin() != null ? request.fechaFin() : fechaPago;
+        validarPeriodo(fechaInicio, fechaFin);
+        asistenciaService.generateAttendanceDeductions(usuario.getIdUser(), fechaInicio, fechaFin);
+        prestamoEmpleadoService.generarDeduccionesParaNomina(usuario.getIdUser(), fechaFin);
 
         List<Long> requestedComisionIds = request.comisionIds() == null ? List.of() : request.comisionIds();
         List<Comision> comisiones = requestedComisionIds.isEmpty()
                 ? comisionService.findPendientesByUsuario(usuario.getIdUser().longValue())
                 : comisionRepository.findAllById(requestedComisionIds);
+        comisiones = comisiones.stream().filter(c -> dentroDelPeriodo(c.getFechaComision(), fechaInicio, fechaFin)).toList();
         if (comisiones.size() != requestedComisionIds.stream().distinct().count() || comisiones.stream().anyMatch(c ->
                 c.getUsuario() == null || !c.getUsuario().getIdUser().equals(usuario.getIdUser()) || c.getEstadoComision() != com.bcsystems.contabilidad.domain.en.EstadoComision.PENDIENTE)) {
             throw new IllegalArgumentException("Las comisiones seleccionadas no pertenecen al empleado o ya fueron aplicadas");
@@ -93,6 +99,7 @@ public class NominaService {
 
         List<Deduccion> disponibles = deduccionRepository.findByUsuarioIdUserAndEstadoIn(usuario.getIdUser(),
                 List.of(EstadoDeduccion.PENDIENTE, EstadoDeduccion.APROBADA));
+        disponibles = disponibles.stream().filter(d -> dentroDelPeriodo(d.getFecha(), fechaInicio, fechaFin)).toList();
         List<Long> requestedDeductionIds = request.deduccionIds() == null ? List.of() : request.deduccionIds();
         boolean includeAllDeductions = requestedDeductionIds.isEmpty();
         disponibles.stream()
@@ -121,7 +128,9 @@ public class NominaService {
         BigDecimal sueldo = sueldoBase.add(totalComisiones).subtract(totalDeducciones);
 
         Nomina nomina = Nomina.builder()
-                .fecha_nomina(request.fecha_nomina() != null ? request.fecha_nomina() : LocalDate.now())
+                .fecha_nomina(fechaPago)
+                .fechaInicio(fechaInicio)
+                .fechaFin(fechaFin)
                 .sueldo(sueldo)
                 .sueldoBase(sueldoBase)
                 .totalComisiones(totalComisiones)
@@ -240,6 +249,13 @@ public class NominaService {
         if (request.fecha_nomina() != null) {
             nomina.setFecha_nomina(request.fecha_nomina());
         }
+        LocalDate fechaInicio = request.fechaInicio() != null ? request.fechaInicio() : nomina.getFechaInicio();
+        LocalDate fechaFin = request.fechaFin() != null ? request.fechaFin() : nomina.getFechaFin();
+        if (fechaInicio != null || fechaFin != null) {
+            validarPeriodo(fechaInicio, fechaFin);
+            nomina.setFechaInicio(fechaInicio);
+            nomina.setFechaFin(fechaFin);
+        }
         return NominaResponse.fromEntity(nominaRepository.save(nomina));
     }
 
@@ -266,18 +282,22 @@ public class NominaService {
         nominaRepository.delete(nomina);
     }
 
-    public NominaDesgloseResponse desglose(Integer usuarioId) {
+    public NominaDesgloseResponse desglose(Integer usuarioId, LocalDate fechaInicio, LocalDate fechaFin) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
+        LocalDate inicio = fechaInicio == null ? LocalDate.now().minusDays(6) : fechaInicio;
+        LocalDate fin = fechaFin == null ? LocalDate.now() : fechaFin;
+        validarPeriodo(inicio, fin);
+
+        prestamoEmpleadoService.generarDeduccionesParaNomina(usuarioId, fin);
+        try { asistenciaService.generateAttendanceDeductions(usuarioId, inicio, fin); } catch (NotFoundException ignored) { }
 
         List<ComisionResponse> comisiones = comisionService.findPendientesByUsuario(usuarioId.longValue())
                 .stream().map(comisionService::toResponse).toList();
-        LocalDate today = LocalDate.now();
-        prestamoEmpleadoService.generarDeduccionesParaNomina(usuarioId, today);
-        LocalDate periodStart = today.withDayOfMonth(1);
-        try { asistenciaService.generateAttendanceDeductions(usuarioId, periodStart, today); } catch (NotFoundException ignored) { }
+        comisiones = comisiones.stream().filter(c -> dentroDelPeriodo(c.fechaGeneracion(), inicio, fin)).toList();
         List<DeduccionResponse> deducciones = deduccionService.findPendientesByUsuarioResponse(usuarioId).stream()
                 .filter(d -> d.estado() == EstadoDeduccion.PENDIENTE || d.estado() == EstadoDeduccion.APROBADA)
+                .filter(d -> dentroDelPeriodo(d.fecha(), inicio, fin))
                 .toList();
 
         BigDecimal totalComisiones = comisiones.stream()
@@ -299,5 +319,15 @@ public class NominaService {
                 totalComisiones,
                 totalDeducciones
         );
+    }
+
+    private void validarPeriodo(LocalDate inicio, LocalDate fin) {
+        if (inicio == null || fin == null || inicio.isAfter(fin)) {
+            throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha final");
+        }
+    }
+
+    private boolean dentroDelPeriodo(LocalDate fecha, LocalDate inicio, LocalDate fin) {
+        return fecha != null && !fecha.isBefore(inicio) && !fecha.isAfter(fin);
     }
 }

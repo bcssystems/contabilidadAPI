@@ -74,7 +74,10 @@ public class NominaPdfService {
         row(data, "Nombre", name);
         row(data, "Puesto", user != null && user.getPosition() != null ? user.getPosition().name() : "-");
         row(data, "Fecha de pago", nomina.getFecha_nomina() == null ? "-" : nomina.getFecha_nomina().toString());
-        row(data, "Horas laboradas", horas(user, nomina.getFecha_nomina()).toPlainString());
+        row(data, "Periodo", periodo(nomina));
+        row(data, "Horas laboradas", horas(user,
+                nomina.getFechaInicio() != null ? nomina.getFechaInicio() : fechaPago(nomina).minusDays(6),
+                nomina.getFechaFin() != null ? nomina.getFechaFin() : fechaPago(nomina)).toPlainString());
         row(data, "Sueldo base", money(nomina.getSueldoBase()));
         row(data, "Comisiones", money(nomina.getTotalComisiones()));
         row(data, "Deducciones", money(nomina.getTotalDeducciones()));
@@ -106,16 +109,25 @@ public class NominaPdfService {
         document.add(new Paragraph(" ").setFontSize(4));
     }
 
-    private BigDecimal horas(Usuario user, LocalDate paymentDate) {
-        if (user == null || paymentDate == null) return BigDecimal.ZERO.setScale(2);
+    private BigDecimal horas(Usuario user, LocalDate start, LocalDate end) {
+        if (user == null || start == null || end == null) return BigDecimal.ZERO.setScale(2);
         long minutes = asistenciaRepository.findByUsuarioIdUserOrderByFechaDesc(user.getIdUser()).stream()
-                .filter(a -> a.getFecha() != null && !a.getFecha().isBefore(paymentDate.minusDays(6)) && !a.getFecha().isAfter(paymentDate))
+                .filter(a -> a.getFecha() != null && !a.getFecha().isBefore(start) && !a.getFecha().isAfter(end))
                 .filter(a -> a.getEntrada() != null && a.getSalida() != null)
                 .mapToLong(a -> Duration.between(a.getEntrada(), a.getSalida()).toMinutes()).sum();
         return BigDecimal.valueOf(minutes).divide(BigDecimal.valueOf(60), 2, RoundingMode.HALF_UP);
     }
 
     private String money(BigDecimal amount) { return "$" + (amount == null ? BigDecimal.ZERO : amount).setScale(2, RoundingMode.HALF_UP); }
+
+    private String periodo(Nomina nomina) {
+        if (nomina.getFechaInicio() == null || nomina.getFechaFin() == null) return "-";
+        return nomina.getFechaInicio() + " al " + nomina.getFechaFin();
+    }
+
+    private LocalDate fechaPago(Nomina nomina) {
+        return nomina.getFecha_nomina() == null ? LocalDate.now() : nomina.getFecha_nomina();
+    }
 
     private void row(Table table, String label, String value) {
         table.addCell(new Paragraph(label).setBold().setFontSize(7));

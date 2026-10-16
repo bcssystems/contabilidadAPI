@@ -266,6 +266,7 @@ public class AsistenciaService {
                 } else if (attendance.get().getEstado() != EstadoIncidencia.RECHAZADA
                     && !justificaciones.existsByAsistenciaIdAndEstado(attendance.get().getId(), EstadoJustificacion.APROBADA)) {
                     Asistencia a = attendance.get();
+                    cancelIncorrectAbsence(user, date);
                     if (a.getEntrada() != null) {
                         long lateMinutes = java.time.Duration.between(daySchedule.getEntrada().plusMinutes(settings.getToleranciaEntrada()), a.getEntrada().toLocalTime()).toMinutes();
                         if (lateMinutes > 0) createAttendanceDeduction(a, TipoDeduccion.RETARDO, hourlySalary, lateMinutes, generated);
@@ -278,6 +279,16 @@ public class AsistenciaService {
             }
         }
         return generated;
+    }
+
+    private void cancelIncorrectAbsence(Usuario user, LocalDate date) {
+        List<Deduccion> absences = deduccionRepository.findByUsuarioIdUserAndFechaAndTipoAndEstadoIn(
+                user.getIdUser(), date, TipoDeduccion.FALTA,
+                List.of(EstadoDeduccion.PENDIENTE, EstadoDeduccion.APROBADA));
+        absences.forEach(absence -> {
+            absence.setEstado(EstadoDeduccion.CANCELADA);
+            deduccionRepository.save(absence);
+        });
     }
 
     private void createAttendanceDeduction(Asistencia attendance, TipoDeduccion type, BigDecimal hourlySalary, long minutes, List<DeduccionResponse> generated) {

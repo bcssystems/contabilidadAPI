@@ -9,6 +9,8 @@ import java.time.LocalDate;
 public record NominaResponse(
         Long id,
         LocalDate fecha_nomina,
+        LocalDate fechaInicio,
+        LocalDate fechaFin,
         BigDecimal sueldo,
         BigDecimal sueldoBase,
         BigDecimal sueldoSemanal,
@@ -23,6 +25,8 @@ public record NominaResponse(
         return new NominaResponse(
                 nomina.getIdNomina(),
                 nomina.getFecha_nomina(),
+                nomina.getFechaInicio(),
+                nomina.getFechaFin(),
                 nomina.getSueldo(),
                 nomina.getSueldoBase(),
                 nomina.getUsuario() != null ? nomina.getUsuario().getSueldoSemanal() : null,
