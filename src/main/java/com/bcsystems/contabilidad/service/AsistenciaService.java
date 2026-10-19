@@ -71,6 +71,16 @@ public class AsistenciaService {
         LocalDate date = now.toLocalDate();
         UsuarioHorario assignment = asignaciones.findFirstByUsuarioIdUserAndActivoTrueOrderByIdDesc(user.getIdUser())
                 .orElseThrow(() -> new IllegalArgumentException("No tienes un horario asignado. No puedes registrar asistencia."));
+        ConfiguracionAsistencia attendanceSettings = configuracion.get();
+        if (attendanceSettings.getFechaInicioOperaciones() != null && date.isBefore(attendanceSettings.getFechaInicioOperaciones())) {
+            throw new IllegalArgumentException("La asistencia aún no está habilitada para esta fecha.");
+        }
+        if (assignment.getVigenteDesde() != null && date.isBefore(assignment.getVigenteDesde())) {
+            throw new IllegalArgumentException("Tu horario aún no estaba vigente para esta fecha.");
+        }
+        if (assignment.getVigenteHasta() != null && date.isAfter(assignment.getVigenteHasta())) {
+            throw new IllegalArgumentException("Tu horario ya no está vigente para esta fecha.");
+        }
         DiaSemana scheduledDay = DiaSemana.values()[date.getDayOfWeek().getValue() - 1];
         HorarioDia todaySchedule = assignment.getHorario().getDias().stream()
                 .filter(day -> day.getDia() == scheduledDay).findFirst().orElse(null);
@@ -256,7 +266,16 @@ public class AsistenciaService {
         ConfiguracionAsistencia settings = configuracion.get();
         List<DeduccionResponse> generated = new ArrayList<>();
         LocalDate lastEvaluableDate = end.isBefore(LocalDate.now()) ? end : LocalDate.now().minusDays(1);
-        for (LocalDate date = start; !date.isAfter(lastEvaluableDate); date = date.plusDays(1)) {
+        LocalDate effectiveStart = start;
+        if (assignment.getVigenteDesde() != null && assignment.getVigenteDesde().isAfter(effectiveStart)) effectiveStart = assignment.getVigenteDesde();
+        if (settings.getFechaInicioOperaciones() != null && settings.getFechaInicioOperaciones().isAfter(effectiveStart)) effectiveStart = settings.getFechaInicioOperaciones();
+        LocalDate effectiveEnd = lastEvaluableDate;
+        if (assignment.getVigenteHasta() != null && assignment.getVigenteHasta().isBefore(effectiveEnd)) effectiveEnd = assignment.getVigenteHasta();
+        LocalDate validStart = assignment.getVigenteDesde();
+        if (validStart == null || (settings.getFechaInicioOperaciones() != null && settings.getFechaInicioOperaciones().isAfter(validStart))) validStart = settings.getFechaInicioOperaciones();
+        LocalDate validEnd = assignment.getVigenteHasta();
+        cancelarFaltasFueraDeVigencia(user, validStart, validEnd);
+        for (LocalDate date = effectiveStart; !date.isAfter(effectiveEnd); date = date.plusDays(1)) {
             Optional<Asistencia> attendance = asistencias.findByUsuarioIdUserAndFecha(usuarioId, date);
             DiaSemana scheduledDay = DiaSemana.values()[date.getDayOfWeek().getValue() - 1];
             HorarioDia daySchedule = assignment.getHorario().getDias().stream().filter(day -> day.getDia() == scheduledDay).findFirst().orElse(null);
@@ -279,6 +298,24 @@ public class AsistenciaService {
             }
         }
         return generated;
+    }
+
+    @Transactional
+    public void reconcileAttendanceDeductions() {
+        ConfiguracionAsistencia settings = configuracion.get();
+        usuariosRepository.findAll().forEach(user -> asignaciones.findFirstByUsuarioIdUserAndActivoTrueOrderByIdDesc(user.getIdUser()).ifPresent(assignment -> {
+            LocalDate validStart = assignment.getVigenteDesde();
+            if (validStart == null || (settings.getFechaInicioOperaciones() != null && settings.getFechaInicioOperaciones().isAfter(validStart))) validStart = settings.getFechaInicioOperaciones();
+            cancelarFaltasFueraDeVigencia(user, validStart, assignment.getVigenteHasta());
+        }));
+    }
+
+    private void cancelarFaltasFueraDeVigencia(Usuario user, LocalDate start, LocalDate end) {
+        List<Deduccion> absences = deduccionRepository.findByUsuarioIdUserAndTipoAndEstadoIn(user.getIdUser(), TipoDeduccion.FALTA,
+                List.of(EstadoDeduccion.PENDIENTE, EstadoDeduccion.APROBADA));
+        absences.stream().filter(absence -> absence.getFecha() == null || (start != null && absence.getFecha().isBefore(start)) || (end != null && absence.getFecha().isAfter(end)))
+                .forEach(absence -> absence.setEstado(EstadoDeduccion.CANCELADA));
+        if (!absences.isEmpty()) deduccionRepository.saveAll(absences);
     }
 
     private void cancelIncorrectAbsence(Usuario user, LocalDate date) {

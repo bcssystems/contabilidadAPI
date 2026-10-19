@@ -12,4 +12,5 @@ public class ConfiguracionAsistencia {
     @Column(nullable = false) private Integer toleranciaSalida = 0;
     @Column(nullable = false) private Integer radioMaximo = 100;
     @Column(nullable = false) private Boolean requiereSelfie = true;
+    private java.time.LocalDate fechaInicioOperaciones;
 }

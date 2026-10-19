@@ -31,11 +31,11 @@ public class QuizService {
         if (!ALLOWED_USERS.contains(normalizedUsername)) {
             throw new AccessDeniedException("Usuario no autorizado para guardar el quiz");
         }
-        if (request == null || request.respuestas() == null || request.respuestas().size() != 3
+        if (request == null || request.respuestas() == null || request.respuestas().size() != 2
                 || request.respuestas().stream().anyMatch(answer -> answer == null
                 || answer.pregunta() == null || answer.pregunta().isBlank()
                 || answer.respuesta() == null || answer.respuesta().isBlank())) {
-            throw new IllegalArgumentException("El quiz debe contener exactamente tres respuestas");
+            throw new IllegalArgumentException("El quiz debe contener exactamente dos respuestas");
         }
 
         StringBuilder content = new StringBuilder()
