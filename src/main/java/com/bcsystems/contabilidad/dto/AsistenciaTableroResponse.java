@@ -11,7 +11,7 @@ public record AsistenciaTableroResponse(Integer id, LocalDate fecha, LocalDateTi
                                           String estado, String estadoUbicacion, Double distanciaMetros, String puntoNombre,
                                           Double latitud, Double longitud, Integer radioPermitido,
                                           Integer minutosRetardo, Integer minutosSalidaTemprana, Boolean fueraDePunto,
-                                          List<AsistenciaBreakResponse> breaks) {
+                                           List<AsistenciaBreakResponse> breaks, Boolean incompleta) {
     public static AsistenciaTableroResponse fromEntity(Asistencia attendance, Marcaje mark,
                                                        List<AsistenciaBreakResponse> breaks) {
         return new AsistenciaTableroResponse(attendance.getId(), attendance.getFecha(), attendance.getEntrada(), attendance.getSalida(),
@@ -20,6 +20,7 @@ public record AsistenciaTableroResponse(Integer id, LocalDate fecha, LocalDateTi
                 mark == null || mark.getLatitud() == null ? null : mark.getLatitud().doubleValue(),
                 mark == null || mark.getLongitud() == null ? null : mark.getLongitud().doubleValue(),
                 mark == null || mark.getPuntoGeografico() == null ? null : mark.getPuntoGeografico().getRadioMetros(),
-                attendance.getMinutosRetardo(), attendance.getMinutosSalidaTemprana(), attendance.getFueraDePunto(), breaks);
+                attendance.getMinutosRetardo(), attendance.getMinutosSalidaTemprana(), attendance.getFueraDePunto(), breaks,
+                attendance.getEntrada() != null && attendance.getSalida() == null);
     }
 }
