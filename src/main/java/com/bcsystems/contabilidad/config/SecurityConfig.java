@@ -100,7 +100,6 @@ public class SecurityConfig {
                                   .requestMatchers("/api/v1/asistencias/evidencias/pendientes", "/api/v1/asistencias/evidencias/*/aprobar", "/api/v1/asistencias/evidencias/*/rechazar", "/api/v1/justificaciones/pendientes", "/api/v1/justificaciones/*/aprobar", "/api/v1/justificaciones/*/rechazar").hasRole("ADMIN")
                                   .requestMatchers("/api/v1/asistencias/**").hasRole("ADMIN")
                                    .requestMatchers("/api/v1/checador/**", "/api/v1/justificaciones/mias").authenticated()
-                                   .requestMatchers("/api/v1/quiz/**").authenticated()
                                    .requestMatchers("/api/v1/justificaciones").authenticated()
                                 .requestMatchers("/api/images/**").permitAll()
                                 .requestMatchers("/uploads/**").permitAll()
