@@ -82,7 +82,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (tokenValidoEnDb) {
             final Optional<Usuario> userOpt = usuarioService.findByUsername(email);
 
-            if (userOpt.isPresent()) {
+            if (userOpt.isPresent() && Boolean.TRUE.equals(userOpt.get().getActivo())) {
                 final boolean isTokenValid = tokenService.isTokenValid(token, userOpt.get());
 
                 if (isTokenValid) {

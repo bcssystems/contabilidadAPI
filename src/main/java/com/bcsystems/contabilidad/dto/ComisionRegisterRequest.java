@@ -3,6 +3,7 @@ package com.bcsystems.contabilidad.dto;
 import com.bcsystems.contabilidad.domain.en.TipoComision;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public record ComisionRegisterRequest(
         TipoComision tipoComision,
@@ -11,6 +12,7 @@ public record ComisionRegisterRequest(
         Long usuarioId,
         BigDecimal montoBase,
         BigDecimal porcentajeComision,
-        BigDecimal monto
+         BigDecimal monto,
+         LocalDate fechaComision
 ) {
 }

@@ -9,6 +9,7 @@ import com.bcsystems.contabilidad.domain.en.TipoComision;
 import com.bcsystems.contabilidad.dto.ComisionRegisterRequest;
 import com.bcsystems.contabilidad.dto.ComisionResponse;
 import com.bcsystems.contabilidad.dto.ComisionUpdateRequest;
+import com.bcsystems.contabilidad.dto.ComisionBatchRequest;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.ComisionRepository;
 import com.bcsystems.contabilidad.repository.UsuarioRepository;
@@ -52,6 +53,7 @@ public class ComisionService {
         if (usuario.isEmpty()) {
             throw new NotFoundException("Usuario no encontrado");
         }
+        if (!Boolean.TRUE.equals(usuario.get().getActivo())) throw new IllegalArgumentException("No se puede registrar comisión para un usuario inactivo");
 
         BigDecimal montoComision = request.monto();
         if (montoComision == null && request.montoBase() != null && request.porcentajeComision() != null) {
@@ -69,7 +71,7 @@ public class ComisionService {
                 .porcentajeComision(request.porcentajeComision())
                 .montoComision(montoComision)
                 .estadoComision(EstadoComision.PENDIENTE)
-                .fechaComision(LocalDate.now())
+                .fechaComision(request.fechaComision() == null ? LocalDate.now() : request.fechaComision())
                 .build();
 
         return comisionRepository.save(comision);
@@ -137,6 +139,14 @@ public class ComisionService {
     public Page<ComisionResponse> findAllPageable(PageRequest pageRequest) {
         Page<Comision> comisiones = comisionRepository.findAll(pageRequest);
         return comisiones.map(this::toResponse);
+    }
+
+    @Transactional
+    public List<Comision> saveBatch(ComisionBatchRequest request) {
+        if (request == null || request.comisiones() == null || request.comisiones().isEmpty()) {
+            throw new IllegalArgumentException("Agrega al menos una comisión");
+        }
+        return request.comisiones().stream().map(this::save).toList();
     }
 
     @Transactional
@@ -220,6 +230,9 @@ public class ComisionService {
         }
         if (request.fechaPago() != null) {
             comision.setFechaPago(request.fechaPago());
+        }
+        if (request.fechaComision() != null) {
+            comision.setFechaComision(request.fechaComision());
         }
 
         return comisionRepository.save(comision);

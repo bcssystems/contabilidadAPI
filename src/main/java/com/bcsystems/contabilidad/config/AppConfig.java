@@ -32,6 +32,7 @@ public class AppConfig {
                     .builder()
                     .username(usuario.get().getUsername())
                     .password(usuario.get().getPassword())
+                    .disabled(!Boolean.TRUE.equals(usuario.get().getActivo()))
                     .build();
         };
     }

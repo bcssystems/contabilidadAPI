@@ -17,6 +17,8 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.AreaBreak;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import jakarta.transaction.Transactional;
@@ -27,6 +29,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class NominaPdfService {
@@ -50,7 +53,7 @@ public class NominaPdfService {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try (PdfDocument pdf = new PdfDocument(new PdfWriter(output))) {
             Document document = new Document(pdf, new PageSize(WIDTH, 560));
-            document.setMargins(12, 10, 12, 10);
+             document.setMargins(5, 8, 5, 8);
             for (int copy = 0; copy < 2; copy++) {
                 if (copy > 0) document.add(new AreaBreak(new PageSize(WIDTH, 560)));
                 addReceipt(document, nomina);
@@ -58,6 +61,28 @@ public class NominaPdfService {
             document.close();
         } catch (Exception e) {
             throw new IllegalStateException("No se pudo generar el recibo de nómina", e);
+        }
+        return output.toByteArray();
+    }
+
+    @Transactional
+    public byte[] generarLote(List<Long> ids) {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        try (PdfDocument pdf = new PdfDocument(new PdfWriter(output))) {
+            Document document = new Document(pdf, new PageSize(WIDTH, 560));
+            document.setMargins(5, 8, 5, 8);
+            boolean first = true;
+            for (Long id : ids == null ? List.<Long>of() : ids) {
+                Nomina nomina = nominaRepository.findById(id).orElseThrow(() -> new NotFoundException("Nómina no encontrada"));
+                for (int copy = 0; copy < 2; copy++) {
+                    if (!first) document.add(new AreaBreak(new PageSize(WIDTH, 560)));
+                    addReceipt(document, nomina);
+                    first = false;
+                }
+            }
+            document.close();
+        } catch (Exception e) {
+            throw new IllegalStateException("No se pudo generar el lote de recibos", e);
         }
         return output.toByteArray();
     }
@@ -101,12 +126,13 @@ public class NominaPdfService {
             row(deductions, "Sin deducciones", money(BigDecimal.ZERO));
         } else {
             for (Deduccion deduction : deductionsList) {
-                row(deductions, deduction.getConcepto(), money(deduction.getMonto()));
+                String date = deduction.getFecha() == null ? "sin fecha" : deduction.getFecha().toString();
+                row(deductions, date + " - " + (deduction.getConcepto() == null ? "Deducción" : deduction.getConcepto()), money(deduction.getMonto()));
             }
         }
         document.add(deductions);
-        document.add(new Paragraph("\n\nFirma del empleado: ____________________").setFontSize(8));
-        document.add(new Paragraph(" ").setFontSize(4));
+        document.add(new Paragraph("Firma del empleado: ____________________").setFontSize(8).setMarginTop(5));
+        document.add(new Paragraph("Firma del responsable: __________________").setFontSize(8).setMarginTop(3));
     }
 
     private BigDecimal horas(Usuario user, LocalDate start, LocalDate end) {
@@ -130,7 +156,7 @@ public class NominaPdfService {
     }
 
     private void row(Table table, String label, String value) {
-        table.addCell(new Paragraph(label).setBold().setFontSize(7));
-        table.addCell(new Paragraph(value == null ? "-" : value).setFontSize(7));
+        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph(label).setBold().setFontSize(7)));
+        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph(value == null ? "-" : value).setFontSize(7)));
     }
 }

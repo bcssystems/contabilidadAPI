@@ -3,6 +3,8 @@ package com.bcsystems.contabilidad.controller;
 import com.bcsystems.contabilidad.dto.NominaRegisterRequest;
 import com.bcsystems.contabilidad.dto.NominaResponse;
 import com.bcsystems.contabilidad.dto.NominaUpdateRequest;
+import com.bcsystems.contabilidad.dto.NominaBatchRequest;
+import com.bcsystems.contabilidad.dto.NominaReviewRequest;
 import com.bcsystems.contabilidad.service.NominaService;
 import com.bcsystems.contabilidad.service.NominaPdfService;
 import org.springframework.data.domain.Page;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.bcsystems.contabilidad.domain.en.EstadoNomina;
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/nomina")
@@ -64,6 +67,21 @@ public class NominaController {
         return ResponseEntity.status(HttpStatus.OK).body(nominaService.findById(id));
     }
 
+    @PostMapping("/preparar-lote")
+    public ResponseEntity<?> prepararLote(@RequestBody NominaBatchRequest request) {
+        return ResponseEntity.ok(nominaService.prepararLote(request));
+    }
+
+    @PostMapping("/{id}/revisar")
+    public ResponseEntity<?> revisar(@PathVariable Long id, @RequestBody(required = false) NominaReviewRequest request) {
+        return ResponseEntity.ok(nominaService.revisar(id, request));
+    }
+
+    @PostMapping("/generar-lote")
+    public ResponseEntity<?> generarLote(@RequestBody(required = false) List<Long> ids) {
+        return ResponseEntity.ok(nominaService.generarLote(ids));
+    }
+
     @GetMapping("/{id}/desglose")
     public ResponseEntity<?> desgloseNomina(@PathVariable Long id) {
         return ResponseEntity.ok(nominaService.desgloseNomina(id));
@@ -74,6 +92,13 @@ public class NominaController {
         return ResponseEntity.ok().header("Content-Type", "application/pdf")
                 .header("Content-Disposition", "attachment; filename=nomina-" + id + ".pdf")
                 .body(nominaPdfService.generar(id));
+    }
+
+    @PostMapping("/lote/pdf")
+    public ResponseEntity<byte[]> pdfLote(@RequestBody List<Long> ids) {
+        return ResponseEntity.ok().header("Content-Type", "application/pdf")
+                .header("Content-Disposition", "attachment; filename=nominas-lote.pdf")
+                .body(nominaPdfService.generarLote(ids));
     }
 
     @PutMapping("/{id}")
