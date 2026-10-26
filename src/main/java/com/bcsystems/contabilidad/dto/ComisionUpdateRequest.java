@@ -14,6 +14,7 @@ public record ComisionUpdateRequest(
         BigDecimal porcentajeComision,
         BigDecimal montoComision,
         LocalDate fechaPago,
-        BigDecimal monto
+        BigDecimal monto,
+        LocalDate fechaComision
 ) {
 }

@@ -3,6 +3,7 @@ package com.bcsystems.contabilidad.controller;
 import com.bcsystems.contabilidad.dto.ComisionRegisterRequest;
 import com.bcsystems.contabilidad.dto.ComisionResponse;
 import com.bcsystems.contabilidad.dto.ComisionUpdateRequest;
+import com.bcsystems.contabilidad.dto.ComisionBatchRequest;
 import com.bcsystems.contabilidad.service.ComisionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +30,11 @@ public class ComisionController {
     @PostMapping
     public ResponseEntity<?> save(@RequestBody ComisionRegisterRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(comisionService.save(request));
+    }
+
+    @PostMapping("/lote")
+    public ResponseEntity<?> saveBatch(@RequestBody ComisionBatchRequest request) {
+        return ResponseEntity.status(HttpStatus.OK).body(comisionService.saveBatch(request));
     }
 
     @PostMapping("/generar-por-venta")

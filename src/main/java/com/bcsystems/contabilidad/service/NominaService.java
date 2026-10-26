@@ -17,6 +17,9 @@ import com.bcsystems.contabilidad.dto.NominaDesgloseResponse;
 import com.bcsystems.contabilidad.dto.NominaRegisterRequest;
 import com.bcsystems.contabilidad.dto.NominaResponse;
 import com.bcsystems.contabilidad.dto.NominaUpdateRequest;
+import com.bcsystems.contabilidad.dto.NominaBatchRequest;
+import com.bcsystems.contabilidad.dto.NominaBatchResponse;
+import com.bcsystems.contabilidad.dto.NominaReviewRequest;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.AsientoContableRepository;
 import com.bcsystems.contabilidad.repository.ComisionRepository;
@@ -36,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class NominaService {
@@ -74,16 +78,124 @@ public class NominaService {
     }
 
     @Transactional
+    public NominaBatchResponse prepararLote(NominaBatchRequest request) {
+        validarPeriodo(request.fechaInicio(), request.fechaFin());
+        LocalDate fechaPago = request.fechaPago() == null ? LocalDate.now() : request.fechaPago();
+        validarPeriodoSemanal(request.fechaInicio(), request.fechaFin(), fechaPago);
+        List<Nomina> nominas = new ArrayList<>();
+        for (Usuario usuario : usuarioRepository.findAll().stream().filter(u -> Boolean.TRUE.equals(u.getActivo())).toList()) {
+            try { asistenciaService.generateAttendanceDeductions(usuario.getIdUser(), request.fechaInicio(), request.fechaFin()); }
+            catch (NotFoundException ignored) { }
+            prestamoEmpleadoService.generarDeduccionesParaNomina(usuario.getIdUser(), request.fechaFin());
+            validarPeriodoNoPagado(usuario.getIdUser(), request.fechaInicio(), request.fechaFin());
+            Nomina nomina = nominaRepository.findFirstByUsuarioIdUserAndFechaInicioAndFechaFinAndEstadoIn(
+                    usuario.getIdUser(), request.fechaInicio(), request.fechaFin(),
+                    List.of(EstadoNomina.PENDIENTE_REVISION, EstadoNomina.REVISADA))
+                    .orElseGet(() -> nominaRepository.save(Nomina.builder()
+                            .fecha_nomina(fechaPago).fechaInicio(request.fechaInicio()).fechaFin(request.fechaFin())
+                            .sueldoBase(usuario.getSueldoSemanal()).sueldo(usuario.getSueldoSemanal())
+                            .totalComisiones(BigDecimal.ZERO).totalDeducciones(BigDecimal.ZERO)
+                     .estado(EstadoNomina.PENDIENTE_REVISION).usuario(usuario).build()));
+            if (nomina.getFecha_nomina() == null) nomina.setFecha_nomina(fechaPago);
+            if (nomina.getEstado() == EstadoNomina.PENDIENTE_REVISION) {
+                List<Comision> commissions = comisionRepository.findByUsuarioIdUser(usuario.getIdUser()).stream()
+                        .filter(item -> item.getNomina() == null && item.getEstadoComision() == com.bcsystems.contabilidad.domain.en.EstadoComision.PENDIENTE)
+                        .filter(item -> dentroDelPeriodo(item.getFechaComision(), request.fechaInicio(), request.fechaFin())).toList();
+                List<Deduccion> deductions = deduccionRepository.findByUsuarioIdUserAndEstadoIn(usuario.getIdUser(), List.of(EstadoDeduccion.PENDIENTE, EstadoDeduccion.APROBADA)).stream()
+                        .filter(item -> item.getNomina() == null && dentroDelPeriodo(item.getFecha(), request.fechaInicio(), request.fechaFin())).toList();
+                actualizarTotales(nomina, commissions, deductions);
+            }
+            nominas.add(nominaRepository.save(nomina));
+        }
+        return resumenLote(nominas);
+    }
+
+    @Transactional
+    public NominaResponse revisar(Long id, NominaReviewRequest request) {
+        Nomina nomina = nominaRepository.findById(id).orElseThrow(() -> new NotFoundException("Nómina no encontrada"));
+        if (nomina.getEstado() != EstadoNomina.PENDIENTE_REVISION && nomina.getEstado() != EstadoNomina.REVISADA) {
+            throw new IllegalArgumentException("La nómina ya no está disponible para revisión");
+        }
+        comisionRepository.findByNominaIdNomina(id).forEach(item -> { item.setNomina(null); comisionRepository.save(item); });
+        deduccionRepository.findByNominaIdNomina(id).forEach(item -> { item.setNomina(null); deduccionRepository.save(item); });
+        List<Long> commissionIds = request == null || request.comisionIds() == null ? List.of() : request.comisionIds();
+        List<Long> deductionIds = request == null || request.deduccionIds() == null ? List.of() : request.deduccionIds();
+        Set<Long> uniqueCommissionIds = Set.copyOf(commissionIds);
+        Set<Long> uniqueDeductionIds = Set.copyOf(deductionIds);
+        List<Comision> commissions = comisionRepository.findAllById(uniqueCommissionIds);
+        List<Deduccion> deductions = deduccionRepository.findAllById(uniqueDeductionIds);
+        if (commissions.size() != uniqueCommissionIds.size() || commissions.stream().anyMatch(item -> (item.getNomina() != null && !item.getNomina().getIdNomina().equals(nomina.getIdNomina())) || !belongsToPeriod(item.getUsuario(), nomina) || item.getEstadoComision() != com.bcsystems.contabilidad.domain.en.EstadoComision.PENDIENTE)) {
+            throw new IllegalArgumentException("Hay comisiones inválidas para esta nómina");
+        }
+        if (deductions.size() != uniqueDeductionIds.size() || deductions.stream().anyMatch(item -> (item.getNomina() != null && !item.getNomina().getIdNomina().equals(nomina.getIdNomina())) || !belongsToPeriod(item.getUsuario(), nomina) || !dentroDelPeriodo(item.getFecha(), nomina.getFechaInicio(), nomina.getFechaFin()) || !puedeAplicarse(item))) {
+            throw new IllegalArgumentException("Hay deducciones inválidas para esta nómina");
+        }
+        commissions.forEach(item -> { item.setNomina(nomina); comisionRepository.save(item); });
+        deductions.forEach(item -> { if (item.getOrigen() == OrigenDeduccion.ASISTENCIA && item.getEstado() == EstadoDeduccion.PENDIENTE) item.setEstado(EstadoDeduccion.APROBADA); item.setNomina(nomina); deduccionRepository.save(item); });
+        actualizarTotales(nomina, commissions, deductions);
+        nomina.setEstado(EstadoNomina.REVISADA);
+        return NominaResponse.fromEntity(nominaRepository.save(nomina));
+    }
+
+    @Transactional
+    public NominaBatchResponse generarLote(List<Long> ids) {
+        List<Nomina> nominas = ids == null || ids.isEmpty() ? nominaRepository.findAll() : nominaRepository.findAllById(ids);
+        if (nominas.stream().anyMatch(item -> item.getEstado() != EstadoNomina.REVISADA)) {
+            throw new IllegalArgumentException("Todas las nóminas seleccionadas deben estar revisadas");
+        }
+        if (nominas.isEmpty()) throw new IllegalArgumentException("No hay nóminas revisadas para generar");
+        List<Nomina> generated = nominas.stream().map(this::finalizarNomina).toList();
+        return resumenLote(generated);
+    }
+
+    private Nomina finalizarNomina(Nomina nomina) {
+        List<Comision> commissions = comisionRepository.findByNominaIdNomina(nomina.getIdNomina());
+        List<Deduccion> deductions = deduccionRepository.findByNominaIdNomina(nomina.getIdNomina());
+        BigDecimal commissionsTotal = commissions.stream().map(Comision::getMontoComision).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal deductionsTotal = deductions.stream().map(Deduccion::getMonto).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+        nomina.setTotalComisiones(commissionsTotal);
+        nomina.setTotalDeducciones(deductionsTotal);
+        nomina.setSueldo((nomina.getSueldoBase() == null ? BigDecimal.ZERO : nomina.getSueldoBase()).add(commissionsTotal).subtract(deductionsTotal));
+        nominaRepository.save(nomina);
+        comisionService.pagarComisionesPorNomina(commissions.stream().map(Comision::getIdComision).toList(), nomina);
+        deduccionService.aplicarDeduccionesPorNomina(deductions.stream().map(Deduccion::getIdDeduccion).toList(), nomina);
+        nomina.setEstado(EstadoNomina.GENERADA);
+        nomina.setAsientoContable(crearAsientoAutomaticoNomina(nomina));
+        return nominaRepository.save(nomina);
+    }
+
+    private boolean belongsToPeriod(Usuario usuario, Nomina nomina) {
+        return usuario != null && nomina.getUsuario() != null && usuario.getIdUser().equals(nomina.getUsuario().getIdUser());
+    }
+
+    private void actualizarTotales(Nomina nomina, List<?> commissions, List<?> deductions) {
+        BigDecimal commissionTotal = commissions.stream().map(item -> item instanceof Comision c ? c.getMontoComision() : BigDecimal.ZERO).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal deductionTotal = deductions.stream().map(item -> item instanceof Deduccion d ? d.getMonto() : BigDecimal.ZERO).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+        nomina.setTotalComisiones(commissionTotal); nomina.setTotalDeducciones(deductionTotal);
+        nomina.setSueldo((nomina.getSueldoBase() == null ? BigDecimal.ZERO : nomina.getSueldoBase()).add(commissionTotal).subtract(deductionTotal));
+    }
+
+    private NominaBatchResponse resumenLote(List<Nomina> nominas) {
+        BigDecimal base = nominas.stream().map(Nomina::getSueldoBase).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal commissions = nominas.stream().map(Nomina::getTotalComisiones).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal deductions = nominas.stream().map(Nomina::getTotalDeducciones).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return new NominaBatchResponse(nominas.stream().map(NominaResponse::fromEntity).toList(), base, commissions, deductions, base.add(commissions).subtract(deductions));
+    }
+
+    @Transactional
     public NominaResponse save(NominaRegisterRequest request) {
         if (request.usuarioId() == null) {
             throw new NotFoundException("Usuario requerido");
         }
         Usuario usuario = usuarioRepository.findById(request.usuarioId().intValue())
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
+        if (!Boolean.TRUE.equals(usuario.getActivo())) throw new IllegalArgumentException("No se puede generar nómina para un usuario inactivo");
         LocalDate fechaPago = request.fecha_nomina() != null ? request.fecha_nomina() : LocalDate.now();
         LocalDate fechaInicio = request.fechaInicio() != null ? request.fechaInicio() : fechaPago.minusDays(6);
         LocalDate fechaFin = request.fechaFin() != null ? request.fechaFin() : fechaPago;
         validarPeriodo(fechaInicio, fechaFin);
+        validarPeriodoSemanal(fechaInicio, fechaFin, fechaPago);
+        validarPeriodoNoPagado(usuario.getIdUser(), fechaInicio, fechaFin);
         asistenciaService.generateAttendanceDeductions(usuario.getIdUser(), fechaInicio, fechaFin);
         prestamoEmpleadoService.generarDeduccionesParaNomina(usuario.getIdUser(), fechaFin);
 
@@ -109,7 +221,8 @@ public class NominaService {
                 .forEach(d -> d.setEstado(EstadoDeduccion.APROBADA));
         List<Deduccion> deducciones = requestedDeductionIds.isEmpty()
                 ? disponibles.stream().filter(this::puedeAplicarse).toList()
-                : deduccionRepository.findAllById(requestedDeductionIds);
+                : deduccionRepository.findAllById(requestedDeductionIds).stream()
+                .filter(d -> dentroDelPeriodo(d.getFecha(), fechaInicio, fechaFin)).toList();
         if (deducciones.size() != requestedDeductionIds.stream().distinct().count() || deducciones.stream().anyMatch(d ->
                 d.getUsuario() == null || !d.getUsuario().getIdUser().equals(usuario.getIdUser()) || !puedeAplicarse(d))) {
             throw new IllegalArgumentException("Las deducciones seleccionadas no pertenecen al empleado, no están aprobadas o ya fueron aplicadas");
@@ -288,6 +401,7 @@ public class NominaService {
         LocalDate inicio = fechaInicio == null ? LocalDate.now().minusDays(6) : fechaInicio;
         LocalDate fin = fechaFin == null ? LocalDate.now() : fechaFin;
         validarPeriodo(inicio, fin);
+        validarPeriodoSemanal(inicio, fin, fin.plusDays(1));
 
         prestamoEmpleadoService.generarDeduccionesParaNomina(usuarioId, fin);
         try { asistenciaService.generateAttendanceDeductions(usuarioId, inicio, fin); } catch (NotFoundException ignored) { }
@@ -325,6 +439,28 @@ public class NominaService {
         if (inicio == null || fin == null || inicio.isAfter(fin)) {
             throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha final");
         }
+    }
+
+    private void validarPeriodoSemanal(LocalDate inicio, LocalDate fin, LocalDate pago) {
+        if (inicio.getDayOfWeek() != java.time.DayOfWeek.FRIDAY || fin.getDayOfWeek() != java.time.DayOfWeek.THURSDAY
+                || !fin.equals(inicio.plusDays(6)) || pago == null || !pago.equals(fin.plusDays(1))
+                || pago.getDayOfWeek() != java.time.DayOfWeek.FRIDAY) {
+            throw new IllegalArgumentException("La nómina debe cubrir de viernes a jueves y pagarse el viernes siguiente");
+        }
+    }
+
+    private void validarPeriodoNoPagado(Integer usuarioId, LocalDate inicio, LocalDate fin) {
+        validarPeriodoNoPagado(usuarioId, inicio, fin, null);
+    }
+
+    private void validarPeriodoNoPagado(Integer usuarioId, LocalDate inicio, LocalDate fin, Long excluirId) {
+        boolean overlaps = nominaRepository.findAll().stream()
+                .filter(item -> item.getUsuario() != null && item.getUsuario().getIdUser().equals(usuarioId))
+                .filter(item -> item.getEstado() == EstadoNomina.GENERADA)
+                .filter(item -> excluirId == null || !item.getIdNomina().equals(excluirId))
+                .anyMatch(item -> item.getFechaInicio() != null && item.getFechaFin() != null
+                        && !fin.isBefore(item.getFechaInicio()) && !inicio.isAfter(item.getFechaFin()));
+        if (overlaps) throw new IllegalArgumentException("El periodo contiene días de una nómina ya pagada para este empleado");
     }
 
     private boolean dentroDelPeriodo(LocalDate fecha, LocalDate inicio, LocalDate fin) {
