@@ -3,6 +3,7 @@ package com.bcsystems.contabilidad.service;
 import com.bcsystems.contabilidad.domain.MovimientoAlmacen;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
@@ -25,6 +26,7 @@ public class PdfGeneratorService {
 
             document.add(new Paragraph("COMPROBANTE DE SALIDA DE ALMACEN")
                     .setBold()
+                    .setFontColor(ColorConstants.BLACK)
                     .setFontSize(18)
                     .setTextAlignment(com.itextpdf.layout.properties.TextAlignment.CENTER));
             document.add(new Paragraph(""));
@@ -63,8 +65,8 @@ public class PdfGeneratorService {
     }
 
     private static void addRow(Table table, String label, String value) {
-        table.addCell(new Paragraph(label).setBold());
-        table.addCell(new Paragraph(value != null ? value : ""));
+        table.addCell(new Paragraph(label).setBold().setFontColor(ColorConstants.BLACK));
+        table.addCell(new Paragraph(value != null ? value : "").setFontColor(ColorConstants.BLACK));
     }
 
     private static String getNombreCompleto(com.bcsystems.contabilidad.domain.Usuario usuario) {

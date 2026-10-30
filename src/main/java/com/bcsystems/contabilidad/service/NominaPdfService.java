@@ -13,6 +13,7 @@ import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
@@ -53,7 +54,7 @@ public class NominaPdfService {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try (PdfDocument pdf = new PdfDocument(new PdfWriter(output))) {
             Document document = new Document(pdf, new PageSize(WIDTH, 560));
-             document.setMargins(5, 8, 5, 8);
+            document.setMargins(5, 8, 5, 8);
             for (int copy = 0; copy < 2; copy++) {
                 if (copy > 0) document.add(new AreaBreak(new PageSize(WIDTH, 560)));
                 addReceipt(document, nomina);
@@ -93,8 +94,8 @@ public class NominaPdfService {
                 ? String.join(" ", user.getPersona().getNombre(), user.getPersona().getPrimerApellido(),
                 user.getPersona().getSegundoApellido() == null ? "" : user.getPersona().getSegundoApellido()).trim()
                 : user == null ? "General" : user.getUsername();
-        document.add(new Paragraph("NOMINA").setBold().setFontSize(14).setTextAlignment(TextAlignment.CENTER));
-        document.add(new Paragraph("Copia idéntica").setFontSize(7).setTextAlignment(TextAlignment.CENTER));
+        document.add(new Paragraph("NOMINA").setBold().setFontColor(ColorConstants.BLACK).setFontSize(14).setTextAlignment(TextAlignment.CENTER));
+        document.add(new Paragraph("Copia idéntica").setFontColor(ColorConstants.BLACK).setFontSize(7).setTextAlignment(TextAlignment.CENTER));
         Table data = new Table(UnitValue.createPercentArray(new float[]{42, 58})).useAllAvailableWidth();
         row(data, "Nombre", name);
         row(data, "Puesto", user != null && user.getPosition() != null ? user.getPosition().name() : "-");
@@ -109,7 +110,7 @@ public class NominaPdfService {
         row(data, "SALDO NETO", money(nomina.getSueldo()));
         document.add(data);
 
-        document.add(new Paragraph("DESGLOSE DE PERCEPCIONES").setBold().setFontSize(8).setMarginTop(8));
+        document.add(new Paragraph("DESGLOSE DE PERCEPCIONES").setBold().setFontColor(ColorConstants.BLACK).setFontSize(8).setMarginTop(8));
         Table perceptions = new Table(UnitValue.createPercentArray(new float[]{72, 28})).useAllAvailableWidth();
         row(perceptions, "Sueldo base", money(nomina.getSueldoBase()));
         for (Comision commission : comisionRepository.findByNominaIdNomina(nomina.getIdNomina())) {
@@ -119,7 +120,7 @@ public class NominaPdfService {
         }
         document.add(perceptions);
 
-        document.add(new Paragraph("DESGLOSE DE DEDUCCIONES").setBold().setFontSize(8).setMarginTop(6));
+        document.add(new Paragraph("DESGLOSE DE DEDUCCIONES").setBold().setFontColor(ColorConstants.BLACK).setFontSize(8).setMarginTop(6));
         Table deductions = new Table(UnitValue.createPercentArray(new float[]{72, 28})).useAllAvailableWidth();
         var deductionsList = deduccionRepository.findByNominaIdNomina(nomina.getIdNomina());
         if (deductionsList.isEmpty()) {
@@ -131,8 +132,8 @@ public class NominaPdfService {
             }
         }
         document.add(deductions);
-        document.add(new Paragraph("Firma del empleado: ____________________").setFontSize(8).setMarginTop(5));
-        document.add(new Paragraph("Firma del responsable: __________________").setFontSize(8).setMarginTop(3));
+        document.add(new Paragraph("Firma del empleado: ____________________").setBold().setFontColor(ColorConstants.BLACK).setFontSize(8).setMarginTop(5));
+        document.add(new Paragraph("Firma del responsable: __________________").setBold().setFontColor(ColorConstants.BLACK).setFontSize(8).setMarginTop(3));
     }
 
     private BigDecimal horas(Usuario user, LocalDate start, LocalDate end) {
@@ -156,7 +157,7 @@ public class NominaPdfService {
     }
 
     private void row(Table table, String label, String value) {
-        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph(label).setBold().setFontSize(7)));
-        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph(value == null ? "-" : value).setFontSize(7)));
+        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph(label).setBold().setFontColor(ColorConstants.BLACK).setFontSize(7)));
+        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph(value == null ? "-" : value).setFontColor(ColorConstants.BLACK).setFontSize(7)));
     }
 }
