@@ -3,6 +3,7 @@ package com.bcsystems.contabilidad.controller;
 import com.bcsystems.contabilidad.dto.DeduccionRegisterRequest;
 import com.bcsystems.contabilidad.dto.DeduccionResponse;
 import com.bcsystems.contabilidad.dto.DeduccionUpdateRequest;
+import com.bcsystems.contabilidad.dto.DeduccionBatchRequest;
 import com.bcsystems.contabilidad.service.DeduccionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +29,11 @@ public class DeduccionController {
     @PostMapping
     public ResponseEntity<?> save(@RequestBody DeduccionRegisterRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(deduccionService.save(request));
+    }
+
+    @PostMapping("/lote")
+    public ResponseEntity<?> saveBatch(@RequestBody DeduccionBatchRequest request) {
+        return ResponseEntity.status(HttpStatus.OK).body(deduccionService.saveBatch(request));
     }
 
     @GetMapping

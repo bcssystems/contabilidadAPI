@@ -14,6 +14,7 @@ import com.bcsystems.contabilidad.domain.en.TipoDeduccion;
 import com.bcsystems.contabilidad.dto.DeduccionRegisterRequest;
 import com.bcsystems.contabilidad.dto.DeduccionResponse;
 import com.bcsystems.contabilidad.dto.DeduccionUpdateRequest;
+import com.bcsystems.contabilidad.dto.DeduccionBatchRequest;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.repository.CorteCajaRepository;
 import com.bcsystems.contabilidad.repository.DeduccionRepository;
@@ -65,6 +66,14 @@ public class DeduccionService {
         }
 
         return deduccionRepository.save(deduccion);
+    }
+
+    @Transactional
+    public List<Deduccion> saveBatch(DeduccionBatchRequest request) {
+        if (request == null || request.deducciones() == null || request.deducciones().isEmpty()) {
+            throw new IllegalArgumentException("Agrega al menos una deducción");
+        }
+        return request.deducciones().stream().map(this::save).toList();
     }
 
     public Page<DeduccionResponse> findAllPageable(PageRequest pageRequest) {
