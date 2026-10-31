@@ -443,9 +443,8 @@ public class NominaService {
 
     private void validarPeriodoSemanal(LocalDate inicio, LocalDate fin, LocalDate pago) {
         if (inicio.getDayOfWeek() != java.time.DayOfWeek.FRIDAY || fin.getDayOfWeek() != java.time.DayOfWeek.THURSDAY
-                || !fin.equals(inicio.plusDays(6)) || pago == null || !pago.equals(fin.plusDays(1))
-                || pago.getDayOfWeek() != java.time.DayOfWeek.FRIDAY) {
-            throw new IllegalArgumentException("La nómina debe cubrir de viernes a jueves y pagarse el viernes siguiente");
+                || !fin.equals(inicio.plusDays(6)) || pago == null || pago.isBefore(fin.plusDays(1))) {
+            throw new IllegalArgumentException("La nómina debe cubrir de viernes a jueves y pagarse a partir del viernes siguiente");
         }
     }
 
