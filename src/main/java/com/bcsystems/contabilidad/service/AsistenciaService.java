@@ -250,7 +250,7 @@ public class AsistenciaService {
         return justificaciones.save(justification);
     }
 
-    @Transactional
+    @Transactional(noRollbackFor = NotFoundException.class)
     public List<DeduccionResponse> generateAttendanceDeductions(Integer usuarioId, LocalDate start, LocalDate end) {
         if (usuarioId == null || start == null || end == null || start.isAfter(end)) {
             throw new IllegalArgumentException("Usuario y rango de fechas validos son requeridos");
