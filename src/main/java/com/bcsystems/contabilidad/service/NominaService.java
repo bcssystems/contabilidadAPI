@@ -124,7 +124,11 @@ public class NominaService {
         Set<Long> uniqueDeductionIds = Set.copyOf(deductionIds);
         List<Comision> commissions = comisionRepository.findAllById(uniqueCommissionIds);
         List<Deduccion> deductions = deduccionRepository.findAllById(uniqueDeductionIds);
-        if (commissions.size() != uniqueCommissionIds.size() || commissions.stream().anyMatch(item -> (item.getNomina() != null && !item.getNomina().getIdNomina().equals(nomina.getIdNomina())) || !belongsToPeriod(item.getUsuario(), nomina) || item.getEstadoComision() != com.bcsystems.contabilidad.domain.en.EstadoComision.PENDIENTE)) {
+        if (commissions.size() != uniqueCommissionIds.size() || commissions.stream().anyMatch(item ->
+                (item.getNomina() != null && !item.getNomina().getIdNomina().equals(nomina.getIdNomina()))
+                        || !belongsToPeriod(item.getUsuario(), nomina)
+                        || !dentroDelPeriodo(item.getFechaComision(), nomina.getFechaInicio(), nomina.getFechaFin())
+                        || item.getEstadoComision() != com.bcsystems.contabilidad.domain.en.EstadoComision.PENDIENTE)) {
             throw new IllegalArgumentException("Hay comisiones inválidas para esta nómina");
         }
         if (deductions.size() != uniqueDeductionIds.size() || deductions.stream().anyMatch(item -> (item.getNomina() != null && !item.getNomina().getIdNomina().equals(nomina.getIdNomina())) || !belongsToPeriod(item.getUsuario(), nomina) || !dentroDelPeriodo(item.getFecha(), nomina.getFechaInicio(), nomina.getFechaFin()) || !puedeAplicarse(item))) {
@@ -139,11 +143,17 @@ public class NominaService {
 
     @Transactional
     public NominaBatchResponse generarLote(List<Long> ids) {
-        List<Nomina> nominas = ids == null || ids.isEmpty() ? nominaRepository.findAll() : nominaRepository.findAllById(ids);
+        if (ids == null || ids.isEmpty()) {
+            throw new IllegalArgumentException("Selecciona al menos una nómina revisada para generar");
+        }
+        Set<Long> uniqueIds = Set.copyOf(ids);
+        List<Nomina> nominas = nominaRepository.findAllById(uniqueIds);
+        if (nominas.size() != uniqueIds.size()) {
+            throw new IllegalArgumentException("Una o más nóminas seleccionadas no existen");
+        }
         if (nominas.stream().anyMatch(item -> item.getEstado() != EstadoNomina.REVISADA)) {
             throw new IllegalArgumentException("Todas las nóminas seleccionadas deben estar revisadas");
         }
-        if (nominas.isEmpty()) throw new IllegalArgumentException("No hay nóminas revisadas para generar");
         List<Nomina> generated = nominas.stream().map(this::finalizarNomina).toList();
         return resumenLote(generated);
     }
@@ -151,6 +161,16 @@ public class NominaService {
     private Nomina finalizarNomina(Nomina nomina) {
         List<Comision> commissions = comisionRepository.findByNominaIdNomina(nomina.getIdNomina());
         List<Deduccion> deductions = deduccionRepository.findByNominaIdNomina(nomina.getIdNomina());
+        if (commissions.stream().anyMatch(item -> !belongsToPeriod(item.getUsuario(), nomina)
+                || item.getEstadoComision() != com.bcsystems.contabilidad.domain.en.EstadoComision.PENDIENTE
+                || !dentroDelPeriodo(item.getFechaComision(), nomina.getFechaInicio(), nomina.getFechaFin()))) {
+            throw new IllegalArgumentException("La nómina contiene comisiones inválidas o fuera del periodo");
+        }
+        if (deductions.stream().anyMatch(item -> !belongsToPeriod(item.getUsuario(), nomina)
+                || !puedeAplicarse(item)
+                || !dentroDelPeriodo(item.getFecha(), nomina.getFechaInicio(), nomina.getFechaFin()))) {
+            throw new IllegalArgumentException("La nómina contiene deducciones inválidas o fuera del periodo");
+        }
         BigDecimal commissionsTotal = commissions.stream().map(Comision::getMontoComision).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal deductionsTotal = deductions.stream().map(Deduccion::getMonto).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
         nomina.setTotalComisiones(commissionsTotal);
@@ -199,32 +219,34 @@ public class NominaService {
         asistenciaService.generateAttendanceDeductions(usuario.getIdUser(), fechaInicio, fechaFin);
         prestamoEmpleadoService.generarDeduccionesParaNomina(usuario.getIdUser(), fechaFin);
 
-        List<Long> requestedComisionIds = request.comisionIds() == null ? List.of() : request.comisionIds();
-        List<Comision> comisiones = requestedComisionIds.isEmpty()
-                ? comisionService.findPendientesByUsuario(usuario.getIdUser().longValue())
-                : comisionRepository.findAllById(requestedComisionIds);
-        comisiones = comisiones.stream().filter(c -> dentroDelPeriodo(c.getFechaComision(), fechaInicio, fechaFin)).toList();
-        if (comisiones.size() != requestedComisionIds.stream().distinct().count() || comisiones.stream().anyMatch(c ->
-                c.getUsuario() == null || !c.getUsuario().getIdUser().equals(usuario.getIdUser()) || c.getEstadoComision() != com.bcsystems.contabilidad.domain.en.EstadoComision.PENDIENTE)) {
+        // Las listas representan una selección explícita. Una lista vacía significa
+        // que no se seleccionó ningún concepto, no que deban incluirse todos.
+        Set<Long> requestedComisionIds = request.comisionIds() == null
+                ? Set.of() : Set.copyOf(request.comisionIds());
+        List<Comision> comisiones = comisionRepository.findAllById(requestedComisionIds).stream()
+                .filter(c -> dentroDelPeriodo(c.getFechaComision(), fechaInicio, fechaFin)).toList();
+        if (comisiones.size() != requestedComisionIds.size() || comisiones.stream().anyMatch(c ->
+                c.getUsuario() == null || !c.getUsuario().getIdUser().equals(usuario.getIdUser())
+                        || c.getNomina() != null
+                        || c.getEstadoComision() != com.bcsystems.contabilidad.domain.en.EstadoComision.PENDIENTE)) {
             throw new IllegalArgumentException("Las comisiones seleccionadas no pertenecen al empleado o ya fueron aplicadas");
         }
 
         List<Deduccion> disponibles = deduccionRepository.findByUsuarioIdUserAndEstadoIn(usuario.getIdUser(),
                 List.of(EstadoDeduccion.PENDIENTE, EstadoDeduccion.APROBADA));
         disponibles = disponibles.stream().filter(d -> dentroDelPeriodo(d.getFecha(), fechaInicio, fechaFin)).toList();
-        List<Long> requestedDeductionIds = request.deduccionIds() == null ? List.of() : request.deduccionIds();
-        boolean includeAllDeductions = requestedDeductionIds.isEmpty();
+        Set<Long> requestedDeductionIds = request.deduccionIds() == null
+                ? Set.of() : Set.copyOf(request.deduccionIds());
         disponibles.stream()
-                .filter(d -> (includeAllDeductions || requestedDeductionIds.contains(d.getIdDeduccion()))
+                .filter(d -> requestedDeductionIds.contains(d.getIdDeduccion())
                         && d.getEstado() == EstadoDeduccion.PENDIENTE
                         && d.getOrigen() == OrigenDeduccion.ASISTENCIA)
                 .forEach(d -> d.setEstado(EstadoDeduccion.APROBADA));
-        List<Deduccion> deducciones = requestedDeductionIds.isEmpty()
-                ? disponibles.stream().filter(this::puedeAplicarse).toList()
-                : deduccionRepository.findAllById(requestedDeductionIds).stream()
+        List<Deduccion> deducciones = deduccionRepository.findAllById(requestedDeductionIds).stream()
                 .filter(d -> dentroDelPeriodo(d.getFecha(), fechaInicio, fechaFin)).toList();
-        if (deducciones.size() != requestedDeductionIds.stream().distinct().count() || deducciones.stream().anyMatch(d ->
-                d.getUsuario() == null || !d.getUsuario().getIdUser().equals(usuario.getIdUser()) || !puedeAplicarse(d))) {
+        if (deducciones.size() != requestedDeductionIds.size() || deducciones.stream().anyMatch(d ->
+                d.getUsuario() == null || !d.getUsuario().getIdUser().equals(usuario.getIdUser())
+                        || d.getNomina() != null || !puedeAplicarse(d))) {
             throw new IllegalArgumentException("Las deducciones seleccionadas no pertenecen al empleado, no están aprobadas o ya fueron aplicadas");
         }
         List<Long> deductionIdsToApply = deducciones.stream().map(Deduccion::getIdDeduccion).toList();
