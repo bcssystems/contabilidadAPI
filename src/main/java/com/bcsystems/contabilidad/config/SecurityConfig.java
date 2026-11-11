@@ -94,7 +94,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/almacen/salida-pdf/**").authenticated()
                                 .requestMatchers("/api/v1/almacen/**").authenticated()
                                   .requestMatchers("/api/v1/usuarios/**").hasRole("ADMIN")
-                                   .requestMatchers("/api/v1/empleado/**", "/api/v1/nomina/**", "/api/v1/deduccion/**", "/api/v1/comision/**").hasRole("ADMIN")
+                                    .requestMatchers("/api/v1/empleado/**", "/api/v1/nomina/**", "/api/v1/deduccion/**", "/api/v1/deduccion-fija/**", "/api/v1/comision/**").hasRole("ADMIN")
                                    .requestMatchers("/api/v1/horarios/**", "/api/v1/puntos-geograficos/**", "/api/v1/configuracion/asistencia").hasRole("ADMIN")
                                   .requestMatchers("/api/v1/empleados/*/horario").hasRole("ADMIN")
                                   .requestMatchers("/api/v1/asistencias/evidencias/pendientes", "/api/v1/asistencias/evidencias/*/aprobar", "/api/v1/asistencias/evidencias/*/rechazar", "/api/v1/justificaciones/pendientes", "/api/v1/justificaciones/*/aprobar", "/api/v1/justificaciones/*/rechazar").hasRole("ADMIN")

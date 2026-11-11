@@ -6,5 +6,6 @@ public enum TipoDeduccion {
     FALTA,
     ASISTENCIA,
     MANUAL,
-    PRESTAMO
+    PRESTAMO,
+    FIJA
 }

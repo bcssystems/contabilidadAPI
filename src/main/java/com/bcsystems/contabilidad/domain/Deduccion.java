@@ -16,7 +16,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "deduccion")
+@Table(name = "deduccion", uniqueConstraints = @UniqueConstraint(
+        name = "uk_deduccion_fija_periodo",
+        columnNames = {"deduccion_fija_id", "id_usuario", "periodo_inicio", "periodo_fin"}))
 public class Deduccion {
 
     @Id
@@ -62,4 +64,12 @@ public class Deduccion {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "prestamo_parcialidad_id", unique = true)
     private PrestamoParcialidad prestamoParcialidad;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinColumn(name = "deduccion_fija_id")
+    private DeduccionFija deduccionFija;
+
+    private LocalDate periodoInicio;
+    private LocalDate periodoFin;
 }

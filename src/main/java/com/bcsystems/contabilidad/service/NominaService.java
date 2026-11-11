@@ -54,6 +54,7 @@ public class NominaService {
     private final DeduccionService deduccionService;
     private final AsistenciaService asistenciaService;
     private final PrestamoEmpleadoService prestamoEmpleadoService;
+    private final DeduccionFijaService deduccionFijaService;
 
     public NominaService(NominaRepository nominaRepository,
                          UsuarioRepository usuarioRepository,
@@ -64,7 +65,8 @@ public class NominaService {
                          ComisionService comisionService,
                          DeduccionService deduccionService,
                          AsistenciaService asistenciaService,
-                         PrestamoEmpleadoService prestamoEmpleadoService) {
+                         PrestamoEmpleadoService prestamoEmpleadoService,
+                         DeduccionFijaService deduccionFijaService) {
         this.nominaRepository = nominaRepository;
         this.usuarioRepository = usuarioRepository;
         this.asientoContableRepository = asientoContableRepository;
@@ -75,6 +77,7 @@ public class NominaService {
         this.deduccionService = deduccionService;
         this.asistenciaService = asistenciaService;
         this.prestamoEmpleadoService = prestamoEmpleadoService;
+        this.deduccionFijaService = deduccionFijaService;
     }
 
     @Transactional
@@ -87,6 +90,7 @@ public class NominaService {
             try { asistenciaService.generateAttendanceDeductions(usuario.getIdUser(), request.fechaInicio(), request.fechaFin()); }
             catch (NotFoundException ignored) { }
             prestamoEmpleadoService.generarDeduccionesParaNomina(usuario.getIdUser(), request.fechaFin());
+            deduccionFijaService.generarParaNomina(usuario, request.fechaInicio(), request.fechaFin());
             validarPeriodoNoPagado(usuario.getIdUser(), request.fechaInicio(), request.fechaFin());
             Nomina nomina = nominaRepository.findFirstByUsuarioIdUserAndFechaInicioAndFechaFinAndEstadoIn(
                     usuario.getIdUser(), request.fechaInicio(), request.fechaFin(),
@@ -218,6 +222,7 @@ public class NominaService {
         validarPeriodoNoPagado(usuario.getIdUser(), fechaInicio, fechaFin);
         asistenciaService.generateAttendanceDeductions(usuario.getIdUser(), fechaInicio, fechaFin);
         prestamoEmpleadoService.generarDeduccionesParaNomina(usuario.getIdUser(), fechaFin);
+        deduccionFijaService.generarParaNomina(usuario, fechaInicio, fechaFin);
 
         // Las listas representan una selección explícita. Una lista vacía significa
         // que no se seleccionó ningún concepto, no que deban incluirse todos.
@@ -426,6 +431,7 @@ public class NominaService {
         validarPeriodoSemanal(inicio, fin, fin.plusDays(1));
 
         prestamoEmpleadoService.generarDeduccionesParaNomina(usuarioId, fin);
+        deduccionFijaService.generarParaNomina(usuario, inicio, fin);
         try { asistenciaService.generateAttendanceDeductions(usuarioId, inicio, fin); } catch (NotFoundException ignored) { }
 
         List<ComisionResponse> comisiones = comisionService.findPendientesByUsuario(usuarioId.longValue())
