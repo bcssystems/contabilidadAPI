@@ -21,6 +21,9 @@ public class MakerFilamento {
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal precioKilo;
 
+    @Column(nullable = false, precision = 12, scale = 3)
+    private BigDecimal stockKg;
+
     @Column(length = 100)
     private String marca;
 

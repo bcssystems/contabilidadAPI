@@ -80,6 +80,9 @@ public class AuthController {
         if (accessToken == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         try {
             String username = tokenService.extractUsername(accessToken);
+            if (!Boolean.TRUE.equals(usuarioService.findByUsername(username).get().getActivo())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
             return ResponseEntity.ok(usuarioService.findByUsernameDetailed(username));
         } catch (RuntimeException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

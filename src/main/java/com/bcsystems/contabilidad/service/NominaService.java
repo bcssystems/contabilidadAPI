@@ -117,6 +117,7 @@ public class NominaService {
     @Transactional
     public NominaResponse revisar(Long id, NominaReviewRequest request) {
         Nomina nomina = nominaRepository.findById(id).orElseThrow(() -> new NotFoundException("Nómina no encontrada"));
+        requireActiveUser(nomina.getUsuario());
         if (nomina.getEstado() != EstadoNomina.PENDIENTE_REVISION && nomina.getEstado() != EstadoNomina.REVISADA) {
             throw new IllegalArgumentException("La nómina ya no está disponible para revisión");
         }
@@ -158,11 +159,13 @@ public class NominaService {
         if (nominas.stream().anyMatch(item -> item.getEstado() != EstadoNomina.REVISADA)) {
             throw new IllegalArgumentException("Todas las nóminas seleccionadas deben estar revisadas");
         }
+        nominas.forEach(item -> requireActiveUser(item.getUsuario()));
         List<Nomina> generated = nominas.stream().map(this::finalizarNomina).toList();
         return resumenLote(generated);
     }
 
     private Nomina finalizarNomina(Nomina nomina) {
+        requireActiveUser(nomina.getUsuario());
         List<Comision> commissions = comisionRepository.findByNominaIdNomina(nomina.getIdNomina());
         List<Deduccion> deductions = deduccionRepository.findByNominaIdNomina(nomina.getIdNomina());
         if (commissions.stream().anyMatch(item -> !belongsToPeriod(item.getUsuario(), nomina)
@@ -190,6 +193,12 @@ public class NominaService {
 
     private boolean belongsToPeriod(Usuario usuario, Nomina nomina) {
         return usuario != null && nomina.getUsuario() != null && usuario.getIdUser().equals(nomina.getUsuario().getIdUser());
+    }
+
+    private void requireActiveUser(Usuario usuario) {
+        if (usuario == null || !Boolean.TRUE.equals(usuario.getActivo())) {
+            throw new IllegalArgumentException("No se puede operar la nómina de un usuario inactivo");
+        }
     }
 
     private void actualizarTotales(Nomina nomina, List<?> commissions, List<?> deductions) {
@@ -425,6 +434,7 @@ public class NominaService {
     public NominaDesgloseResponse desglose(Integer usuarioId, LocalDate fechaInicio, LocalDate fechaFin) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
+        requireActiveUser(usuario);
         LocalDate inicio = fechaInicio == null ? LocalDate.now().minusDays(6) : fechaInicio;
         LocalDate fin = fechaFin == null ? LocalDate.now() : fechaFin;
         validarPeriodo(inicio, fin);
