@@ -8,6 +8,8 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -20,13 +22,15 @@ public class MakerWorkspaceService {
     private final MakerTareaRepository taskRepository;
     private final MakerNotificacionRepository notificationRepository;
     private final MakerCotizacionRepository quoteRepository;
+    private final MakerFilamentoRepository filamentRepository;
     private final UsuarioRepository userRepository;
 
     public MakerWorkspaceService(MakerProyectoRepository projectRepository, MakerTareaRepository taskRepository,
                                  MakerNotificacionRepository notificationRepository, MakerCotizacionRepository quoteRepository,
-                                 UsuarioRepository userRepository) {
+                                 MakerFilamentoRepository filamentRepository, UsuarioRepository userRepository) {
         this.projectRepository = projectRepository; this.taskRepository = taskRepository;
-        this.notificationRepository = notificationRepository; this.quoteRepository = quoteRepository; this.userRepository = userRepository;
+        this.notificationRepository = notificationRepository; this.quoteRepository = quoteRepository;
+        this.filamentRepository = filamentRepository; this.userRepository = userRepository;
     }
 
     public List<MakerUserResponse> users() { return userRepository.findByActivoTrue().stream().map(u -> new MakerUserResponse(u.getIdUser(), u.getUsername())).toList(); }
@@ -46,6 +50,7 @@ public class MakerWorkspaceService {
         if (request.cotizacionId() != null) project.setCotizacion(quoteRepository.findById(request.cotizacionId()).orElseThrow(() -> new NotFoundException("Cotización no encontrada")));
         else project.setCotizacion(null);
         project.getAsignados().clear(); project.getAsignados().addAll(resolveUsers(request.usuarioIds()));
+        if ("PRODUCCION".equals(project.getEstado())) consumeFilamentForProduction(project);
         MakerProyecto saved = projectRepository.save(project);
         if (saved.getCotizacion() != null) { saved.getCotizacion().setProyecto(saved); quoteRepository.save(saved.getCotizacion()); }
         notifyUsers(saved.getAsignados(), "Proyecto asignado", "Fuiste asignado al proyecto: " + saved.getNombre(), "PROYECTO", saved.getId(), actor);
@@ -103,6 +108,36 @@ public class MakerWorkspaceService {
     private void validate(String state, String priority, Set<String> validStates) { if (!validStates.contains(normalize(state))) throw new IllegalArgumentException("Estado no válido"); if (!PRIORITIES.contains(normalize(priority))) throw new IllegalArgumentException("Prioridad no válida"); }
     private String normalize(String value) { return value == null ? "" : value.trim().toUpperCase(Locale.ROOT).replace(' ', '_'); }
     private List<Usuario> resolveUsers(List<Integer> ids) { return ids == null ? new ArrayList<>() : userRepository.findAllById(ids); }
+
+    private void consumeFilamentForProduction(MakerProyecto project) {
+        if (Boolean.TRUE.equals(project.getFilamentoDescontado()) || project.getCotizacion() == null) return;
+        MakerCotizacion quote = project.getCotizacion();
+        if (quote.getFilamentos() == null || quote.getFilamentos().isEmpty()) return;
+        Map<Integer, BigDecimal> requiredKg = new HashMap<>();
+        BigDecimal net = quote.getGramosNetos() == null ? BigDecimal.ZERO : quote.getGramosNetos();
+        BigDecimal waste = quote.getGramosMerma() == null ? BigDecimal.ZERO : quote.getGramosMerma();
+        for (MakerCotizacionFilamento line : quote.getFilamentos()) {
+            if (line.getFilamento() == null) continue;
+            BigDecimal lineWaste = net.signum() == 0 ? BigDecimal.ZERO : waste.multiply(line.getGramos()).divide(net, 6, RoundingMode.HALF_UP);
+            BigDecimal kilograms = line.getGramos().add(lineWaste).divide(BigDecimal.valueOf(1000), 6, RoundingMode.HALF_UP);
+            requiredKg.merge(line.getFilamento().getId(), kilograms, BigDecimal::add);
+        }
+        Map<Integer, MakerFilamento> filaments = new HashMap<>();
+        for (Map.Entry<Integer, BigDecimal> entry : requiredKg.entrySet()) {
+            MakerFilamento filament = filamentRepository.findById(entry.getKey()).orElseThrow(() -> new NotFoundException("Filamento de la cotización no encontrado"));
+            BigDecimal available = filament.getStockKg() == null ? BigDecimal.ZERO : filament.getStockKg();
+            if (available.compareTo(entry.getValue()) < 0) {
+                throw new IllegalArgumentException("Stock insuficiente de filamento " + filament.getNombre() + ". Disponible: " + available + " kg; requerido: " + entry.getValue() + " kg");
+            }
+            filaments.put(entry.getKey(), filament);
+        }
+        requiredKg.forEach((id, amount) -> {
+            MakerFilamento filament = filaments.get(id);
+            filament.setStockKg(filament.getStockKg().subtract(amount).setScale(3, RoundingMode.HALF_UP));
+            filamentRepository.save(filament);
+        });
+        project.setFilamentoDescontado(true);
+    }
 
     private void notifyUsers(List<Usuario> users, String title, String message, String referenceType, Integer referenceId, String actor) {
         Set<Integer> unique = new HashSet<>();

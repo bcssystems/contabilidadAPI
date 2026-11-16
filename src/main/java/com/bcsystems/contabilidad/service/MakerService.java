@@ -90,6 +90,7 @@ public class MakerService {
                 .orElseThrow(() -> new NotFoundException("Filamento no encontrado"));
         filament.setNombre(request.nombre().trim()); filament.setMaterial(material);
         filament.setPrecioKilo(request.precioKilo()); filament.setMarca(blankToNull(request.marca()));
+        filament.setStockKg(request.stockKg() == null ? BigDecimal.ZERO : request.stockKg().setScale(3, ROUNDING));
         filament.setColor(blankToNull(request.color())); filament.setActivo(request.activo() == null || request.activo());
         return filamentResponse(filamentoRepository.save(filament));
     }
@@ -205,7 +206,7 @@ public class MakerService {
     private BigDecimal config(String key) { return configRepository.findByClave(key).map(MakerConfiguracion::getValor).orElse(BigDecimal.ZERO); }
     private String nextFolio() { return "MK-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")); }
     private String blankToNull(String value) { return value == null || value.isBlank() ? null : value.trim(); }
-    private MakerCatalogResponse filamentResponse(MakerFilamento f) { return new MakerCatalogResponse(f.getId(), f.getNombre(), f.getMaterial().getNombre(), f.getMaterial().getId(), f.getPrecioKilo(), f.getMarca(), f.getColor(), f.getActivo()); }
+    private MakerCatalogResponse filamentResponse(MakerFilamento f) { return new MakerCatalogResponse(f.getId(), f.getNombre(), f.getMaterial().getNombre(), f.getMaterial().getId(), f.getPrecioKilo(), f.getStockKg(), f.getMarca(), f.getColor(), f.getActivo()); }
 
     private MakerResponse response(MakerCotizacion q) {
         return new MakerResponse(q.getId(), q.getFolio(), q.getFecha(), q.getUsuario() == null ? null : q.getUsuario().getUsername(), q.getDescripcion(), q.getModo(), q.getGramosNetos(), q.getGramosMerma(), q.getGramosTotales(), q.getHorasImpresion(), q.getPiezasPorCama(), q.getConsumoKw(), q.getCostoKwh(), q.getCostoMaterial(), q.getCostoElectricidad(), q.getCostoExtras(), q.getCostoCama(), q.getCostoPieza(), q.getTipoPrecio(), q.getMargen(), q.getPrecioCama(), q.getPrecioPieza(), q.getFilamentos().stream().map(f -> new MakerResponse.MakerFilamentoResponse(f.getNombreFilamento(), f.getMaterial(), f.getMarca(), f.getColor(), f.getGramos(), f.getPrecioKilo(), f.getCosto())).toList(), q.getExtras().stream().map(e -> new MakerResponse.MakerExtraResponse(e.getNombre(), e.getCantidad(), e.getPrecioUnitario(), e.getImporte())).toList(), q.getPrecioCamaFinal(), q.getPrecioPiezaFinal());

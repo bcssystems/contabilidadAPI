@@ -38,6 +38,10 @@ public class MakerProyecto {
     @Column(nullable = false, updatable = false)
     private LocalDateTime fechaCreacion;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean filamentoDescontado = false;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
     private Usuario creador;
