@@ -9,6 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -74,6 +76,17 @@ public class MakerController {
 
     @GetMapping("/cotizaciones/{id}")
     public ResponseEntity<MakerResponse> cotizacion(@PathVariable Integer id) { return ResponseEntity.ok(service.quote(id)); }
+
+    @PutMapping("/cotizaciones/{id}")
+    public ResponseEntity<MakerResponse> actualizarCotizacion(@PathVariable Integer id, @Valid @RequestBody MakerCotizacionRequest request) {
+        return ResponseEntity.ok(service.updateQuote(id, request));
+    }
+
+    @GetMapping(value = "/cotizaciones/{id}/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> pdfCotizacion(@PathVariable Integer id) {
+        byte[] pdf = service.quotePdf(id);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=cotizacion-" + id + ".pdf").body(pdf);
+    }
 
     @DeleteMapping("/cotizaciones/{id}")
     public ResponseEntity<?> eliminarCotizacion(@PathVariable Integer id) { service.deleteQuote(id); return ResponseEntity.noContent().build(); }

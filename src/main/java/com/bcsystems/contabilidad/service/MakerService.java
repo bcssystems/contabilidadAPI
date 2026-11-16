@@ -4,6 +4,7 @@ import com.bcsystems.contabilidad.domain.*;
 import com.bcsystems.contabilidad.dto.*;
 import com.bcsystems.contabilidad.exception.NotFoundException;
 import com.bcsystems.contabilidad.exception.RepeatedException;
+import com.bcsystems.contabilidad.exception.InvalidEntryException;
 import com.bcsystems.contabilidad.repository.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,15 @@ import java.math.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.io.ByteArrayOutputStream;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.UnitValue;
+import com.itextpdf.layout.properties.TextAlignment;
 
 @Service
 public class MakerService {
@@ -146,11 +156,66 @@ public class MakerService {
         return response(saved);
     }
 
+    @Transactional
+    public MakerResponse updateQuote(Integer id, MakerCotizacionRequest request) {
+        MakerCotizacion quote = cotizacionRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Cotización no encontrada"));
+        ensureDefaults();
+        Calc calc = calculate(request);
+        quote.setDescripcion(blankToNull(request.descripcion()));
+        quote.setModo(request.modo().toUpperCase(Locale.ROOT));
+        quote.setGramosNetos(request.gramosNetos()); quote.setGramosMerma(calc.waste); quote.setGramosTotales(calc.totalGrams);
+        quote.setHorasImpresion(request.horasImpresion()); quote.setPiezasPorCama(request.piezasPorCama());
+        quote.setConsumoKw(calc.kw); quote.setCostoKwh(calc.kwh); quote.setCostoMaterial(calc.materialCost);
+        quote.setCostoElectricidad(calc.electricCost); quote.setCostoExtras(calc.extraCost); quote.setCostoCama(calc.bedCost);
+        quote.setCostoPieza(calc.unitCost); quote.setTipoPrecio(request.tipoPrecio().toUpperCase(Locale.ROOT)); quote.setMargen(calc.margin);
+        quote.setPrecioCama(calc.saleBed); quote.setPrecioPieza(calc.saleUnit);
+        quote.setPrecioCamaFinal(calc.saleBed); quote.setPrecioPiezaFinal(calc.saleUnit);
+        quote.getFilamentos().clear();
+        for (MakerFilamentoInput input : request.filamentos()) {
+            MakerFilamento f = filamentoRepository.findById(input.filamentoId()).orElseThrow(() -> new NotFoundException("Filamento no encontrado"));
+            quote.getFilamentos().add(MakerCotizacionFilamento.builder().cotizacion(quote).filamento(f)
+                    .nombreFilamento(f.getNombre()).material(f.getMaterial().getNombre()).marca(f.getMarca()).color(f.getColor())
+                    .precioKilo(f.getPrecioKilo()).gramos(input.gramos())
+                    .costo(lineCost(f.getPrecioKilo(), input.gramos(), request.gramosNetos(), calc.waste, request.modo(), request.cambiosColor())).build());
+        }
+        quote.getExtras().clear();
+        if (request.extras() != null) for (MakerExtraInput extra : request.extras()) {
+            quote.getExtras().add(MakerCotizacionExtra.builder().cotizacion(quote).nombre(extra.nombre().trim())
+                    .cantidad(extra.cantidad()).precioUnitario(extra.precioUnitario())
+                    .importe(extra.cantidad().multiply(extra.precioUnitario()).setScale(SCALE, ROUNDING)).build());
+        }
+        return response(cotizacionRepository.save(quote));
+    }
+
     @Transactional(readOnly = true)
     public Page<MakerResponse> quotes(Pageable pageable) { return cotizacionRepository.findAllByOrderByFechaDesc(pageable).map(this::response); }
 
     @Transactional(readOnly = true)
     public MakerResponse quote(Integer id) { return response(cotizacionRepository.findById(id).orElseThrow(() -> new NotFoundException("Cotización no encontrada"))); }
+
+    public byte[] quotePdf(Integer id) {
+        MakerCotizacion q = cotizacionRepository.findById(id).orElseThrow(() -> new NotFoundException("Cotización no encontrada"));
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        try (PdfDocument pdf = new PdfDocument(new PdfWriter(output)); Document document = new Document(pdf)) {
+            document.add(new Paragraph("COTIZACIÓN").setBold().setFontSize(20).setTextAlignment(TextAlignment.CENTER));
+            document.add(new Paragraph(""));
+            Table table = new Table(UnitValue.createPercentArray(new float[]{35, 65})).useAllAvailableWidth();
+            pdfRow(table, "Folio", q.getFolio());
+            pdfRow(table, "Fecha", q.getFecha() == null ? "" : q.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            pdfRow(table, "Descripción", q.getDescripcion() == null ? "Impresión 3D" : q.getDescripcion());
+            pdfRow(table, "Piezas por cama", String.valueOf(q.getPiezasPorCama()));
+            pdfRow(table, "Precio final por pieza", "$" + (q.getPrecioPiezaFinal() == null ? q.getPrecioPieza() : q.getPrecioPiezaFinal()));
+            document.add(table);
+            document.add(new Paragraph("Precio final comercial").setBold().setFontSize(16).setFontColor(ColorConstants.BLACK).setTextAlignment(TextAlignment.RIGHT));
+            return output.toByteArray();
+        } catch (Exception e) { throw new RuntimeException("No se pudo generar el PDF de la cotización", e); }
+    }
+
+    private void pdfRow(Table table, String label, String value) {
+        table.addCell(new Paragraph(label).setBold());
+        table.addCell(new Paragraph(value == null ? "" : value));
+    }
 
     @Transactional
     public void deleteQuote(Integer id) { if (!cotizacionRepository.existsById(id)) throw new NotFoundException("Cotización no encontrada"); proyectoRepository.findByCotizacionId(id).forEach(p -> { p.setCotizacion(null); proyectoRepository.save(p); }); cotizacionRepository.deleteById(id); }
@@ -172,6 +237,11 @@ public class MakerService {
         if (!Set.of("PUBLICO", "MAYOREO", "DISTRIBUIDOR").contains(type))
             throw new IllegalArgumentException("El tipo de precio no es válido");
         BigDecimal filamentGrams = request.filamentos().stream().map(MakerFilamentoInput::gramos).reduce(BigDecimal.ZERO, BigDecimal::add);
+        if (mode.equals("MULTICOLOR")) {
+            Set<Integer> ids = new HashSet<>();
+            for (MakerFilamentoInput line : request.filamentos()) if (!ids.add(line.filamentoId()))
+                throw new InvalidEntryException("En modo multicolor no puedes repetir el mismo color o filamento. Selecciona un filamento diferente en cada línea.");
+        }
         if (filamentGrams.subtract(request.gramosNetos()).abs().compareTo(new BigDecimal("0.01")) > 0)
             throw new IllegalArgumentException("La suma de gramos de los filamentos debe coincidir con los gramos netos");
         BigDecimal rate = config(mode.equals("MULTICOLOR") ? "MERMA_MULTICOLOR" : "MERMA_MONOCOLOR");
@@ -209,7 +279,7 @@ public class MakerService {
     private MakerCatalogResponse filamentResponse(MakerFilamento f) { return new MakerCatalogResponse(f.getId(), f.getNombre(), f.getMaterial().getNombre(), f.getMaterial().getId(), f.getPrecioKilo(), f.getStockKg(), f.getMarca(), f.getColor(), f.getActivo()); }
 
     private MakerResponse response(MakerCotizacion q) {
-        return new MakerResponse(q.getId(), q.getFolio(), q.getFecha(), q.getUsuario() == null ? null : q.getUsuario().getUsername(), q.getDescripcion(), q.getModo(), q.getGramosNetos(), q.getGramosMerma(), q.getGramosTotales(), q.getHorasImpresion(), q.getPiezasPorCama(), q.getConsumoKw(), q.getCostoKwh(), q.getCostoMaterial(), q.getCostoElectricidad(), q.getCostoExtras(), q.getCostoCama(), q.getCostoPieza(), q.getTipoPrecio(), q.getMargen(), q.getPrecioCama(), q.getPrecioPieza(), q.getFilamentos().stream().map(f -> new MakerResponse.MakerFilamentoResponse(f.getNombreFilamento(), f.getMaterial(), f.getMarca(), f.getColor(), f.getGramos(), f.getPrecioKilo(), f.getCosto())).toList(), q.getExtras().stream().map(e -> new MakerResponse.MakerExtraResponse(e.getNombre(), e.getCantidad(), e.getPrecioUnitario(), e.getImporte())).toList(), q.getPrecioCamaFinal(), q.getPrecioPiezaFinal());
+        return new MakerResponse(q.getId(), q.getFolio(), q.getFecha(), q.getUsuario() == null ? null : q.getUsuario().getUsername(), q.getDescripcion(), q.getModo(), q.getGramosNetos(), q.getGramosMerma(), q.getGramosTotales(), q.getHorasImpresion(), q.getPiezasPorCama(), q.getConsumoKw(), q.getCostoKwh(), q.getCostoMaterial(), q.getCostoElectricidad(), q.getCostoExtras(), q.getCostoCama(), q.getCostoPieza(), q.getTipoPrecio(), q.getMargen(), q.getPrecioCama(), q.getPrecioPieza(), q.getFilamentos().stream().map(f -> new MakerResponse.MakerFilamentoResponse(f.getFilamento() == null ? null : f.getFilamento().getId(), f.getNombreFilamento(), f.getMaterial(), f.getMarca(), f.getColor(), f.getGramos(), f.getPrecioKilo(), f.getCosto())).toList(), q.getExtras().stream().map(e -> new MakerResponse.MakerExtraResponse(e.getNombre(), e.getCantidad(), e.getPrecioUnitario(), e.getImporte())).toList(), q.getPrecioCamaFinal(), q.getPrecioPiezaFinal());
     }
     private record Calc(BigDecimal waste, BigDecimal totalGrams, BigDecimal kw, BigDecimal kwh, BigDecimal materialCost, BigDecimal electricCost, BigDecimal extraCost, BigDecimal bedCost, BigDecimal unitCost, BigDecimal margin, BigDecimal saleBed, BigDecimal saleUnit) {}
 }

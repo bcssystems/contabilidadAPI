@@ -10,7 +10,7 @@ public record MakerResponse(Integer id, String folio, LocalDateTime fecha, Strin
                             BigDecimal costoCama, BigDecimal costoPieza, String tipoPrecio, BigDecimal margen,
                             BigDecimal precioCama, BigDecimal precioPieza, List<MakerFilamentoResponse> filamentos,
                             List<MakerExtraResponse> extras, BigDecimal precioCamaFinal, BigDecimal precioPiezaFinal) {
-    public record MakerFilamentoResponse(String nombre, String material, String marca, String color,
+    public record MakerFilamentoResponse(Integer filamentoId, String nombre, String material, String marca, String color,
                                          BigDecimal gramos, BigDecimal precioKilo, BigDecimal costo) {}
     public record MakerExtraResponse(String nombre, BigDecimal cantidad, BigDecimal precioUnitario, BigDecimal importe) {}
 }
