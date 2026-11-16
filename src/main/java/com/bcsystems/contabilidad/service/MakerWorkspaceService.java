@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -44,11 +45,18 @@ public class MakerWorkspaceService {
     @Transactional
     public MakerProyectoResponse saveProject(Integer id, MakerProyectoRequest request, String actor) {
         validate(request.estado(), request.prioridad(), PROJECT_STATES);
+        if (request.fechaFin() != null && request.fechaFin().isBefore(LocalDate.now()))
+            throw new IllegalArgumentException("La fecha límite no puede ser menor a hoy");
         MakerProyecto project = id == null ? MakerProyecto.builder().fechaCreacion(LocalDateTime.now()).build() : projectRepository.findById(id).orElseThrow(() -> new NotFoundException("Proyecto no encontrado"));
         project.setNombre(request.nombre().trim()); project.setDescripcion(request.descripcion()); project.setEstado(normalize(request.estado()));
         project.setPrioridad(normalize(request.prioridad())); project.setColor(request.color()); project.setFechaFin(request.fechaFin());
+        MakerCotizacion previousQuote = project.getCotizacion();
         if (request.cotizacionId() != null) project.setCotizacion(quoteRepository.findById(request.cotizacionId()).orElseThrow(() -> new NotFoundException("Cotización no encontrada")));
         else project.setCotizacion(null);
+        if (previousQuote != null && previousQuote != project.getCotizacion()) {
+            previousQuote.setProyecto(null);
+            quoteRepository.save(previousQuote);
+        }
         project.getAsignados().clear(); project.getAsignados().addAll(resolveUsers(request.usuarioIds()));
         if ("PRODUCCION".equals(project.getEstado())) consumeFilamentForProduction(project);
         MakerProyecto saved = projectRepository.save(project);
