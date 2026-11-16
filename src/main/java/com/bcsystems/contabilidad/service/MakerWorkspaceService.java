@@ -81,7 +81,7 @@ public class MakerWorkspaceService {
     public MakerTareaResponse saveTask(Integer id, MakerTareaRequest request, String actor) {
         validate(request.estado(), request.prioridad(), TASK_STATES);
         MakerTarea task = id == null ? MakerTarea.builder().fechaCreacion(LocalDateTime.now()).build() : taskRepository.findById(id).orElseThrow(() -> new NotFoundException("Tarea no encontrada"));
-        task.setNombre(request.nombre().trim()); task.setDescripcion(request.descripcion()); task.setChecklist(request.checklist());
+        task.setNombre(request.nombre().trim()); task.setDescripcion(request.descripcion()); task.setChecklist(normalizeChecklist(request.checklist()));
         task.setEstado(normalize(request.estado())); task.setPrioridad(normalize(request.prioridad())); task.setColor(request.color()); task.setFechaFin(request.fechaFin());
         task.setProyecto(request.proyectoId() == null ? null : projectRepository.findById(request.proyectoId()).orElseThrow(() -> new NotFoundException("Proyecto no encontrado")));
         task.getAsignados().clear(); task.getAsignados().addAll(resolveUsers(request.usuarioIds()));
@@ -115,6 +115,15 @@ public class MakerWorkspaceService {
     private void checkOwner(MakerNotificacion n, String username) { if (!n.getUsuario().getUsername().equals(username)) throw new IllegalArgumentException("Notificación no pertenece al usuario"); }
     private void validate(String state, String priority, Set<String> validStates) { if (!validStates.contains(normalize(state))) throw new IllegalArgumentException("Estado no válido"); if (!PRIORITIES.contains(normalize(priority))) throw new IllegalArgumentException("Prioridad no válida"); }
     private String normalize(String value) { return value == null ? "" : value.trim().toUpperCase(Locale.ROOT).replace(' ', '_'); }
+    private String normalizeChecklist(String value) {
+        if (value == null || value.isBlank()) return null;
+        return Arrays.stream(value.split("\\R"))
+                .map(String::trim)
+                .filter(line -> !line.isBlank())
+                .map(line -> line.replaceFirst("^\\[[ xX]\\]\\s*", ""))
+                .map(line -> "[ ] " + line)
+                .collect(java.util.stream.Collectors.joining("\\n"));
+    }
     private List<Usuario> resolveUsers(List<Integer> ids) { return ids == null ? new ArrayList<>() : userRepository.findAllById(ids); }
 
     private void consumeFilamentForProduction(MakerProyecto project) {
