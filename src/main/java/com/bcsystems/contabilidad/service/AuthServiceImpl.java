@@ -4,7 +4,6 @@ import com.bcsystems.contabilidad.domain.Persona;
 import com.bcsystems.contabilidad.domain.Usuario;
 import com.bcsystems.contabilidad.domain.auth.Token;
 import com.bcsystems.contabilidad.domain.en.Role;
-import com.bcsystems.contabilidad.domain.en.TokenType;
 import com.bcsystems.contabilidad.dto.TokenResponse;
 import com.bcsystems.contabilidad.dto.UserAuthRequest;
 import com.bcsystems.contabilidad.dto.UserRegisterRequest;
@@ -16,18 +15,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AuthServiceImpl implements AuthService {
-
     private final TokenService tokenService;
     private final UsuarioService usuarioService;
     private final PersonaService personaService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public AuthServiceImpl(TokenService tokenService, UsuarioService usuarioService, PersonaService personaService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
+    public AuthServiceImpl(TokenService tokenService, UsuarioService usuarioService, PersonaService personaService,
+                           PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
         this.tokenService = tokenService;
         this.usuarioService = usuarioService;
         this.personaService = personaService;
@@ -35,101 +34,82 @@ public class AuthServiceImpl implements AuthService {
         this.authenticationManager = authenticationManager;
     }
 
-
+    @Override
     @Transactional
-    public TokenResponse register(UserRegisterRequest userRegisterRequest) {
-        Persona persona = Persona
-                .builder()
-                .nombre(userRegisterRequest.nombre())
-                .primerApellido(userRegisterRequest.primerApellido())
-                .segundoApellido(userRegisterRequest.segundoApellido())
-                .personType(userRegisterRequest.personType())
-                .build();
-        Persona personaSaved = personaService.save(persona);
-        Usuario usuario = Usuario
-                .builder()
-                .username(usuarioService.generateUsername(userRegisterRequest.nombre(), userRegisterRequest.primerApellido(), userRegisterRequest.segundoApellido()))
-                .password(passwordEncoder.encode(userRegisterRequest.password()))
-                .role(userRegisterRequest.role() != null ? userRegisterRequest.role() : Role.USER)
-                .activo(true)
-                .persona(personaSaved)
-                .position(userRegisterRequest.position())
-                .sueldoBase(userRegisterRequest.sueldoBase() != null ? userRegisterRequest.sueldoBase() : java.math.BigDecimal.ZERO)
-                 .sueldoSemanal(userRegisterRequest.sueldoSemanal() != null ? userRegisterRequest.sueldoSemanal() : userRegisterRequest.sueldoBase())
-                 .sueldoHora(java.math.BigDecimal.ZERO)
-                 .build();
+    public TokenResponse register(UserRegisterRequest request) {
+        Persona persona = Persona.builder().nombre(request.nombre()).primerApellido(request.primerApellido())
+                .segundoApellido(request.segundoApellido()).personType(request.personType()).build();
+        persona = personaService.save(persona);
+        Usuario usuario = Usuario.builder()
+                .username(request.username() == null || request.username().isBlank()
+                        ? usuarioService.generateUsername(request.nombre(), request.primerApellido(), request.segundoApellido())
+                        : request.username().trim())
+                .password(passwordEncoder.encode(request.password()))
+                .role(request.role() == null ? Role.USER : request.role())
+                .activo(true).persona(persona).position(request.position())
+                .sueldoBase(request.sueldoBase() == null ? java.math.BigDecimal.ZERO : request.sueldoBase())
+                .sueldoSemanal(request.sueldoSemanal() == null ? request.sueldoBase() : request.sueldoSemanal())
+                .sueldoHora(java.math.BigDecimal.ZERO).build();
         usuario = usuarioService.save(usuario);
-        String token = tokenService.generateToken(usuario);
-        String refreshToken = tokenService.generateRefreshToken(usuario);
-
-        saveUserToken(usuario, token);
-        return new TokenResponse(token, refreshToken);
+        revokeAllTokens(usuario);
+        return issueTokens(usuario, UUID.randomUUID().toString());
     }
 
     @Override
-    public TokenResponse login(UserAuthRequest userAuthRequest) {
-        try{
-            authenticationManager
-                    .authenticate(
-                            new UsernamePasswordAuthenticationToken(
-                                    userAuthRequest.email(),
-                                    userAuthRequest.password()
-                            )
-                    );
-        } catch (InvalidEntryException ex){
-            throw new InvalidEntryException("Credenciales invalidas");
-        }
+    @Transactional
+    public TokenResponse login(UserAuthRequest request) {
+        String username = request.email() == null ? "" : request.email().trim();
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, request.password()));
+        Usuario usuario = usuarioService.findByUsername(username)
+                .orElseThrow(() -> new InvalidEntryException("Credenciales inválidas"));
+        revokeAllTokens(usuario);
+        return issueTokens(usuario, UUID.randomUUID().toString());
+    }
 
-        Optional<Usuario> usuario = usuarioService.findByUsername(userAuthRequest.email());
-        String accessToken = tokenService.generateToken(usuario.get());
-        String refreshToken = tokenService.generateRefreshToken(usuario.get());
-        removeAllUserTokens(usuario.get());
-        saveUserToken(usuario.get(), accessToken);
+    @Override
+    @Transactional
+    public TokenResponse refreshToken(String refreshToken) {
+        if (refreshToken == null || refreshToken.isBlank()) throw new InvalidEntryException("Token de refresco inválido");
+        final String username;
+        try { username = tokenService.extractUsername(refreshToken); }
+        catch (RuntimeException ex) { throw new InvalidEntryException("Token de refresco inválido"); }
+        Usuario usuario = usuarioService.findByUsername(username)
+                .orElseThrow(() -> new InvalidEntryException("Usuario no encontrado"));
+        Token stored = tokenService.findByRefreshTokenHash(tokenService.hashToken(refreshToken)).orElse(null);
+        if (stored == null || Boolean.TRUE.equals(stored.getIsExpired()) || Boolean.TRUE.equals(stored.getIsRevoked())) {
+            if (stored != null && stored.getSessionFamily() != null) tokenService.revokeAllBySessionFamily(stored.getSessionFamily());
+            throw new InvalidEntryException("Token de refresco inválido o reutilizado");
+        }
+        if (!tokenService.belongsToSiga(refreshToken) || !"refresh".equals(tokenService.tokenType(refreshToken))
+                || !tokenService.isTokenValid(refreshToken, usuario) || tokenService.consumeRefreshToken(stored.getIdToken()) == 0) {
+            tokenService.revokeAllBySessionFamily(stored.getSessionFamily());
+            throw new InvalidEntryException("Token de refresco inválido o reutilizado");
+        }
+        revokeAllTokens(usuario);
+        return issueTokens(usuario, stored.getSessionFamily());
+    }
+
+    @Override
+    @Transactional
+    public void logout(String accessToken, String refreshToken) {
+        Token stored = refreshToken == null ? null : tokenService.findByRefreshTokenHash(tokenService.hashToken(refreshToken)).orElse(null);
+        if (stored == null && accessToken != null) stored = tokenService.findByTokenHash(tokenService.hashToken(accessToken)).orElse(null);
+        if (stored != null) tokenService.revokeAllBySessionFamily(stored.getSessionFamily());
+    }
+
+    private TokenResponse issueTokens(Usuario usuario, String family) {
+        Token token = tokenService.generateTokenPair(usuario, family);
+        String accessToken = token.getToken();
+        String refreshToken = token.getRefreshToken();
+        token.setToken(null);
+        token.setRefreshToken(null);
+        tokenService.saveToken(token);
         return new TokenResponse(accessToken, refreshToken);
     }
 
-    @Override
-    public void saveUserToken(Usuario usuario, String token) {
-        Token tokenJwt = Token
-                .builder()
-                .token(token)
-                .isExpired(false)
-                .isRevoked(false)
-                .type(TokenType.BEARER)
-                .usuario(usuario)
-                .build();
-        tokenService.saveToken(tokenJwt);
-    }
-
-    @Override
-    public void removeAllUserTokens(Usuario usuario) {
-        List<Token> tokens = tokenService.findalltokensbyusuario(usuario);
-        if(!tokens.isEmpty()){
-            tokenService.deleteTokens(tokens);
-        }
-    }
-
-    @Override
-    public TokenResponse refreshToken(String authentication) {
-        if (authentication == null || !authentication.startsWith("Bearer ")) {
-            throw new InvalidEntryException("Error de entrada de token");
-        }
-        String refreshToken = authentication.substring(7);
-        String email = tokenService.extractUsername(refreshToken);
-        if (email == null) {
-            return null;
-        }
-
-        Usuario usuario = usuarioService.findByUsername(email).orElseThrow();
-        boolean isTokenValid = tokenService.isTokenValid(refreshToken, usuario);
-        if (!isTokenValid) {
-            return null;
-        }
-
-        String accessToken = tokenService.generateToken(usuario);
-        removeAllUserTokens(usuario);
-        saveUserToken(usuario, accessToken);
-
-        return new TokenResponse(accessToken, refreshToken);
+    private void revokeAllTokens(Usuario usuario) {
+        List<Token> tokens = tokenService.findAllValidTokensByUsuario(usuario);
+        tokens.forEach(token -> { token.setIsExpired(true); token.setIsRevoked(true); });
+        tokens.forEach(tokenService::saveToken);
     }
 }

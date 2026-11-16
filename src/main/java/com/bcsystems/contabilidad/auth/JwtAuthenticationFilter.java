@@ -7,6 +7,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Cookie;
 import lombok.NonNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -45,19 +46,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
-        if (request.getServletPath().contains("/auth")) {
+        String path = request.getServletPath();
+        if (path.equals("/api/v1/auth/login") || path.equals("/api/v1/auth/register")
+                || path.equals("/api/v1/auth/refresh-token") || path.equals("/api/v1/auth/logout")
+                || path.equals("/api/v1/auth/csrf")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        final String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+        final String token = cookieValue(request, "SIGA_ACCESS");
+        if (token == null || token.isBlank()) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        final String token = authorizationHeader.substring(7);
-        final String email = tokenService.extractUsername(token);
+        final String email;
+        try { email = tokenService.extractUsername(token); }
+        catch (RuntimeException ex) { writeError(response, HttpServletResponse.SC_UNAUTHORIZED, "invalid_token", "Token inválido"); return; }
         final Authentication existingAuth = SecurityContextHolder.getContext().getAuthentication();
 
         if (email == null || existingAuth != null) {
@@ -74,38 +79,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        final boolean tokenValidoEnDb = tokenService.findByToken(token)
+        final boolean tokenValidoEnDb = tokenService.findByTokenHash(tokenService.hashToken(token))
                 .map(jwt -> !jwt.getIsExpired() && !jwt.getIsRevoked())
                 .orElse(false);
 
 
-        if (tokenValidoEnDb) {
+        if (tokenValidoEnDb && tokenService.belongsToSiga(token) && "access".equals(tokenService.tokenType(token))) {
             final Optional<Usuario> userOpt = usuarioService.findByUsername(email);
 
             if (userOpt.isPresent() && Boolean.TRUE.equals(userOpt.get().getActivo())) {
                 final boolean isTokenValid = tokenService.isTokenValid(token, userOpt.get());
 
                 if (isTokenValid) {
-                    Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
-
-                    if (authorities == null || authorities.isEmpty()) {
-                        String rolEntidad = null;
-                        if (userOpt.get().getPersona() != null) {
-                            rolEntidad = String.valueOf(userOpt.get().getRole());
-                        }
-
-                        if (rolEntidad != null) {
-                            String authorityString = rolEntidad.startsWith("ROLE_") ? rolEntidad : "ROLE_" + rolEntidad;
-                            authorities = List.of(new SimpleGrantedAuthority(authorityString));
-                        } else {
-                            authorities = List.of();
-                        }
-                    }
-
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,
-                            authorities
+                            userDetails.getAuthorities()
                     );
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -121,6 +110,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private String cookieValue(HttpServletRequest request, String name) {
+        if (request.getCookies() == null) return null;
+        for (Cookie cookie : request.getCookies()) if (name.equals(cookie.getName())) return cookie.getValue();
+        return null;
+    }
+
+    private void writeError(HttpServletResponse response, int status, String error, String message) throws IOException {
+        response.setStatus(status);
+        response.setContentType("application/json");
+        response.getWriter().write("{\"error\":\"" + error + "\",\"message\":\"" + message + "\"}");
     }
 
 }
