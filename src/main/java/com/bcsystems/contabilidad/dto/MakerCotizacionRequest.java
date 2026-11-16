@@ -10,8 +10,6 @@ public record MakerCotizacionRequest(
         @NotNull @DecimalMin("0.001") BigDecimal gramosNetos,
         @NotNull @DecimalMin("0.01") BigDecimal horasImpresion,
         @NotNull @Min(1) Integer piezasPorCama,
-        @DecimalMin("0.00") BigDecimal consumoKw,
-        @DecimalMin("0.00") BigDecimal costoKwh,
         @Min(0) Integer cambiosColor,
         @NotBlank String tipoPrecio,
         Integer proyectoId,

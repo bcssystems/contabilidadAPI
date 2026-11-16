@@ -39,7 +39,7 @@ public class MakerService {
     @Transactional
     public void ensureDefaults() {
         defaultConfig("COSTO_KWH", "3.50", "MXN/kWh", "Costo de electricidad");
-        defaultConfig("CONSUMO_KW", "0.10", "kW", "Consumo predeterminado de Bambu Lab A1");
+        defaultConfig("CONSUMO_KW", "0.095", "kW", "Consumo promedio de Bambu Lab A1 durante impresión PLA (95 W)");
         defaultConfig("MERMA_MONOCOLOR", "0.03", "%", "Merma proporcional para impresión monocolor");
         defaultConfig("MERMA_MULTICOLOR", "0.15", "%", "Merma proporcional para impresión multicolor");
         defaultConfig("PURGA_POR_CAMBIO", "3.00", "g", "Gramos de purga por cambio de color");
@@ -183,8 +183,8 @@ public class MakerService {
             material = material.add(lineCost(f.getPrecioKilo(), line.gramos(), request.gramosNetos(), waste, mode, request.cambiosColor()));
         }
         material = material.setScale(SCALE, ROUNDING);
-        BigDecimal kw = request.consumoKw() == null ? config("CONSUMO_KW") : request.consumoKw();
-        BigDecimal kwh = request.costoKwh() == null ? config("COSTO_KWH") : request.costoKwh();
+        BigDecimal kw = config("CONSUMO_KW");
+        BigDecimal kwh = config("COSTO_KWH");
         BigDecimal electricity = kw.multiply(request.horasImpresion()).multiply(kwh).setScale(SCALE, ROUNDING);
         BigDecimal extras = Optional.ofNullable(request.extras()).orElse(List.of()).stream()
                 .map(e -> e.cantidad().multiply(e.precioUnitario())).reduce(BigDecimal.ZERO, BigDecimal::add).setScale(SCALE, ROUNDING);
