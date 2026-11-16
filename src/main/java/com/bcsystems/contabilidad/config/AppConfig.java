@@ -33,6 +33,7 @@ public class AppConfig {
                     .username(usuario.get().getUsername())
                     .password(usuario.get().getPassword())
                     .disabled(!Boolean.TRUE.equals(usuario.get().getActivo()))
+                    .roles(usuario.get().getRole() == null ? "USER" : usuario.get().getRole().name())
                     .build();
         };
     }
