@@ -17,8 +17,16 @@ public class Token {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idToken;
-    @Column(unique = true)
+    @Column(name = "token_hash", unique = true, length = 64)
+    private String tokenHash;
+    @Transient
     private String token;
+    @Column(name = "refresh_token_hash", unique = true, length = 64)
+    private String refreshTokenHash;
+    @Transient
+    private String refreshToken;
+    @Column(name = "session_family", length = 36)
+    private String sessionFamily;
     @Column(nullable = false)
     private Boolean isRevoked;
     @Column(nullable = false)
